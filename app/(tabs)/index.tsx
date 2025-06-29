@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { Coffee, Printer, Heart, Clock, DollarSign, MapPin, Star, ChevronRight } from 'lucide-react-native';
+import { HustlLogo } from '@/components/HustlLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -18,8 +19,13 @@ export default function HomeScreen() {
       >
         <View style={styles.headerContent}>
           <View style={styles.headerTop}>
-            <Text style={styles.logo}>Hustl</Text>
-            <Text style={styles.subtitle}>Campus Gigs</Text>
+            <View style={styles.logoContainer}>
+              <HustlLogo size={40} />
+              <View style={styles.logoText}>
+                <Text style={styles.logo}>Hustl</Text>
+                <Text style={styles.subtitle}>Campus Gigs</Text>
+              </View>
+            </View>
             <View style={styles.authButtons}>
               <TouchableOpacity style={styles.signInButton}>
                 <Text style={styles.signInText}>Sign In</Text>
@@ -274,6 +280,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logoText: {
+    marginLeft: 12,
+  },
   logo: {
     fontSize: 28,
     fontWeight: '800',
@@ -282,8 +295,6 @@ const styles = StyleSheet.create({
   subtitle: {
     fontSize: 14,
     color: '#E5E7EB',
-    position: 'absolute',
-    left: 80,
   },
   authButtons: {
     flexDirection: 'row',

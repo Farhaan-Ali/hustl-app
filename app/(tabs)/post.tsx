@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera } from 'lucide-react-native';
+import { HustlLogo } from '@/components/HustlLogo';
 
 export default function PostTaskScreen() {
   const [formData, setFormData] = useState({
@@ -96,7 +97,10 @@ export default function PostTaskScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Post a Task</Text>
+        <View style={styles.headerTop}>
+          <HustlLogo size={32} />
+          <Text style={styles.headerTitle}>Post a Task</Text>
+        </View>
         <Text style={styles.headerSubtitle}>Get help from fellow students</Text>
       </View>
 
@@ -267,11 +271,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#FFFFFF',
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 4,
+    marginLeft: 12,
   },
   headerSubtitle: {
     fontSize: 16,

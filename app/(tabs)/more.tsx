@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { CircleHelp as HelpCircle, Shield, FileText, Star, MessageCircle, Globe, Bell, CreditCard, Users, Award, ChevronRight } from 'lucide-react-native';
+import { HustlLogo } from '@/components/HustlLogo';
 
 export default function MoreScreen() {
   const handleLinkPress = (url: string) => {
@@ -14,7 +15,10 @@ export default function MoreScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>More</Text>
+        <View style={styles.headerTop}>
+          <HustlLogo size={32} />
+          <Text style={styles.headerTitle}>More</Text>
+        </View>
         <Text style={styles.headerSubtitle}>Settings, help, and information</Text>
       </View>
 
@@ -115,7 +119,10 @@ export default function MoreScreen() {
 
       {/* About Section */}
       <View style={styles.aboutSection}>
-        <Text style={styles.aboutTitle}>About Hustl</Text>
+        <View style={styles.aboutHeader}>
+          <HustlLogo size={40} />
+          <Text style={styles.aboutTitle}>About Hustl</Text>
+        </View>
         <Text style={styles.aboutDescription}>
           Hustl connects University of Florida students for quick campus errands and tasks. 
           From coffee runs to printing services, we make campus life easier for everyone.
@@ -200,11 +207,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#FFFFFF',
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 4,
+    marginLeft: 12,
   },
   headerSubtitle: {
     fontSize: 16,
@@ -294,11 +306,16 @@ const styles = StyleSheet.create({
     shadowRadius: 8,
     elevation: 2,
   },
+  aboutHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
   aboutTitle: {
     fontSize: 20,
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 12,
+    marginLeft: 12,
   },
   aboutDescription: {
     fontSize: 16,

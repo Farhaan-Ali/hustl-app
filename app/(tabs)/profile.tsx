@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions
 import { StatusBar } from 'expo-status-bar';
 import { CreditCard as Edit, Star, Clock, DollarSign, Award, TrendingUp, Settings, LogOut, Shield, Bell, CreditCard } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { HustlLogo } from '@/components/HustlLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -74,6 +75,11 @@ export default function ProfileScreen() {
           <TouchableOpacity style={styles.editButton}>
             <Edit size={20} color="#FFFFFF" />
           </TouchableOpacity>
+        </View>
+        
+        {/* Logo in header */}
+        <View style={styles.headerLogo}>
+          <HustlLogo size={24} />
         </View>
       </LinearGradient>
 
@@ -309,6 +315,12 @@ const styles = StyleSheet.create({
     paddingTop: 60,
     paddingBottom: 30,
     paddingHorizontal: 20,
+    position: 'relative',
+  },
+  headerLogo: {
+    position: 'absolute',
+    top: 60,
+    right: 20,
   },
   profileSection: {
     flexDirection: 'row',

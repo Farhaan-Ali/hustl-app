@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
-import { Chrome as Home, Search, Plus, User, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
+import { Search, Plus, User, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
+import { HustlLogo } from '@/components/HustlLogo';
 
 export default function TabLayout() {
   return (
@@ -27,7 +28,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ size, color }) => (
-            <Home size={size} color={color} />
+            <HustlLogo size={size} />
           ),
         }}
       />

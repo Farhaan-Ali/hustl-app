@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
 import { Search, Filter, MapPin, Clock, DollarSign, Star, Coffee, Printer, Heart, ShoppingBag } from 'lucide-react-native';
+import { HustlLogo } from '@/components/HustlLogo';
 
 export default function BrowseScreen() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -114,7 +115,10 @@ export default function BrowseScreen() {
       
       {/* Header */}
       <View style={styles.header}>
-        <Text style={styles.headerTitle}>Browse Tasks</Text>
+        <View style={styles.headerTop}>
+          <HustlLogo size={32} />
+          <Text style={styles.headerTitle}>Browse Tasks</Text>
+        </View>
         <Text style={styles.headerSubtitle}>Find tasks that match your skills</Text>
       </View>
 
@@ -244,11 +248,16 @@ const styles = StyleSheet.create({
     paddingBottom: 20,
     backgroundColor: '#FFFFFF',
   },
+  headerTop: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
   headerTitle: {
     fontSize: 28,
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 4,
+    marginLeft: 12,
   },
   headerSubtitle: {
     fontSize: 16,
