@@ -18,11 +18,11 @@ export default function PostTaskScreen() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const categories = [
-    { id: 'coffee', name: 'Coffee Run', icon: <Coffee size={24} color="#F97316" /> },
-    { id: 'printing', name: 'Printing', icon: <Printer size={24} color="#3B82F6" /> },
-    { id: 'petcare', name: 'Pet Care', icon: <Heart size={24} color="#EF4444" /> },
-    { id: 'food', name: 'Food Delivery', icon: <ShoppingBag size={24} color="#10B981" /> },
-    { id: 'shopping', name: 'Shopping', icon: <ShoppingBag size={24} color="#8B5CF6" /> },
+    { id: 'coffee', name: 'Coffee', icon: <Coffee size={20} color="#F97316" /> },
+    { id: 'printing', name: 'Printing', icon: <Printer size={20} color="#3B82F6" /> },
+    { id: 'petcare', name: 'Pet Care', icon: <Heart size={20} color="#EF4444" /> },
+    { id: 'food', name: 'Food', icon: <ShoppingBag size={20} color="#10B981" /> },
+    { id: 'shopping', name: 'Shopping', icon: <ShoppingBag size={20} color="#8B5CF6" /> },
   ];
 
   const urgencyLevels = [
@@ -92,22 +92,22 @@ export default function PostTaskScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <StatusBar style="dark" />
       
-      {/* Header */}
+      {/* Clean Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <HustlLogo size={32} />
-          <Text style={styles.headerTitle}>Post a Task</Text>
+          <HustlLogo size={28} />
+          <Text style={styles.headerTitle}>Post Task</Text>
         </View>
         <Text style={styles.headerSubtitle}>Get help from fellow students</Text>
       </View>
 
-      <View style={styles.form}>
+      <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         {/* Task Title */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Task Title *</Text>
+          <Text style={styles.inputLabel}>Task Title</Text>
           <TextInput
             style={[styles.input, errors.title && styles.inputError]}
             value={formData.title}
@@ -120,7 +120,7 @@ export default function PostTaskScreen() {
 
         {/* Category Selection */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Category *</Text>
+          <Text style={styles.inputLabel}>Category</Text>
           <View style={styles.categoryGrid}>
             {categories.map((category) => (
               <TouchableOpacity
@@ -146,12 +146,12 @@ export default function PostTaskScreen() {
 
         {/* Description */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Description *</Text>
+          <Text style={styles.inputLabel}>Description</Text>
           <TextInput
             style={[styles.textArea, errors.description && styles.inputError]}
             value={formData.description}
             onChangeText={(value) => updateFormData('description', value)}
-            placeholder="Describe what you need done, include specific details..."
+            placeholder="Describe what you need done..."
             placeholderTextColor="#9CA3AF"
             multiline
             numberOfLines={4}
@@ -162,14 +162,14 @@ export default function PostTaskScreen() {
 
         {/* Location */}
         <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Pickup/Delivery Location *</Text>
+          <Text style={styles.inputLabel}>Location</Text>
           <View style={styles.inputWithIcon}>
             <MapPin size={20} color="#6B7280" />
             <TextInput
               style={[styles.inputWithIconText, errors.location && styles.inputError]}
               value={formData.location}
               onChangeText={(value) => updateFormData('location', value)}
-              placeholder="e.g., Turlington Plaza, Reitz Union"
+              placeholder="e.g., Turlington Plaza"
               placeholderTextColor="#9CA3AF"
             />
           </View>
@@ -179,7 +179,7 @@ export default function PostTaskScreen() {
         {/* Budget and Time */}
         <View style={styles.row}>
           <View style={[styles.inputGroup, styles.halfWidth]}>
-            <Text style={styles.inputLabel}>Budget *</Text>
+            <Text style={styles.inputLabel}>Budget</Text>
             <View style={styles.inputWithIcon}>
               <DollarSign size={20} color="#6B7280" />
               <TextInput
@@ -195,7 +195,7 @@ export default function PostTaskScreen() {
           </View>
 
           <View style={[styles.inputGroup, styles.halfWidth]}>
-            <Text style={styles.inputLabel}>Time Estimate *</Text>
+            <Text style={styles.inputLabel}>Time Estimate</Text>
             <View style={styles.inputWithIcon}>
               <Clock size={20} color="#6B7280" />
               <TextInput
@@ -242,7 +242,7 @@ export default function PostTaskScreen() {
 
         {/* Add Photo */}
         <TouchableOpacity style={styles.photoButton}>
-          <Camera size={24} color="#6B7280" />
+          <Camera size={20} color="#6B7280" />
           <Text style={styles.photoButtonText}>Add Photo (Optional)</Text>
         </TouchableOpacity>
 
@@ -255,8 +255,8 @@ export default function PostTaskScreen() {
         <Text style={styles.termsText}>
           By posting a task, you agree to our Terms of Service and Community Guidelines.
         </Text>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -266,9 +266,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 24,
     backgroundColor: '#FFFFFF',
   },
   headerTop: {
@@ -287,16 +287,18 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   form: {
-    padding: 20,
-    gap: 24,
+    flex: 1,
+    paddingHorizontal: 24,
+    paddingTop: 24,
   },
   inputGroup: {
-    gap: 8,
+    marginBottom: 24,
   },
   inputLabel: {
     fontSize: 16,
     fontWeight: '600',
     color: '#374151',
+    marginBottom: 8,
   },
   input: {
     backgroundColor: '#FFFFFF',
@@ -341,6 +343,7 @@ const styles = StyleSheet.create({
   errorText: {
     fontSize: 12,
     color: '#EF4444',
+    marginTop: 4,
   },
   categoryGrid: {
     flexDirection: 'row',
@@ -375,9 +378,11 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 16,
+    marginBottom: 24,
   },
   halfWidth: {
     flex: 1,
+    marginBottom: 0,
   },
   urgencyOptions: {
     gap: 12,
@@ -419,22 +424,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     borderStyle: 'dashed',
+    marginBottom: 32,
   },
   photoButtonText: {
     fontSize: 16,
     color: '#6B7280',
-    marginLeft: 12,
+    marginLeft: 8,
   },
   submitButton: {
     backgroundColor: '#F97316',
     paddingVertical: 18,
     borderRadius: 12,
     alignItems: 'center',
-    shadowColor: '#F97316',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
-    elevation: 4,
+    marginBottom: 24,
   },
   submitButtonText: {
     color: '#FFFFFF',
@@ -446,5 +448,6 @@ const styles = StyleSheet.create({
     color: '#6B7280',
     textAlign: 'center',
     lineHeight: 18,
+    marginBottom: 40,
   },
 });

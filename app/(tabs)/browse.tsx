@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, TextInput, Image } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Search, Filter, MapPin, Clock, DollarSign, Star, Coffee, Printer, Heart, ShoppingBag } from 'lucide-react-native';
+import { Search, Filter, MapPin, Clock, Star, Coffee, Printer, Heart, ShoppingBag } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
 
 export default function BrowseScreen() {
@@ -63,32 +63,6 @@ export default function BrowseScreen() {
       image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: true,
     },
-    {
-      id: 5,
-      title: 'Grocery Shopping',
-      description: 'Pick up groceries from Publix - list provided',
-      category: 'Shopping',
-      price: 25,
-      time: '60 min',
-      location: 'Archer Road',
-      rating: 4.6,
-      reviews: 8,
-      image: 'https://images.pexels.com/photos/264636/pexels-photo-264636.jpeg?auto=compress&cs=tinysrgb&w=400',
-      urgent: false,
-    },
-    {
-      id: 6,
-      title: 'Dunkin Coffee & Donuts',
-      description: 'Medium iced coffee and 6 donuts from Dunkin near campus',
-      category: 'Coffee',
-      price: 18,
-      time: '20 min',
-      location: 'SW 13th St',
-      rating: 4.5,
-      reviews: 15,
-      image: 'https://images.pexels.com/photos/302899/pexels-photo-302899.jpeg?auto=compress&cs=tinysrgb&w=400',
-      urgent: false,
-    },
   ];
 
   const filteredTasks = tasks.filter(task => {
@@ -110,19 +84,19 @@ export default function BrowseScreen() {
   };
 
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <View style={styles.container}>
       <StatusBar style="dark" />
       
-      {/* Header */}
+      {/* Clean Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <HustlLogo size={32} />
-          <Text style={styles.headerTitle}>Browse Tasks</Text>
+          <HustlLogo size={28} />
+          <Text style={styles.headerTitle}>Browse</Text>
         </View>
         <Text style={styles.headerSubtitle}>Find tasks that match your skills</Text>
       </View>
 
-      {/* Search Bar */}
+      {/* Search Section */}
       <View style={styles.searchSection}>
         <View style={styles.searchBar}>
           <Search size={20} color="#6B7280" />
@@ -166,21 +140,18 @@ export default function BrowseScreen() {
       </ScrollView>
 
       {/* Tasks List */}
-      <View style={styles.tasksSection}>
+      <ScrollView style={styles.tasksList} showsVerticalScrollIndicator={false}>
         <View style={styles.tasksHeader}>
           <Text style={styles.tasksCount}>{filteredTasks.length} tasks available</Text>
-          <TouchableOpacity>
-            <Text style={styles.sortText}>Sort by: Nearest</Text>
-          </TouchableOpacity>
         </View>
 
-        <View style={styles.tasksList}>
+        <View style={styles.tasksGrid}>
           {filteredTasks.map((task) => (
             <TaskCard key={task.id} task={task} getCategoryIcon={getCategoryIcon} />
           ))}
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </View>
   );
 }
 
@@ -208,7 +179,7 @@ function TaskCard({ task, getCategoryIcon }: {
         </View>
         
         <Text style={styles.taskTitle}>{task.title}</Text>
-        <Text style={styles.taskDescription}>{task.description}</Text>
+        <Text style={styles.taskDescription} numberOfLines={2}>{task.description}</Text>
         
         <View style={styles.taskMeta}>
           <View style={styles.taskMetaItem}>
@@ -229,7 +200,7 @@ function TaskCard({ task, getCategoryIcon }: {
           </View>
           
           <TouchableOpacity style={styles.acceptButton}>
-            <Text style={styles.acceptButtonText}>Accept Task</Text>
+            <Text style={styles.acceptButtonText}>Accept</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -243,9 +214,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 24,
     backgroundColor: '#FFFFFF',
   },
   headerTop: {
@@ -265,8 +236,8 @@ const styles = StyleSheet.create({
   },
   searchSection: {
     flexDirection: 'row',
-    paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
     backgroundColor: '#FFFFFF',
     gap: 12,
   },
@@ -277,7 +248,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
     borderRadius: 12,
     paddingHorizontal: 16,
-    paddingVertical: 12,
+    paddingVertical: 14,
   },
   searchInput: {
     flex: 1,
@@ -288,29 +259,26 @@ const styles = StyleSheet.create({
   filterButton: {
     backgroundColor: '#F3F4F6',
     borderRadius: 12,
-    padding: 12,
+    padding: 14,
     justifyContent: 'center',
     alignItems: 'center',
   },
   categoriesSection: {
     backgroundColor: '#FFFFFF',
-    paddingBottom: 16,
+    paddingBottom: 20,
   },
   categoriesContent: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     gap: 12,
   },
   categoryChip: {
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 10,
     borderRadius: 20,
     backgroundColor: '#F3F4F6',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
   },
   categoryChipActive: {
     backgroundColor: '#3B82F6',
-    borderColor: '#3B82F6',
   },
   categoryText: {
     fontSize: 14,
@@ -320,36 +288,31 @@ const styles = StyleSheet.create({
   categoryTextActive: {
     color: '#FFFFFF',
   },
-  tasksSection: {
-    padding: 20,
+  tasksList: {
+    flex: 1,
   },
   tasksHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 20,
   },
   tasksCount: {
     fontSize: 16,
     fontWeight: '600',
     color: '#111827',
   },
-  sortText: {
-    fontSize: 14,
-    color: '#3B82F6',
-    fontWeight: '600',
-  },
-  tasksList: {
-    gap: 16,
+  tasksGrid: {
+    paddingHorizontal: 24,
+    gap: 20,
+    paddingBottom: 40,
   },
   taskCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
     overflow: 'hidden',
     position: 'relative',
   },
@@ -370,10 +333,10 @@ const styles = StyleSheet.create({
   },
   taskImage: {
     width: '100%',
-    height: 160,
+    height: 140,
   },
   taskContent: {
-    padding: 16,
+    padding: 20,
   },
   taskHeader: {
     flexDirection: 'row',

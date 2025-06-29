@@ -13,10 +13,10 @@ export default function MoreScreen() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar style="dark" />
       
-      {/* Header */}
+      {/* Clean Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <HustlLogo size={32} />
+          <HustlLogo size={28} />
           <Text style={styles.headerTitle}>More</Text>
         </View>
         <Text style={styles.headerSubtitle}>Settings, help, and information</Text>
@@ -120,7 +120,7 @@ export default function MoreScreen() {
       {/* About Section */}
       <View style={styles.aboutSection}>
         <View style={styles.aboutHeader}>
-          <HustlLogo size={40} />
+          <HustlLogo size={32} />
           <Text style={styles.aboutTitle}>About Hustl</Text>
         </View>
         <Text style={styles.aboutDescription}>
@@ -202,9 +202,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#F8FAFC',
   },
   header: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
+    paddingBottom: 24,
     backgroundColor: '#FFFFFF',
   },
   headerTop: {
@@ -223,7 +223,8 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   statsSection: {
-    padding: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
   },
   statsCard: {
     backgroundColor: '#FFFFFF',
@@ -253,8 +254,8 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   section: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   sectionTitle: {
     fontSize: 18,
@@ -296,7 +297,7 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   aboutSection: {
-    margin: 20,
+    margin: 24,
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     padding: 24,
@@ -341,8 +342,8 @@ const styles = StyleSheet.create({
     color: '#6B7280',
   },
   socialSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   socialLinks: {
     flexDirection: 'row',

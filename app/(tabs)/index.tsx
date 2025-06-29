@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, Printer, Heart, Clock, DollarSign, MapPin, Star, ChevronRight } from 'lucide-react-native';
+import { Coffee, Printer, Heart, Clock, DollarSign, MapPin, Star, ChevronRight, ArrowRight } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
 
 const { width } = Dimensions.get('window');
@@ -12,213 +12,153 @@ export default function HomeScreen() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar style="light" />
       
-      {/* Header */}
+      {/* Clean Header */}
       <LinearGradient
         colors={['#1E40AF', '#3B82F6']}
         style={styles.header}
       >
         <View style={styles.headerContent}>
-          <View style={styles.headerTop}>
-            <View style={styles.logoContainer}>
-              <HustlLogo size={40} />
-              <View style={styles.logoText}>
-                <Text style={styles.logo}>Hustl</Text>
-                <Text style={styles.subtitle}>Campus Gigs</Text>
-              </View>
+          <View style={styles.logoSection}>
+            <HustlLogo size={36} />
+            <View style={styles.logoText}>
+              <Text style={styles.logo}>Hustl</Text>
+              <Text style={styles.subtitle}>Campus Tasks</Text>
             </View>
-            <View style={styles.authButtons}>
-              <TouchableOpacity style={styles.signInButton}>
-                <Text style={styles.signInText}>Sign In</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.signUpButton}>
-                <Text style={styles.signUpText}>Sign Up</Text>
-              </TouchableOpacity>
-            </View>
+          </View>
+          
+          <View style={styles.authButtons}>
+            <TouchableOpacity style={styles.signInButton}>
+              <Text style={styles.signInText}>Sign In</Text>
+            </TouchableOpacity>
           </View>
         </View>
       </LinearGradient>
 
-      {/* Hero Section */}
+      {/* Hero Section - Simplified */}
       <View style={styles.heroSection}>
-        <LinearGradient
-          colors={['#1E40AF', '#2563EB']}
-          style={styles.heroContent}
-        >
-          <View style={styles.heroTextContainer}>
-            <Text style={styles.heroTitle}>Running late for class?</Text>
-            <Text style={styles.heroSubtitle}>Get coffee delivered right to you</Text>
-            <Text style={styles.heroDescription}>
-              Campus errands, covered. Coffee runs, printing, pet care — Hustl connects Gators in minutes.
-            </Text>
+        <View style={styles.heroContent}>
+          <Text style={styles.heroTitle}>Need something done on campus?</Text>
+          <Text style={styles.heroDescription}>
+            Connect with fellow students for quick errands, coffee runs, and campus tasks.
+          </Text>
+          
+          <View style={styles.ctaButtons}>
+            <TouchableOpacity style={styles.primaryCTA}>
+              <Text style={styles.primaryCTAText}>Post a Task</Text>
+              <ArrowRight size={18} color="#FFFFFF" />
+            </TouchableOpacity>
             
-            <View style={styles.ctaButtons}>
-              <TouchableOpacity style={styles.primaryCTA}>
-                <Text style={styles.primaryCTAText}>Post a Task</Text>
-                <ChevronRight size={20} color="#FFFFFF" />
-              </TouchableOpacity>
-              
-              <TouchableOpacity style={styles.secondaryCTA}>
-                <Text style={styles.secondaryCTAText}>Browse Tasks</Text>
-                <ChevronRight size={20} color="#1E40AF" />
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity style={styles.secondaryCTA}>
+              <Text style={styles.secondaryCTAText}>Browse Tasks</Text>
+            </TouchableOpacity>
           </View>
-        </LinearGradient>
+        </View>
         
         <View style={styles.heroImageContainer}>
           <Image
-            source={{ uri: 'https://images.pexels.com/photos/324028/pexels-photo-324028.jpeg?auto=compress&cs=tinysrgb&w=800' }}
+            source={{ uri: 'https://images.pexels.com/photos/1438081/pexels-photo-1438081.jpeg?auto=compress&cs=tinysrgb&w=800' }}
             style={styles.heroImage}
           />
-          
-          {/* Service Card Overlay */}
-          <View style={styles.serviceCard}>
-            <View style={styles.serviceCardHeader}>
-              <Coffee size={24} color="#F97316" />
-              <View style={styles.serviceCardInfo}>
-                <Text style={styles.serviceCardTitle}>Coffee Run</Text>
-                <View style={styles.serviceCardMeta}>
-                  <Clock size={14} color="#6B7280" />
-                  <Text style={styles.serviceCardTime}>15 min</Text>
-                  <DollarSign size={14} color="#6B7280" />
-                  <Text style={styles.serviceCardPrice}>$8</Text>
-                </View>
-              </View>
-            </View>
-          </View>
         </View>
       </View>
 
-      {/* Popular Services */}
+      {/* Services - Clean Grid */}
       <View style={styles.servicesSection}>
         <Text style={styles.sectionTitle}>Popular Services</Text>
         <View style={styles.servicesGrid}>
-          <ServiceTile
-            icon={<Coffee size={32} color="#F97316" />}
+          <ServiceCard
+            icon={<Coffee size={28} color="#F97316" />}
             title="Coffee Runs"
-            description="Get your favorite drink delivered"
-            price="$5-15"
-            time="10-20 min"
+            description="Quick coffee delivery"
+            color="#FFF7ED"
           />
-          <ServiceTile
-            icon={<Printer size={32} color="#3B82F6" />}
+          <ServiceCard
+            icon={<Printer size={28} color="#3B82F6" />}
             title="Printing"
-            description="Documents printed and delivered"
-            price="$3-10"
-            time="15-30 min"
+            description="Document services"
+            color="#EFF6FF"
           />
-          <ServiceTile
-            icon={<Heart size={32} color="#EF4444" />}
+          <ServiceCard
+            icon={<Heart size={28} color="#EF4444" />}
             title="Pet Care"
-            description="Walking, feeding, and care"
-            price="$10-25"
-            time="30-60 min"
+            description="Walking & sitting"
+            color="#FEF2F2"
           />
         </View>
       </View>
 
-      {/* Recent Tasks */}
+      {/* Recent Tasks - Horizontal Scroll */}
       <View style={styles.recentSection}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Tasks</Text>
-          <TouchableOpacity>
-            <Text style={styles.seeAllText}>See All</Text>
+          <TouchableOpacity style={styles.seeAllButton}>
+            <Text style={styles.seeAllText}>View All</Text>
+            <ChevronRight size={16} color="#3B82F6" />
           </TouchableOpacity>
         </View>
         
         <ScrollView horizontal showsHorizontalScrollIndicator={false} style={styles.tasksList}>
           <TaskCard
-            title="Starbucks Coffee Run"
-            location="Turlington Plaza"
+            title="Starbucks Run"
+            location="Reitz Union"
             price="$12"
-            time="15 min"
-            rating={4.8}
             image="https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400"
           />
           <TaskCard
-            title="Print Assignment"
+            title="Print Documents"
             location="Library West"
             price="$5"
-            time="20 min"
-            rating={4.9}
             image="https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400"
           />
           <TaskCard
             title="Dog Walking"
             location="Campus Area"
             price="$20"
-            time="45 min"
-            rating={5.0}
             image="https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=400"
           />
         </ScrollView>
       </View>
 
-      {/* How It Works */}
+      {/* How It Works - Simplified */}
       <View style={styles.howItWorksSection}>
-        <Text style={styles.sectionTitle}>How Hustl Works</Text>
+        <Text style={styles.sectionTitle}>How It Works</Text>
         <View style={styles.stepsContainer}>
-          <StepCard
-            number="1"
-            title="Post Your Task"
-            description="Describe what you need done and set your budget"
-          />
-          <StepCard
-            number="2"
-            title="Get Matched"
-            description="Students nearby will offer to help you out"
-          />
-          <StepCard
-            number="3"
-            title="Task Complete"
-            description="Pay securely and rate your experience"
-          />
+          <StepCard number="1" title="Post" description="Describe your task" />
+          <StepCard number="2" title="Match" description="Get connected" />
+          <StepCard number="3" title="Done" description="Task completed" />
         </View>
       </View>
 
-      {/* CTA Section */}
-      <LinearGradient
-        colors={['#F97316', '#EA580C']}
-        style={styles.ctaSection}
-      >
+      {/* Final CTA */}
+      <View style={styles.finalCTA}>
         <Text style={styles.ctaTitle}>Ready to get started?</Text>
-        <Text style={styles.ctaDescription}>
-          Join thousands of students making campus life easier
-        </Text>
         <TouchableOpacity style={styles.ctaButton}>
-          <Text style={styles.ctaButtonText}>Join Hustl Today</Text>
+          <Text style={styles.ctaButtonText}>Join Hustl</Text>
         </TouchableOpacity>
-      </LinearGradient>
+      </View>
     </ScrollView>
   );
 }
 
-function ServiceTile({ icon, title, description, price, time }: {
+function ServiceCard({ icon, title, description, color }: {
   icon: React.ReactNode;
   title: string;
   description: string;
-  price: string;
-  time: string;
+  color: string;
 }) {
   return (
-    <TouchableOpacity style={styles.serviceTile}>
+    <TouchableOpacity style={[styles.serviceCard, { backgroundColor: color }]}>
       <View style={styles.serviceIcon}>{icon}</View>
       <Text style={styles.serviceTitle}>{title}</Text>
       <Text style={styles.serviceDescription}>{description}</Text>
-      <View style={styles.serviceMeta}>
-        <Text style={styles.servicePrice}>{price}</Text>
-        <Text style={styles.serviceTime}>{time}</Text>
-      </View>
     </TouchableOpacity>
   );
 }
 
-function TaskCard({ title, location, price, time, rating, image }: {
+function TaskCard({ title, location, price, image }: {
   title: string;
   location: string;
   price: string;
-  time: string;
-  rating: number;
   image: string;
 }) {
   return (
@@ -226,18 +166,11 @@ function TaskCard({ title, location, price, time, rating, image }: {
       <Image source={{ uri: image }} style={styles.taskImage} />
       <View style={styles.taskContent}>
         <Text style={styles.taskTitle}>{title}</Text>
-        <View style={styles.taskLocation}>
-          <MapPin size={14} color="#6B7280" />
-          <Text style={styles.taskLocationText}>{location}</Text>
-        </View>
         <View style={styles.taskMeta}>
-          <Text style={styles.taskPrice}>{price}</Text>
-          <Text style={styles.taskTime}>{time}</Text>
-          <View style={styles.taskRating}>
-            <Star size={14} color="#F59E0B" fill="#F59E0B" />
-            <Text style={styles.taskRatingText}>{rating}</Text>
-          </View>
+          <MapPin size={12} color="#6B7280" />
+          <Text style={styles.taskLocation}>{location}</Text>
         </View>
+        <Text style={styles.taskPrice}>{price}</Text>
       </View>
     </TouchableOpacity>
   );
@@ -265,22 +198,16 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
+    paddingTop: 60,
+    paddingBottom: 24,
+    paddingHorizontal: 24,
   },
   headerContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  headerTop: {
-    flex: 1,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  logoContainer: {
+  logoSection: {
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -288,71 +215,51 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   logo: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: '800',
     color: '#FFFFFF',
   },
   subtitle: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#E5E7EB',
+    fontWeight: '500',
   },
   authButtons: {
     flexDirection: 'row',
-    gap: 12,
   },
   signInButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    borderWidth: 1,
-    borderColor: '#FFFFFF',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.15)',
   },
   signInText: {
     color: '#FFFFFF',
     fontSize: 14,
     fontWeight: '600',
   },
-  signUpButton: {
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 8,
-    backgroundColor: '#F97316',
-  },
-  signUpText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-  },
   heroSection: {
-    minHeight: 400,
-  },
-  heroContent: {
     paddingHorizontal: 24,
     paddingVertical: 40,
   },
-  heroTextContainer: {
-    maxWidth: width > 768 ? '50%' : '100%',
+  heroContent: {
+    marginBottom: 32,
   },
   heroTitle: {
-    fontSize: width > 768 ? 32 : 28,
+    fontSize: 32,
     fontWeight: '800',
-    color: '#FFFFFF',
-    marginBottom: 12,
-    lineHeight: width > 768 ? 38 : 34,
-  },
-  heroSubtitle: {
-    fontSize: width > 768 ? 20 : 18,
-    fontWeight: '600',
-    color: '#E5E7EB',
+    color: '#111827',
     marginBottom: 16,
+    lineHeight: 38,
   },
   heroDescription: {
-    fontSize: 16,
-    color: '#CBD5E1',
-    lineHeight: 24,
+    fontSize: 18,
+    color: '#6B7280',
+    lineHeight: 26,
     marginBottom: 32,
   },
   ctaButtons: {
+    flexDirection: 'row',
     gap: 16,
   },
   primaryCTA: {
@@ -362,12 +269,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
     flexDirection: 'row',
     alignItems: 'center',
+    flex: 1,
     justifyContent: 'center',
-    shadowColor: '#F97316',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
-    elevation: 4,
   },
   primaryCTAText: {
     color: '#FFFFFF',
@@ -376,109 +279,47 @@ const styles = StyleSheet.create({
     marginRight: 8,
   },
   secondaryCTA: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F3F4F6',
     paddingHorizontal: 24,
     paddingVertical: 16,
     borderRadius: 12,
-    flexDirection: 'row',
+    flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 2,
   },
   secondaryCTAText: {
-    color: '#1E40AF',
+    color: '#374151',
     fontSize: 16,
-    fontWeight: '700',
-    marginRight: 8,
+    fontWeight: '600',
   },
   heroImageContainer: {
-    position: 'relative',
-    height: 300,
-    marginTop: -100,
-    marginHorizontal: 20,
-    borderRadius: 16,
+    borderRadius: 20,
     overflow: 'hidden',
+    height: 240,
   },
   heroImage: {
     width: '100%',
     height: '100%',
   },
-  serviceCard: {
-    position: 'absolute',
-    bottom: 20,
-    right: 20,
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-    minWidth: 160,
-  },
-  serviceCardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  serviceCardInfo: {
-    marginLeft: 12,
-  },
-  serviceCardTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#111827',
-    marginBottom: 4,
-  },
-  serviceCardMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  serviceCardTime: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  serviceCardPrice: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
   servicesSection: {
-    padding: 20,
-    marginTop: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 40,
+    backgroundColor: '#F8FAFC',
   },
   sectionTitle: {
     fontSize: 24,
     fontWeight: '800',
     color: '#111827',
-    marginBottom: 20,
+    marginBottom: 24,
   },
   servicesGrid: {
     gap: 16,
   },
-  serviceTile: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
+  serviceCard: {
+    padding: 24,
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-    borderWidth: 1,
-    borderColor: '#F3F4F6',
+    alignItems: 'center',
   },
   serviceIcon: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#F8FAFC',
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginBottom: 16,
   },
   serviceTitle: {
@@ -490,55 +331,46 @@ const styles = StyleSheet.create({
   serviceDescription: {
     fontSize: 14,
     color: '#6B7280',
-    lineHeight: 20,
-    marginBottom: 12,
-  },
-  serviceMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  servicePrice: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#F97316',
-  },
-  serviceTime: {
-    fontSize: 14,
-    color: '#6B7280',
+    textAlign: 'center',
   },
   recentSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingVertical: 40,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 20,
+    paddingHorizontal: 24,
+    marginBottom: 24,
+  },
+  seeAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   seeAllText: {
     fontSize: 14,
     color: '#3B82F6',
     fontWeight: '600',
+    marginRight: 4,
   },
   tasksList: {
-    paddingLeft: 0,
+    paddingLeft: 24,
   },
   taskCard: {
     backgroundColor: '#FFFFFF',
     borderRadius: 16,
     marginRight: 16,
-    width: 200,
+    width: 180,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    shadowOpacity: 0.08,
+    shadowRadius: 12,
+    elevation: 3,
     overflow: 'hidden',
   },
   taskImage: {
     width: '100%',
-    height: 120,
+    height: 100,
   },
   taskContent: {
     padding: 16,
@@ -549,105 +381,76 @@ const styles = StyleSheet.create({
     color: '#111827',
     marginBottom: 8,
   },
-  taskLocation: {
+  taskMeta: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 12,
   },
-  taskLocationText: {
+  taskLocation: {
     fontSize: 12,
     color: '#6B7280',
     marginLeft: 4,
-  },
-  taskMeta: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
   },
   taskPrice: {
-    fontSize: 16,
-    fontWeight: '700',
+    fontSize: 18,
+    fontWeight: '800',
     color: '#F97316',
   },
-  taskTime: {
-    fontSize: 12,
-    color: '#6B7280',
-  },
-  taskRating: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  taskRatingText: {
-    fontSize: 12,
-    color: '#6B7280',
-    marginLeft: 4,
-  },
   howItWorksSection: {
-    padding: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 40,
     backgroundColor: '#F8FAFC',
   },
   stepsContainer: {
-    gap: 20,
+    flexDirection: 'row',
+    gap: 16,
   },
   stepCard: {
+    flex: 1,
     backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 16,
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
   },
   stepNumber: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     backgroundColor: '#3B82F6',
-    borderRadius: 25,
+    borderRadius: 20,
     justifyContent: 'center',
     alignItems: 'center',
     marginBottom: 16,
   },
   stepNumberText: {
-    fontSize: 20,
+    fontSize: 16,
     fontWeight: '800',
     color: '#FFFFFF',
   },
   stepTitle: {
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: '700',
     color: '#111827',
     marginBottom: 8,
-    textAlign: 'center',
   },
   stepDescription: {
-    fontSize: 14,
+    fontSize: 12,
     color: '#6B7280',
     textAlign: 'center',
-    lineHeight: 20,
   },
-  ctaSection: {
-    margin: 20,
-    padding: 32,
-    borderRadius: 20,
+  finalCTA: {
+    paddingHorizontal: 24,
+    paddingVertical: 40,
     alignItems: 'center',
   },
   ctaTitle: {
     fontSize: 24,
     fontWeight: '800',
-    color: '#FFFFFF',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  ctaDescription: {
-    fontSize: 16,
-    color: '#FED7AA',
-    textAlign: 'center',
+    color: '#111827',
     marginBottom: 24,
+    textAlign: 'center',
   },
   ctaButton: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#F97316',
     paddingHorizontal: 32,
     paddingVertical: 16,
     borderRadius: 12,
@@ -655,6 +458,6 @@ const styles = StyleSheet.create({
   ctaButtonText: {
     fontSize: 16,
     fontWeight: '700',
-    color: '#F97316',
+    color: '#FFFFFF',
   },
 });

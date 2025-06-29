@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { CreditCard as Edit, Star, Clock, DollarSign, Award, TrendingUp, Settings, LogOut, Shield, Bell, CreditCard } from 'lucide-react-native';
+import { Edit, Star, Clock, DollarSign, Award, Settings, LogOut, Shield, Bell, CreditCard, ChevronRight } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 
@@ -43,21 +43,25 @@ export default function ProfileScreen() {
   ];
 
   const achievements = [
-    { id: 1, title: 'Coffee Master', description: '50+ coffee runs', icon: '☕', unlocked: true, color: '#F97316' },
-    { id: 2, title: 'Speed Demon', description: 'Average 10min response', icon: '⚡', unlocked: true, color: '#3B82F6' },
-    { id: 3, title: 'Top Rated', description: '4.8+ star rating', icon: '⭐', unlocked: true, color: '#F59E0B' },
-    { id: 4, title: 'Century Club', description: '100+ tasks completed', icon: '💯', unlocked: false, color: '#8B5CF6' },
+    { id: 1, title: 'Coffee Master', description: '50+ coffee runs', icon: '☕', unlocked: true },
+    { id: 2, title: 'Speed Demon', description: 'Fast response time', icon: '⚡', unlocked: true },
+    { id: 3, title: 'Top Rated', description: '4.8+ star rating', icon: '⭐', unlocked: true },
+    { id: 4, title: 'Century Club', description: '100+ tasks', icon: '💯', unlocked: false },
   ];
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       <StatusBar style="light" />
       
-      {/* Header with Gradient */}
+      {/* Header with Profile */}
       <LinearGradient
         colors={['#1E40AF', '#3B82F6']}
         style={styles.header}
       >
+        <View style={styles.headerLogo}>
+          <HustlLogo size={24} />
+        </View>
+        
         <View style={styles.profileSection}>
           <Image
             source={{ uri: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300' }}
@@ -76,39 +80,34 @@ export default function ProfileScreen() {
             <Edit size={20} color="#FFFFFF" />
           </TouchableOpacity>
         </View>
-        
-        {/* Logo in header */}
-        <View style={styles.headerLogo}>
-          <HustlLogo size={24} />
-        </View>
       </LinearGradient>
 
       {/* Stats Cards */}
       <View style={styles.statsSection}>
         <View style={styles.statsGrid}>
           <StatCard
-            icon={<Award size={24} color="#F97316" />}
+            icon={<Award size={20} color="#F97316" />}
             value={userStats.tasksCompleted.toString()}
-            label="Tasks Completed"
-            gradient={['#FFF7ED', '#FFEDD5']}
+            label="Tasks"
+            color="#FFF7ED"
           />
           <StatCard
-            icon={<DollarSign size={24} color="#10B981" />}
+            icon={<DollarSign size={20} color="#10B981" />}
             value={`$${userStats.totalEarned}`}
-            label="Total Earned"
-            gradient={['#ECFDF5', '#D1FAE5']}
+            label="Earned"
+            color="#ECFDF5"
           />
           <StatCard
-            icon={<Star size={24} color="#F59E0B" />}
+            icon={<Star size={20} color="#F59E0B" />}
             value={userStats.rating.toString()}
-            label="Average Rating"
-            gradient={['#FFFBEB', '#FEF3C7']}
+            label="Rating"
+            color="#FFFBEB"
           />
           <StatCard
-            icon={<Clock size={24} color="#3B82F6" />}
+            icon={<Clock size={20} color="#3B82F6" />}
             value={userStats.responseTime}
-            label="Avg Response"
-            gradient={['#EFF6FF', '#DBEAFE']}
+            label="Response"
+            color="#EFF6FF"
           />
         </View>
       </View>
@@ -130,8 +129,9 @@ export default function ProfileScreen() {
       <View style={styles.activitySection}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Recent Activity</Text>
-          <TouchableOpacity>
+          <TouchableOpacity style={styles.seeAllButton}>
             <Text style={styles.seeAllText}>See All</Text>
+            <ChevronRight size={16} color="#3B82F6" />
           </TouchableOpacity>
         </View>
         
@@ -142,42 +142,6 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      {/* Performance Chart */}
-      <View style={styles.performanceSection}>
-        <Text style={styles.sectionTitle}>This Month's Performance</Text>
-        <LinearGradient
-          colors={['#FFFFFF', '#F8FAFC']}
-          style={styles.performanceCard}
-        >
-          <View style={styles.performanceHeader}>
-            <View style={styles.performanceIconContainer}>
-              <TrendingUp size={24} color="#10B981" />
-            </View>
-            <Text style={styles.performanceTitle}>Earnings Trend</Text>
-          </View>
-          <Text style={styles.performanceValue}>$340</Text>
-          <Text style={styles.performanceChange}>+23% from last month</Text>
-          
-          {/* Simple bar chart representation */}
-          <View style={styles.chartContainer}>
-            <View style={styles.chartBars}>
-              {[0.6, 0.8, 0.4, 1.0, 0.7, 0.9, 0.5].map((height, index) => (
-                <LinearGradient
-                  key={index}
-                  colors={['#3B82F6', '#1E40AF']}
-                  style={[styles.chartBar, { height: height * 60 }]}
-                />
-              ))}
-            </View>
-            <View style={styles.chartLabels}>
-              {['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'].map((day) => (
-                <Text key={day} style={styles.chartLabel}>{day}</Text>
-              ))}
-            </View>
-          </View>
-        </LinearGradient>
-      </View>
-
       {/* Settings */}
       <View style={styles.settingsSection}>
         <Text style={styles.sectionTitle}>Settings</Text>
@@ -186,32 +150,27 @@ export default function ProfileScreen() {
             icon={<Settings size={20} color="#3B82F6" />}
             title="Account Settings"
             subtitle="Privacy, notifications, security"
-            iconBg="#EFF6FF"
           />
           <SettingsItem
             icon={<Shield size={20} color="#10B981" />}
             title="Verification"
             subtitle="Student ID, background check"
-            iconBg="#ECFDF5"
           />
           <SettingsItem
             icon={<Bell size={20} color="#F97316" />}
             title="Notifications"
             subtitle="Push notifications, email alerts"
-            iconBg="#FFF7ED"
           />
           <SettingsItem
             icon={<CreditCard size={20} color="#8B5CF6" />}
             title="Payment Methods"
             subtitle="Bank account, payment history"
-            iconBg="#F3F4F6"
           />
           <SettingsItem
             icon={<LogOut size={20} color="#EF4444" />}
             title="Sign Out"
             subtitle="Log out of your account"
             isDestructive
-            iconBg="#FEF2F2"
           />
         </View>
       </View>
@@ -219,33 +178,25 @@ export default function ProfileScreen() {
   );
 }
 
-function StatCard({ icon, value, label, gradient }: {
+function StatCard({ icon, value, label, color }: {
   icon: React.ReactNode;
   value: string;
   label: string;
-  gradient: string[];
+  color: string;
 }) {
   return (
-    <LinearGradient
-      colors={gradient}
-      style={styles.statCard}
-    >
+    <View style={[styles.statCard, { backgroundColor: color }]}>
       <View style={styles.statIcon}>{icon}</View>
       <Text style={styles.statValue}>{value}</Text>
       <Text style={styles.statLabel}>{label}</Text>
-    </LinearGradient>
+    </View>
   );
 }
 
 function AchievementCard({ achievement }: { achievement: any }) {
   return (
     <View style={[styles.achievementCard, !achievement.unlocked && styles.achievementCardLocked]}>
-      <LinearGradient
-        colors={achievement.unlocked ? [achievement.color + '20', achievement.color + '10'] : ['#F3F4F6', '#E5E7EB']}
-        style={styles.achievementIconContainer}
-      >
-        <Text style={styles.achievementIcon}>{achievement.icon}</Text>
-      </LinearGradient>
+      <Text style={styles.achievementIcon}>{achievement.icon}</Text>
       <Text style={[styles.achievementTitle, !achievement.unlocked && styles.achievementTitleLocked]}>
         {achievement.title}
       </Text>
@@ -269,12 +220,9 @@ function ActivityCard({ task }: { task: any }) {
         <Text style={styles.activityDate}>{task.date}</Text>
       </View>
       <View style={styles.activityMeta}>
-        <LinearGradient
-          colors={['#10B981', '#059669']}
-          style={styles.earningsContainer}
-        >
+        <View style={styles.earningsContainer}>
           <Text style={styles.activityEarnings}>+${task.earnings}</Text>
-        </LinearGradient>
+        </View>
         <View style={styles.activityRating}>
           <Star size={14} color="#F59E0B" fill="#F59E0B" />
           <Text style={styles.activityRatingText}>{task.rating}</Text>
@@ -284,16 +232,15 @@ function ActivityCard({ task }: { task: any }) {
   );
 }
 
-function SettingsItem({ icon, title, subtitle, isDestructive = false, iconBg }: {
+function SettingsItem({ icon, title, subtitle, isDestructive = false }: {
   icon: React.ReactNode;
   title: string;
   subtitle: string;
   isDestructive?: boolean;
-  iconBg: string;
 }) {
   return (
     <TouchableOpacity style={styles.settingsItem}>
-      <View style={[styles.settingsIconContainer, { backgroundColor: iconBg }]}>
+      <View style={styles.settingsIconContainer}>
         {icon}
       </View>
       <View style={styles.settingsContent}>
@@ -302,6 +249,7 @@ function SettingsItem({ icon, title, subtitle, isDestructive = false, iconBg }: 
         </Text>
         <Text style={styles.settingsSubtitle}>{subtitle}</Text>
       </View>
+      <ChevronRight size={16} color="#D1D5DB" />
     </TouchableOpacity>
   );
 }
@@ -314,13 +262,13 @@ const styles = StyleSheet.create({
   header: {
     paddingTop: 60,
     paddingBottom: 30,
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     position: 'relative',
   },
   headerLogo: {
     position: 'absolute',
     top: 60,
-    right: 20,
+    right: 24,
   },
   profileSection: {
     flexDirection: 'row',
@@ -369,7 +317,8 @@ const styles = StyleSheet.create({
     borderRadius: 12,
   },
   statsSection: {
-    padding: 20,
+    paddingHorizontal: 24,
+    paddingVertical: 24,
     marginTop: -20,
   },
   statsGrid: {
@@ -392,7 +341,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   statValue: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: '800',
     color: '#111827',
     marginBottom: 4,
@@ -404,8 +353,8 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   achievementsSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   sectionTitle: {
     fontSize: 20,
@@ -434,16 +383,9 @@ const styles = StyleSheet.create({
   achievementCardLocked: {
     opacity: 0.6,
   },
-  achievementIconContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
   achievementIcon: {
-    fontSize: 24,
+    fontSize: 32,
+    marginBottom: 12,
   },
   achievementTitle: {
     fontSize: 14,
@@ -472,8 +414,8 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   activitySection: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
   },
   sectionHeader: {
     flexDirection: 'row',
@@ -481,10 +423,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
+  seeAllButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
   seeAllText: {
     fontSize: 14,
     color: '#3B82F6',
     fontWeight: '600',
+    marginRight: 4,
   },
   activityList: {
     gap: 12,
@@ -520,6 +467,7 @@ const styles = StyleSheet.create({
     gap: 8,
   },
   earningsContainer: {
+    backgroundColor: '#ECFDF5',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
@@ -527,7 +475,7 @@ const styles = StyleSheet.create({
   activityEarnings: {
     fontSize: 14,
     fontWeight: '700',
-    color: '#FFFFFF',
+    color: '#10B981',
   },
   activityRating: {
     flexDirection: 'row',
@@ -539,74 +487,8 @@ const styles = StyleSheet.create({
     marginLeft: 4,
     fontWeight: '600',
   },
-  performanceSection: {
-    paddingHorizontal: 20,
-    paddingBottom: 20,
-  },
-  performanceCard: {
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
-  },
-  performanceHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  performanceIconContainer: {
-    backgroundColor: '#ECFDF5',
-    padding: 8,
-    borderRadius: 12,
-    marginRight: 12,
-  },
-  performanceTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
-  },
-  performanceValue: {
-    fontSize: 32,
-    fontWeight: '800',
-    color: '#111827',
-    marginBottom: 4,
-  },
-  performanceChange: {
-    fontSize: 14,
-    color: '#10B981',
-    marginBottom: 20,
-    fontWeight: '600',
-  },
-  chartContainer: {
-    marginTop: 16,
-  },
-  chartBars: {
-    flexDirection: 'row',
-    alignItems: 'flex-end',
-    justifyContent: 'space-between',
-    height: 60,
-    marginBottom: 8,
-  },
-  chartBar: {
-    width: 20,
-    borderRadius: 4,
-  },
-  chartLabels: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-  },
-  chartLabel: {
-    fontSize: 12,
-    color: '#6B7280',
-    width: 20,
-    textAlign: 'center',
-    fontWeight: '600',
-  },
   settingsSection: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 24,
     paddingBottom: 40,
   },
   settingsList: {
@@ -627,11 +509,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#F3F4F6',
   },
   settingsIconContainer: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    justifyContent: 'center',
-    alignItems: 'center',
     marginRight: 16,
   },
   settingsContent: {
