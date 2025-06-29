@@ -1,11 +1,10 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, Animated } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Search, Filter, MapPin, Clock, Star, Coffee, Printer, Heart, ShoppingBag, Zap, TrendingUp } from 'lucide-react-native';
+import { Search, Filter, MapPin, Clock, Star, Coffee, Printer, Heart, ShoppingBag } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { ModernCard } from '@/components/ui/ModernCard';
-import { GlassCard } from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
 import { AnimatedButton } from '@/components/ui/AnimatedButton';
@@ -25,25 +24,23 @@ export default function BrowseScreen() {
   }, []);
 
   const categories = [
-    { id: 'All', name: 'All', icon: null, count: 24, color: '#667eea' },
-    { id: 'Coffee', name: 'Coffee', icon: <Coffee size={16} color="#f97316" />, count: 8, color: '#f97316' },
-    { id: 'Printing', name: 'Print', icon: <Printer size={16} color="#3b82f6" />, count: 5, color: '#3b82f6' },
-    { id: 'Pet Care', name: 'Pets', icon: <Heart size={16} color="#ef4444" />, count: 3, color: '#ef4444' },
-    { id: 'Food', name: 'Food', icon: <ShoppingBag size={16} color="#10b981" />, count: 6, color: '#10b981' },
-    { id: 'Shopping', name: 'Shop', icon: <ShoppingBag size={16} color="#8b5cf6" />, count: 2, color: '#8b5cf6' },
+    { id: 'All', name: 'All', icon: null, count: 24 },
+    { id: 'Coffee', name: 'Coffee', icon: <Coffee size={16} color="#E6501E" />, count: 8 },
+    { id: 'Printing', name: 'Print', icon: <Printer size={16} color="#0021A5" />, count: 5 },
+    { id: 'Pet Care', name: 'Pets', icon: <Heart size={16} color="#FF7849" />, count: 3 },
+    { id: 'Shopping', name: 'Shop', icon: <ShoppingBag size={16} color="#001E3C" />, count: 6 },
   ];
 
   const tasks = [
     {
       id: 1,
       title: 'Starbucks Coffee Run',
-      description: 'Need a venti iced coffee with oat milk from Starbucks at Reitz Union. Will tip well for quick service!',
+      description: 'Need a venti iced coffee with oat milk from Starbucks at Reitz Union.',
       category: 'Coffee',
       price: 12,
       time: '15 min',
       location: 'Reitz Union',
       rating: 4.8,
-      reviews: 24,
       image: 'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: true,
       distance: '0.2 mi',
@@ -56,13 +53,12 @@ export default function BrowseScreen() {
     {
       id: 2,
       title: 'Print Assignment',
-      description: 'Print 20 pages double-sided and deliver to Turlington Plaza. PDF will be shared via email.',
+      description: 'Print 20 pages double-sided and deliver to Turlington Plaza.',
       category: 'Printing',
       price: 8,
       time: '20 min',
       location: 'Library West',
       rating: 4.9,
-      reviews: 18,
       image: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: false,
       distance: '0.5 mi',
@@ -72,49 +68,10 @@ export default function BrowseScreen() {
         image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100'
       }
     },
-    {
-      id: 3,
-      title: 'Dog Walking',
-      description: 'Walk my golden retriever for 30 minutes around campus area. Very friendly and well-behaved.',
-      category: 'Pet Care',
-      price: 20,
-      time: '45 min',
-      location: 'Campus Area',
-      rating: 5.0,
-      reviews: 12,
-      image: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=400',
-      urgent: false,
-      distance: '0.8 mi',
-      poster: {
-        name: 'Emma K.',
-        rating: 4.8,
-        image: 'https://images.pexels.com/photos/1130626/pexels-photo-1130626.jpeg?auto=compress&cs=tinysrgb&w=100'
-      }
-    },
-    {
-      id: 4,
-      title: 'Chipotle Pickup',
-      description: 'Pick up my mobile order from Chipotle and deliver to Beaty Towers. Order already paid for.',
-      category: 'Food',
-      price: 15,
-      time: '25 min',
-      location: 'Midtown',
-      rating: 4.7,
-      reviews: 31,
-      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
-      urgent: true,
-      distance: '1.2 mi',
-      poster: {
-        name: 'Alex J.',
-        rating: 4.6,
-        image: 'https://images.pexels.com/photos/1043471/pexels-photo-1043471.jpeg?auto=compress&cs=tinysrgb&w=100'
-      }
-    },
   ];
 
   const filteredTasks = tasks.filter(task => {
-    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         task.description.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesSearch = task.title.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesCategory = selectedCategory === 'All' || task.category === selectedCategory;
     return matchesSearch && matchesCategory;
   });
@@ -123,9 +80,9 @@ export default function BrowseScreen() {
     <View style={styles.container}>
       <StatusBar style="light" />
       
-      {/* Premium Header */}
+      {/* Header */}
       <LinearGradient
-        colors={['#667eea', '#764ba2']}
+        colors={['#0021A5', '#001E3C']}
         style={styles.header}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
@@ -133,44 +90,27 @@ export default function BrowseScreen() {
         <Animated.View style={[styles.headerContent, { opacity: fadeAnim }]}>
           <View style={styles.headerTop}>
             <HustlLogo size={32} />
-            <View style={styles.headerText}>
-              <Typography variant="h2" color="#ffffff">Browse Tasks</Typography>
-              <Typography variant="body2" color="rgba(255,255,255,0.8)">
-                Find your next gig
-              </Typography>
-            </View>
+            <Typography variant="h2" color="#ffffff">Browse Tasks</Typography>
             <TouchableOpacity style={styles.filterButton}>
               <Filter size={20} color="#ffffff" />
             </TouchableOpacity>
           </View>
 
-          {/* Live Stats */}
-          <GlassCard style={styles.liveStats}>
-            <View style={styles.liveStatsContent}>
-              <View style={styles.liveStat}>
-                <TrendingUp size={16} color="#10b981" />
-                <Typography variant="caption" color="#ffffff">24 Active</Typography>
-              </View>
-              <View style={styles.liveStat}>
-                <Clock size={16} color="#f97316" />
-                <Typography variant="caption" color="#ffffff">Avg 8min</Typography>
-              </View>
-              <View style={styles.liveStat}>
-                <Star size={16} color="#ffd89b" />
-                <Typography variant="caption" color="#ffffff">4.9★ Rating</Typography>
-              </View>
-            </View>
-          </GlassCard>
+          <View style={styles.liveStats}>
+            <Typography variant="body2" color="rgba(255,255,255,0.8)">
+              24 active tasks • Avg 8min response
+            </Typography>
+          </View>
         </Animated.View>
       </LinearGradient>
 
-      {/* Search Section */}
+      {/* Search */}
       <View style={styles.searchSection}>
         <Input
-          placeholder="Search tasks, locations, or keywords..."
+          placeholder="Search tasks or locations..."
           value={searchQuery}
           onChangeText={setSearchQuery}
-          icon={<Search size={20} color="#718096" />}
+          icon={<Search size={20} color="#001E3C" />}
           containerStyle={styles.searchContainer}
         />
       </View>
@@ -187,35 +127,23 @@ export default function BrowseScreen() {
               key={category.id}
               style={[
                 styles.categoryChip,
-                selectedCategory === category.id && [
-                  styles.categoryChipActive,
-                  { backgroundColor: category.color }
-                ]
+                selectedCategory === category.id && styles.categoryChipActive
               ]}
               onPress={() => setSelectedCategory(category.id)}
             >
               {category.icon}
               <Typography 
                 variant="body2" 
-                color={selectedCategory === category.id ? "#ffffff" : "#4a5568"}
-                style={styles.categoryText}
+                color={selectedCategory === category.id ? "#ffffff" : "#001E3C"}
               >
                 {category.name}
               </Typography>
               <Badge 
                 variant={selectedCategory === category.id ? "default" : "default"} 
                 size="sm"
-                style={[
-                  styles.categoryBadge,
-                  selectedCategory === category.id && { backgroundColor: 'rgba(255,255,255,0.2)' }
-                ]}
+                style={styles.categoryBadge}
               >
-                <Typography 
-                  variant="caption" 
-                  color={selectedCategory === category.id ? "#ffffff" : "#718096"}
-                >
-                  {category.count}
-                </Typography>
+                <Typography variant="caption">{category.count}</Typography>
               </Badge>
             </TouchableOpacity>
           ))}
@@ -225,8 +153,8 @@ export default function BrowseScreen() {
       {/* Tasks Header */}
       <View style={styles.tasksHeader}>
         <Typography variant="h4">{filteredTasks.length} tasks available</Typography>
-        <TouchableOpacity style={styles.sortContainer}>
-          <Typography variant="body2" color="#667eea">Nearest first</Typography>
+        <TouchableOpacity>
+          <Typography variant="body2" color="#0021A5">Nearest first</Typography>
         </TouchableOpacity>
       </View>
 
@@ -247,21 +175,18 @@ function TaskCard({ task }: { task: any }) {
     <ModernCard style={styles.taskCard} onPress={() => {}}>
       <View style={styles.taskHeader}>
         {task.urgent && (
-          <Badge variant="error" size="sm" style={styles.urgentBadge}>
-            <Zap size={12} color="#dc2626" />
-            <Typography variant="caption" color="#dc2626">Urgent</Typography>
+          <Badge variant="secondary" size="sm">
+            <Typography variant="caption" color="#FFFFFF">Urgent</Typography>
           </Badge>
         )}
         
         <View style={styles.categoryBadge}>
-          {task.category === 'Coffee' && <Coffee size={14} color="#f97316" />}
-          {task.category === 'Printing' && <Printer size={14} color="#3b82f6" />}
-          {task.category === 'Pet Care' && <Heart size={14} color="#ef4444" />}
-          {task.category === 'Food' && <ShoppingBag size={14} color="#10b981" />}
+          {task.category === 'Coffee' && <Coffee size={14} color="#E6501E" />}
+          {task.category === 'Printing' && <Printer size={14} color="#0021A5" />}
           <Typography variant="caption" style={styles.categoryText}>{task.category}</Typography>
         </View>
         
-        <Typography variant="h3" color="#667eea">${task.price}</Typography>
+        <Typography variant="h3" color="#0021A5">${task.price}</Typography>
       </View>
       
       <Image source={{ uri: task.image }} style={styles.taskImage} />
@@ -274,13 +199,13 @@ function TaskCard({ task }: { task: any }) {
         
         <View style={styles.taskMeta}>
           <View style={styles.metaItem}>
-            <MapPin size={14} color="#718096" />
-            <Typography variant="body2" color="#718096">{task.location}</Typography>
-            <Typography variant="body2" color="#667eea">• {task.distance}</Typography>
+            <MapPin size={14} color="#001E3C" />
+            <Typography variant="body2" color="#001E3C">{task.location}</Typography>
+            <Typography variant="body2" color="#0021A5">• {task.distance}</Typography>
           </View>
           <View style={styles.metaItem}>
-            <Clock size={14} color="#718096" />
-            <Typography variant="body2" color="#718096">{task.time}</Typography>
+            <Clock size={14} color="#001E3C" />
+            <Typography variant="body2" color="#001E3C">{task.time}</Typography>
           </View>
         </View>
         
@@ -289,8 +214,8 @@ function TaskCard({ task }: { task: any }) {
           <View style={styles.posterInfo}>
             <Typography variant="body2">{task.poster.name}</Typography>
             <View style={styles.posterRating}>
-              <Star size={12} color="#f59e0b" fill="#f59e0b" />
-              <Typography variant="caption" color="#718096">{task.poster.rating}</Typography>
+              <Star size={12} color="#E6501E" fill="#E6501E" />
+              <Typography variant="caption" color="#001E3C">{task.poster.rating}</Typography>
             </View>
           </View>
           
@@ -300,7 +225,6 @@ function TaskCard({ task }: { task: any }) {
             variant="primary"
             size="sm"
             gradient
-            gradientColors={['#667eea', '#764ba2']}
             style={styles.acceptButton}
           />
         </View>
@@ -312,7 +236,7 @@ function TaskCard({ task }: { task: any }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8fafc',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     paddingTop: 60,
@@ -326,41 +250,30 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
-    marginBottom: 24,
-  },
-  headerText: {
-    flex: 1,
+    marginBottom: 16,
   },
   filterButton: {
-    padding: 12,
+    padding: 8,
     backgroundColor: 'rgba(255,255,255,0.2)',
-    borderRadius: 12,
+    borderRadius: 8,
+    marginLeft: 'auto',
   },
   liveStats: {
-    marginTop: 16,
-  },
-  liveStatsContent: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
-  },
-  liveStat: {
-    flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
   },
   searchSection: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
   },
   searchContainer: {
     marginBottom: 0,
   },
   categoriesSection: {
-    backgroundColor: '#ffffff',
+    backgroundColor: '#FFFFFF',
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#f3f4f6',
+    borderBottomColor: '#D8DDE6',
   },
   categoriesContent: {
     paddingHorizontal: 24,
@@ -372,21 +285,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     borderRadius: 20,
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#D8DDE6',
     gap: 8,
   },
   categoryChipActive: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  categoryText: {
-    fontFamily: 'Inter-SemiBold',
+    backgroundColor: '#0021A5',
   },
   categoryBadge: {
     marginLeft: 4,
+  },
+  categoryText: {
+    fontFamily: 'Inter-SemiBold',
   },
   tasksHeader: {
     flexDirection: 'row',
@@ -394,10 +303,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 24,
     paddingVertical: 20,
-  },
-  sortContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
   },
   tasksList: {
     paddingHorizontal: 24,
@@ -413,21 +318,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 16,
     gap: 12,
-  },
-  urgentBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  categoryBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#f3f4f6',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 8,
-    gap: 4,
-    flex: 1,
   },
   taskImage: {
     width: '100%',

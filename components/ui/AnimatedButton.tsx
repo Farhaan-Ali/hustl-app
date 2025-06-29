@@ -12,7 +12,6 @@ interface AnimatedButtonProps {
   textStyle?: TextStyle;
   icon?: React.ReactNode;
   gradient?: boolean;
-  gradientColors?: string[];
 }
 
 export function AnimatedButton({ 
@@ -24,38 +23,33 @@ export function AnimatedButton({
   style, 
   textStyle,
   icon,
-  gradient = false,
-  gradientColors = ['#667eea', '#764ba2']
+  gradient = false
 }: AnimatedButtonProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
-  const opacityAnim = useRef(new Animated.Value(1)).current;
 
   const handlePressIn = () => {
-    Animated.parallel([
-      Animated.spring(scaleAnim, {
-        toValue: 0.95,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 0.8,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    Animated.spring(scaleAnim, {
+      toValue: 0.96,
+      useNativeDriver: true,
+    }).start();
   };
 
   const handlePressOut = () => {
-    Animated.parallel([
-      Animated.spring(scaleAnim, {
-        toValue: 1,
-        useNativeDriver: true,
-      }),
-      Animated.timing(opacityAnim, {
-        toValue: 1,
-        duration: 100,
-        useNativeDriver: true,
-      }),
-    ]).start();
+    Animated.spring(scaleAnim, {
+      toValue: 1,
+      useNativeDriver: true,
+    }).start();
+  };
+
+  const getGradientColors = () => {
+    switch (variant) {
+      case 'primary':
+        return ['#0021A5', '#001E3C'];
+      case 'secondary':
+        return ['#E6501E', '#FF7849'];
+      default:
+        return ['#0021A5', '#001E3C'];
+    }
   };
 
   const buttonStyle = [
@@ -76,7 +70,6 @@ export function AnimatedButton({
 
   const animatedStyle = {
     transform: [{ scale: scaleAnim }],
-    opacity: opacityAnim,
   };
 
   const content = (
@@ -86,7 +79,7 @@ export function AnimatedButton({
     </>
   );
 
-  if (gradient && variant === 'primary') {
+  if (gradient) {
     return (
       <Animated.View style={[animatedStyle, buttonStyle, { padding: 0 }]}>
         <TouchableOpacity 
@@ -97,7 +90,7 @@ export function AnimatedButton({
           activeOpacity={1}
         >
           <LinearGradient
-            colors={gradientColors}
+            colors={getGradientColors()}
             style={[styles.gradientButton, styles[size]]}
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 1 }}
@@ -132,11 +125,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
   },
   gradientButton: {
     borderRadius: 16,
@@ -158,18 +146,18 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
   },
   primary: {
-    backgroundColor: '#667eea',
+    backgroundColor: '#0021A5',
   },
   secondary: {
-    backgroundColor: '#f093fb',
+    backgroundColor: '#E6501E',
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#667eea',
+    borderColor: '#0021A5',
   },
   ghost: {
-    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+    backgroundColor: 'rgba(0, 33, 165, 0.1)',
   },
   disabled: {
     opacity: 0.5,
@@ -193,12 +181,12 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   outlineText: {
-    color: '#667eea',
+    color: '#0021A5',
   },
   ghostText: {
-    color: '#667eea',
+    color: '#0021A5',
   },
   disabledText: {
-    color: '#9CA3AF',
+    color: '#D8DDE6',
   },
 });

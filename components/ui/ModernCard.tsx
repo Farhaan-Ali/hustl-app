@@ -9,18 +9,33 @@ interface ModernCardProps {
   gradientColors?: string[];
   elevated?: boolean;
   onPress?: () => void;
-  variant?: 'default' | 'glass' | 'elevated' | 'flat';
+  variant?: 'default' | 'primary' | 'secondary' | 'accent';
 }
 
 export function ModernCard({ 
   children, 
   style, 
   gradient = false, 
-  gradientColors = ['#ffffff', '#f8fafc'], 
+  gradientColors, 
   elevated = true,
   onPress,
   variant = 'default'
 }: ModernCardProps) {
+  const getGradientColors = () => {
+    if (gradientColors) return gradientColors;
+    
+    switch (variant) {
+      case 'primary':
+        return ['#0021A5', '#001E3C'];
+      case 'secondary':
+        return ['#E6501E', '#FF7849'];
+      case 'accent':
+        return ['#D8DDE6', '#ffffff'];
+      default:
+        return ['#ffffff', '#D8DDE6'];
+    }
+  };
+
   const cardStyle = [
     styles.card,
     styles[variant],
@@ -32,7 +47,7 @@ export function ModernCard({
     <View style={cardStyle}>
       {gradient ? (
         <LinearGradient 
-          colors={gradientColors} 
+          colors={getGradientColors()} 
           style={styles.gradientContent}
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
@@ -58,29 +73,28 @@ export function ModernCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 24,
+    borderRadius: 20,
     padding: 24,
     overflow: 'hidden',
   },
   default: {
     backgroundColor: '#ffffff',
   },
-  glass: {
-    backgroundColor: 'rgba(255,255,255,0.9)',
-    borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
+  primary: {
+    backgroundColor: '#0021A5',
+  },
+  secondary: {
+    backgroundColor: '#E6501E',
+  },
+  accent: {
+    backgroundColor: '#D8DDE6',
   },
   elevated: {
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.08,
-    shadowRadius: 24,
+    shadowColor: '#001E3C',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 16,
     elevation: 8,
-  },
-  flat: {
-    backgroundColor: '#f8fafc',
-    shadowOpacity: 0,
-    elevation: 0,
   },
   gradientContent: {
     flex: 1,

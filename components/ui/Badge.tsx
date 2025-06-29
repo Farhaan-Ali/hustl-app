@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, ViewStyle, TextStyle } from 'react-native';
 
 interface BadgeProps {
   children: React.ReactNode;
-  variant?: 'default' | 'success' | 'warning' | 'error' | 'info';
+  variant?: 'default' | 'primary' | 'secondary' | 'success' | 'warning';
   size?: 'sm' | 'md';
   style?: ViewStyle;
   textStyle?: TextStyle;
@@ -35,19 +35,19 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
   },
   default: {
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#D8DDE6',
+  },
+  primary: {
+    backgroundColor: '#0021A5',
+  },
+  secondary: {
+    backgroundColor: '#E6501E',
   },
   success: {
-    backgroundColor: '#DCFCE7',
+    backgroundColor: '#E6501E',
   },
   warning: {
-    backgroundColor: '#FEF3C7',
-  },
-  error: {
-    backgroundColor: '#FEE2E2',
-  },
-  info: {
-    backgroundColor: '#DBEAFE',
+    backgroundColor: '#FF7849',
   },
   text: {
     fontWeight: '600',
@@ -59,18 +59,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
   },
   defaultText: {
-    color: '#6B7280',
+    color: '#001E3C',
+  },
+  primaryText: {
+    color: '#FFFFFF',
+  },
+  secondaryText: {
+    color: '#FFFFFF',
   },
   successText: {
-    color: '#16A34A',
+    color: '#FFFFFF',
   },
   warningText: {
-    color: '#D97706',
-  },
-  errorText: {
-    color: '#DC2626',
-  },
-  infoText: {
-    color: '#2563EB',
+    color: '#FFFFFF',
   },
 });
