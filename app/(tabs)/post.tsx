@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera } from 'lucide-react-native';
+import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera, Zap, Users } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
+import { Card } from '@/components/ui/Card';
+import { Input } from '@/components/ui/Input';
+import { Button } from '@/components/ui/Button';
+import { Badge } from '@/components/ui/Badge';
 
 export default function PostTaskScreen() {
   const [formData, setFormData] = useState({
@@ -18,17 +22,65 @@ export default function PostTaskScreen() {
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
 
   const categories = [
-    { id: 'coffee', name: 'Coffee', icon: <Coffee size={20} color="#F97316" /> },
-    { id: 'printing', name: 'Printing', icon: <Printer size={20} color="#3B82F6" /> },
-    { id: 'petcare', name: 'Pet Care', icon: <Heart size={20} color="#EF4444" /> },
-    { id: 'food', name: 'Food', icon: <ShoppingBag size={20} color="#10B981" /> },
-    { id: 'shopping', name: 'Shopping', icon: <ShoppingBag size={20} color="#8B5CF6" /> },
+    { 
+      id: 'coffee', 
+      name: 'Coffee Run', 
+      icon: <Coffee size={24} color="#F97316" />, 
+      color: '#FFF7ED',
+      description: 'Quick caffeine fixes'
+    },
+    { 
+      id: 'printing', 
+      name: 'Printing', 
+      icon: <Printer size={24} color="#3B82F6" />, 
+      color: '#EFF6FF',
+      description: 'Documents & materials'
+    },
+    { 
+      id: 'petcare', 
+      name: 'Pet Care', 
+      icon: <Heart size={24} color="#EF4444" />, 
+      color: '#FEF2F2',
+      description: 'Walking & sitting'
+    },
+    { 
+      id: 'food', 
+      name: 'Food Delivery', 
+      icon: <ShoppingBag size={24} color="#10B981" />, 
+      color: '#ECFDF5',
+      description: 'Pickup & delivery'
+    },
+    { 
+      id: 'shopping', 
+      name: 'Shopping', 
+      icon: <ShoppingBag size={24} color="#8B5CF6" />, 
+      color: '#F3F4F6',
+      description: 'Errands & purchases'
+    },
   ];
 
   const urgencyLevels = [
-    { id: 'normal', name: 'Normal', description: 'Within a few hours' },
-    { id: 'urgent', name: 'Urgent', description: 'Within 30 minutes' },
-    { id: 'asap', name: 'ASAP', description: 'Right now!' },
+    { 
+      id: 'normal', 
+      name: 'Normal', 
+      description: 'Within a few hours',
+      icon: <Clock size={20} color="#6B7280" />,
+      color: '#F3F4F6'
+    },
+    { 
+      id: 'urgent', 
+      name: 'Urgent', 
+      description: 'Within 30 minutes',
+      icon: <Zap size={20} color="#F97316" />,
+      color: '#FFF7ED'
+    },
+    { 
+      id: 'asap', 
+      name: 'ASAP', 
+      description: 'Right now!',
+      icon: <Users size={20} color="#EF4444" />,
+      color: '#FEF2F2'
+    },
   ];
 
   const validateForm = () => {
@@ -67,9 +119,9 @@ export default function PostTaskScreen() {
   const handleSubmit = () => {
     if (validateForm()) {
       Alert.alert(
-        'Task Posted!',
-        'Your task has been posted successfully. Students nearby will be notified.',
-        [{ text: 'OK', onPress: () => {
+        'Task Posted Successfully! 🎉',
+        'Your task is now live. Students nearby will be notified and can start accepting it.',
+        [{ text: 'Great!', onPress: () => {
           setFormData({
             title: '',
             category: '',
@@ -95,28 +147,29 @@ export default function PostTaskScreen() {
     <View style={styles.container}>
       <StatusBar style="dark" />
       
-      {/* Clean Header */}
+      {/* Premium Header */}
       <View style={styles.header}>
         <View style={styles.headerTop}>
-          <HustlLogo size={28} />
-          <Text style={styles.headerTitle}>Post Task</Text>
+          <HustlLogo size={32} />
+          <View style={styles.headerText}>
+            <Text style={styles.headerTitle}>Post Task</Text>
+            <Text style={styles.headerSubtitle}>Get help from fellow students</Text>
+          </View>
+          <Badge variant="success" size="sm">
+            <Text>Live</Text>
+          </Badge>
         </View>
-        <Text style={styles.headerSubtitle}>Get help from fellow students</Text>
       </View>
 
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         {/* Task Title */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Task Title</Text>
-          <TextInput
-            style={[styles.input, errors.title && styles.inputError]}
-            value={formData.title}
-            onChangeText={(value) => updateFormData('title', value)}
-            placeholder="e.g., Starbucks coffee run"
-            placeholderTextColor="#9CA3AF"
-          />
-          {errors.title && <Text style={styles.errorText}>{errors.title}</Text>}
-        </View>
+        <Input
+          label="What do you need help with?"
+          placeholder="e.g., Starbucks coffee run to Reitz Union"
+          value={formData.title}
+          onChangeText={(value) => updateFormData('title', value)}
+          error={errors.title}
+        />
 
         {/* Category Selection */}
         <View style={styles.inputGroup}>
@@ -127,6 +180,7 @@ export default function PostTaskScreen() {
                 key={category.id}
                 style={[
                   styles.categoryCard,
+                  { backgroundColor: category.color },
                   formData.category === category.id && styles.categoryCardSelected
                 ]}
                 onPress={() => updateFormData('category', category.id)}
@@ -138,6 +192,7 @@ export default function PostTaskScreen() {
                 ]}>
                   {category.name}
                 </Text>
+                <Text style={styles.categoryDescription}>{category.description}</Text>
               </TouchableOpacity>
             ))}
           </View>
@@ -145,90 +200,78 @@ export default function PostTaskScreen() {
         </View>
 
         {/* Description */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Description</Text>
-          <TextInput
-            style={[styles.textArea, errors.description && styles.inputError]}
-            value={formData.description}
-            onChangeText={(value) => updateFormData('description', value)}
-            placeholder="Describe what you need done..."
-            placeholderTextColor="#9CA3AF"
-            multiline
-            numberOfLines={4}
-            textAlignVertical="top"
-          />
-          {errors.description && <Text style={styles.errorText}>{errors.description}</Text>}
-        </View>
+        <Input
+          label="Task Details"
+          placeholder="Provide specific details, preferences, and any special instructions..."
+          value={formData.description}
+          onChangeText={(value) => updateFormData('description', value)}
+          error={errors.description}
+          multiline
+          numberOfLines={4}
+          style={styles.textArea}
+        />
 
         {/* Location */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Location</Text>
-          <View style={styles.inputWithIcon}>
-            <MapPin size={20} color="#6B7280" />
-            <TextInput
-              style={[styles.inputWithIconText, errors.location && styles.inputError]}
-              value={formData.location}
-              onChangeText={(value) => updateFormData('location', value)}
-              placeholder="e.g., Turlington Plaza"
-              placeholderTextColor="#9CA3AF"
+        <Input
+          label="Pickup/Delivery Location"
+          placeholder="e.g., Turlington Plaza, Reitz Union, Library West"
+          value={formData.location}
+          onChangeText={(value) => updateFormData('location', value)}
+          error={errors.location}
+          icon={<MapPin size={20} color="#6B7280" />}
+        />
+
+        {/* Budget and Time Row */}
+        <View style={styles.row}>
+          <View style={styles.halfWidth}>
+            <Input
+              label="Budget ($)"
+              placeholder="15"
+              value={formData.budget}
+              onChangeText={(value) => updateFormData('budget', value)}
+              error={errors.budget}
+              keyboardType="numeric"
+              icon={<DollarSign size={20} color="#6B7280" />}
+              containerStyle={styles.halfInput}
             />
           </View>
-          {errors.location && <Text style={styles.errorText}>{errors.location}</Text>}
-        </View>
 
-        {/* Budget and Time */}
-        <View style={styles.row}>
-          <View style={[styles.inputGroup, styles.halfWidth]}>
-            <Text style={styles.inputLabel}>Budget</Text>
-            <View style={styles.inputWithIcon}>
-              <DollarSign size={20} color="#6B7280" />
-              <TextInput
-                style={[styles.inputWithIconText, errors.budget && styles.inputError]}
-                value={formData.budget}
-                onChangeText={(value) => updateFormData('budget', value)}
-                placeholder="15"
-                placeholderTextColor="#9CA3AF"
-                keyboardType="numeric"
-              />
-            </View>
-            {errors.budget && <Text style={styles.errorText}>{errors.budget}</Text>}
-          </View>
-
-          <View style={[styles.inputGroup, styles.halfWidth]}>
-            <Text style={styles.inputLabel}>Time Estimate</Text>
-            <View style={styles.inputWithIcon}>
-              <Clock size={20} color="#6B7280" />
-              <TextInput
-                style={[styles.inputWithIconText, errors.timeEstimate && styles.inputError]}
-                value={formData.timeEstimate}
-                onChangeText={(value) => updateFormData('timeEstimate', value)}
-                placeholder="30 min"
-                placeholderTextColor="#9CA3AF"
-              />
-            </View>
-            {errors.timeEstimate && <Text style={styles.errorText}>{errors.timeEstimate}</Text>}
+          <View style={styles.halfWidth}>
+            <Input
+              label="Time Estimate"
+              placeholder="30 min"
+              value={formData.timeEstimate}
+              onChangeText={(value) => updateFormData('timeEstimate', value)}
+              error={errors.timeEstimate}
+              icon={<Clock size={20} color="#6B7280" />}
+              containerStyle={styles.halfInput}
+            />
           </View>
         </View>
 
         {/* Urgency Level */}
         <View style={styles.inputGroup}>
           <Text style={styles.inputLabel}>Urgency Level</Text>
-          <View style={styles.urgencyOptions}>
+          <View style={styles.urgencyGrid}>
             {urgencyLevels.map((level) => (
               <TouchableOpacity
                 key={level.id}
                 style={[
-                  styles.urgencyOption,
-                  formData.urgency === level.id && styles.urgencyOptionSelected
+                  styles.urgencyCard,
+                  { backgroundColor: level.color },
+                  formData.urgency === level.id && styles.urgencyCardSelected
                 ]}
                 onPress={() => updateFormData('urgency', level.id)}
               >
-                <Text style={[
-                  styles.urgencyName,
-                  formData.urgency === level.id && styles.urgencyNameSelected
-                ]}>
-                  {level.name}
-                </Text>
+                <View style={styles.urgencyHeader}>
+                  <View style={styles.urgencyIcon}>{level.icon}</View>
+                  <Text style={[
+                    styles.urgencyName,
+                    formData.urgency === level.id && styles.urgencyNameSelected
+                  ]}>
+                    {level.name}
+                  </Text>
+                </View>
                 <Text style={[
                   styles.urgencyDescription,
                   formData.urgency === level.id && styles.urgencyDescriptionSelected
@@ -241,19 +284,43 @@ export default function PostTaskScreen() {
         </View>
 
         {/* Add Photo */}
-        <TouchableOpacity style={styles.photoButton}>
-          <Camera size={20} color="#6B7280" />
-          <Text style={styles.photoButtonText}>Add Photo (Optional)</Text>
-        </TouchableOpacity>
+        <Card style={styles.photoCard}>
+          <TouchableOpacity style={styles.photoButton}>
+            <Camera size={24} color="#6B7280" />
+            <Text style={styles.photoButtonText}>Add Photo (Optional)</Text>
+            <Text style={styles.photoButtonSubtext}>Help others understand your task better</Text>
+          </TouchableOpacity>
+        </Card>
+
+        {/* Task Preview */}
+        <Card style={styles.previewCard} gradient gradientColors={['#F8FAFC', '#FFFFFF']}>
+          <Text style={styles.previewTitle}>Task Preview</Text>
+          <View style={styles.previewContent}>
+            <Text style={styles.previewTaskTitle}>{formData.title || 'Your task title'}</Text>
+            <Text style={styles.previewDescription}>{formData.description || 'Task description will appear here'}</Text>
+            <View style={styles.previewMeta}>
+              <Badge variant="info" size="sm">
+                <Text>{formData.category || 'Category'}</Text>
+              </Badge>
+              <Text style={styles.previewPrice}>${formData.budget || '0'}</Text>
+            </View>
+          </View>
+        </Card>
 
         {/* Submit Button */}
-        <TouchableOpacity style={styles.submitButton} onPress={handleSubmit}>
-          <Text style={styles.submitButtonText}>Post Task</Text>
-        </TouchableOpacity>
+        <Button
+          title="Post Task"
+          onPress={handleSubmit}
+          variant="primary"
+          size="lg"
+          gradient
+          style={styles.submitButton}
+        />
 
         {/* Terms */}
         <Text style={styles.termsText}>
-          By posting a task, you agree to our Terms of Service and Community Guidelines.
+          By posting a task, you agree to our Terms of Service and Community Guidelines. 
+          Payment will be held securely until task completion.
         </Text>
       </ScrollView>
     </View>
@@ -268,23 +335,29 @@ const styles = StyleSheet.create({
   header: {
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 24,
+    paddingBottom: 20,
     backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 8,
+    gap: 16,
+  },
+  headerText: {
+    flex: 1,
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: '800',
+    fontWeight: '900',
     color: '#111827',
-    marginLeft: 12,
+    letterSpacing: -0.5,
   },
   headerSubtitle: {
-    fontSize: 16,
+    fontSize: 14,
     color: '#6B7280',
+    fontWeight: '500',
   },
   form: {
     flex: 1,
@@ -296,113 +369,86 @@ const styles = StyleSheet.create({
   },
   inputLabel: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#374151',
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    fontSize: 16,
-    color: '#111827',
-  },
-  textArea: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-    fontSize: 16,
-    color: '#111827',
-    height: 100,
-  },
-  inputWithIcon: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 16,
-  },
-  inputWithIconText: {
-    flex: 1,
-    marginLeft: 12,
-    fontSize: 16,
-    color: '#111827',
-  },
-  inputError: {
-    borderColor: '#EF4444',
-  },
-  errorText: {
-    fontSize: 12,
-    color: '#EF4444',
-    marginTop: 4,
+    marginBottom: 12,
   },
   categoryGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
     gap: 12,
   },
   categoryCard: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    width: '48%',
+    padding: 20,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   categoryCardSelected: {
     borderColor: '#3B82F6',
-    backgroundColor: '#EFF6FF',
+    shadowColor: '#3B82F6',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
   },
   categoryIcon: {
-    marginBottom: 8,
+    marginBottom: 12,
   },
   categoryName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6B7280',
-    textAlign: 'center',
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#374151',
+    marginBottom: 4,
   },
   categoryNameSelected: {
     color: '#3B82F6',
   },
+  categoryDescription: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
   row: {
     flexDirection: 'row',
     gap: 16,
-    marginBottom: 24,
   },
   halfWidth: {
     flex: 1,
+  },
+  halfInput: {
     marginBottom: 0,
   },
-  urgencyOptions: {
+  urgencyGrid: {
     gap: 12,
   },
-  urgencyOption: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
+  urgencyCard: {
     padding: 16,
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
-  urgencyOptionSelected: {
+  urgencyCardSelected: {
     borderColor: '#F97316',
-    backgroundColor: '#FFF7ED',
+    shadowColor: '#F97316',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 2,
+  },
+  urgencyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  urgencyIcon: {
+    marginRight: 12,
   },
   urgencyName: {
     fontSize: 16,
-    fontWeight: '600',
+    fontWeight: '700',
     color: '#374151',
-    marginBottom: 4,
   },
   urgencyNameSelected: {
     color: '#F97316',
@@ -414,34 +460,69 @@ const styles = StyleSheet.create({
   urgencyDescriptionSelected: {
     color: '#EA580C',
   },
+  photoCard: {
+    marginBottom: 24,
+    padding: 0,
+  },
   photoButton: {
-    backgroundColor: '#FFFFFF',
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    borderRadius: 12,
-    padding: 20,
-    flexDirection: 'row',
+    padding: 24,
     alignItems: 'center',
-    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
     borderStyle: 'dashed',
-    marginBottom: 32,
+    borderRadius: 16,
   },
   photoButtonText: {
     fontSize: 16,
     color: '#6B7280',
-    marginLeft: 8,
+    fontWeight: '600',
+    marginTop: 8,
   },
-  submitButton: {
-    backgroundColor: '#F97316',
-    paddingVertical: 18,
+  photoButtonSubtext: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 4,
+  },
+  previewCard: {
+    marginBottom: 32,
+  },
+  previewTitle: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#374151',
+    marginBottom: 16,
+  },
+  previewContent: {
+    padding: 16,
+    backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    alignItems: 'center',
-    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
-  submitButtonText: {
-    color: '#FFFFFF',
+  previewTaskTitle: {
     fontSize: 18,
     fontWeight: '700',
+    color: '#111827',
+    marginBottom: 8,
+  },
+  previewDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 12,
+    lineHeight: 20,
+  },
+  previewMeta: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  previewPrice: {
+    fontSize: 20,
+    fontWeight: '800',
+    color: '#F97316',
+  },
+  submitButton: {
+    marginBottom: 24,
   },
   termsText: {
     fontSize: 12,
@@ -449,5 +530,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     lineHeight: 18,
     marginBottom: 40,
+  },
+  errorText: {
+    fontSize: 12,
+    color: '#EF4444',
+    marginTop: 4,
   },
 });
