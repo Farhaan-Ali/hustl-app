@@ -1,382 +1,507 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { CircleHelp as HelpCircle, Shield, FileText, Star, MessageCircle, Globe, Bell, CreditCard, Users, Award, ChevronRight } from 'lucide-react-native';
+import { CircleHelp as HelpCircle, Shield, FileText, Star, MessageCircle, Globe, Bell, CreditCard, Users, Award, ChevronRight, Sparkles, TrendingUp } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Typography } from '@/components/ui/Typography';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
 
 export default function MoreScreen() {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   const handleLinkPress = (url: string) => {
     Linking.openURL(url);
   };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       
-      {/* Clean Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <HustlLogo size={28} />
-          <Text style={styles.headerTitle}>More</Text>
-        </View>
-        <Text style={styles.headerSubtitle}>Settings, help, and information</Text>
-      </View>
+      {/* Premium Header */}
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <Animated.View 
+          style={[
+            styles.headerContent,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <View style={styles.headerTop}>
+            <HustlLogo size={32} />
+            <Typography variant="h2" color="#ffffff">More</Typography>
+          </View>
+          <Typography variant="body2" color="rgba(255,255,255,0.8)">
+            Settings, help, and information
+          </Typography>
+        </Animated.View>
+      </LinearGradient>
 
-      {/* Quick Stats */}
-      <View style={styles.statsSection}>
-        <View style={styles.statsCard}>
-          <View style={styles.statItem}>
-            <Users size={24} color="#3B82F6" />
-            <View style={styles.statContent}>
-              <Text style={styles.statValue}>12,000+</Text>
-              <Text style={styles.statLabel}>Active Students</Text>
+      {/* Community Stats */}
+      <Animated.View 
+        style={[
+          styles.statsSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <GlassCard style={styles.statsCard} gradient gradientColors={['rgba(255,255,255,0.95)', 'rgba(248,250,252,0.9)']}>
+          <View style={styles.statsGrid}>
+            <View style={styles.statItem}>
+              <Users size={24} color="#667eea" />
+              <View style={styles.statContent}>
+                <Typography variant="h3">12,000+</Typography>
+                <Typography variant="body2" color="#718096">Active Students</Typography>
+              </View>
+            </View>
+            <View style={styles.statItem}>
+              <Award size={24} color="#f093fb" />
+              <View style={styles.statContent}>
+                <Typography variant="h3">50,000+</Typography>
+                <Typography variant="body2" color="#718096">Tasks Completed</Typography>
+              </View>
+            </View>
+            <View style={styles.statItem}>
+              <TrendingUp size={24} color="#10b981" />
+              <View style={styles.statContent}>
+                <Typography variant="h3">4.9★</Typography>
+                <Typography variant="body2" color="#718096">Average Rating</Typography>
+              </View>
             </View>
           </View>
-          <View style={styles.statItem}>
-            <Award size={24} color="#F97316" />
-            <View style={styles.statContent}>
-              <Text style={styles.statValue}>50,000+</Text>
-              <Text style={styles.statLabel}>Tasks Completed</Text>
-            </View>
-          </View>
-        </View>
-      </View>
+        </GlassCard>
+      </Animated.View>
 
       {/* Account Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Account</Text>
-        <View style={styles.menuList}>
+      <Animated.View 
+        style={[
+          styles.section,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Account</Typography>
+        <ModernCard style={styles.menuList}>
           <MenuItem
-            icon={<Bell size={20} color="#6B7280" />}
+            icon={<Bell size={20} color="#f97316" />}
             title="Notifications"
             subtitle="Push notifications, email alerts"
             onPress={() => {}}
+            gradient={['#fff7ed', '#fed7aa']}
           />
           <MenuItem
-            icon={<CreditCard size={20} color="#6B7280" />}
+            icon={<CreditCard size={20} color="#3b82f6" />}
             title="Payment Methods"
             subtitle="Manage cards and bank accounts"
             onPress={() => {}}
+            gradient={['#eff6ff', '#dbeafe']}
           />
           <MenuItem
-            icon={<Globe size={20} color="#6B7280" />}
+            icon={<Globe size={20} color="#10b981" />}
             title="Language & Region"
             subtitle="English (US)"
             onPress={() => {}}
+            gradient={['#ecfdf5', '#a7f3d0']}
           />
-        </View>
-      </View>
+        </ModernCard>
+      </Animated.View>
 
       {/* Support Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Support</Text>
-        <View style={styles.menuList}>
+      <Animated.View 
+        style={[
+          styles.section,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Support</Typography>
+        <ModernCard style={styles.menuList}>
           <MenuItem
-            icon={<HelpCircle size={20} color="#6B7280" />}
+            icon={<HelpCircle size={20} color="#8b5cf6" />}
             title="Help Center"
             subtitle="FAQs and troubleshooting"
             onPress={() => {}}
+            gradient={['#f3f4f6', '#e5e7eb']}
           />
           <MenuItem
-            icon={<MessageCircle size={20} color="#6B7280" />}
+            icon={<MessageCircle size={20} color="#f093fb" />}
             title="Contact Support"
             subtitle="Get help from our team"
             onPress={() => {}}
+            gradient={['#fdf2f8', '#fce7f3']}
           />
           <MenuItem
-            icon={<Star size={20} color="#6B7280" />}
+            icon={<Star size={20} color="#ffd89b" />}
             title="Rate Hustl"
             subtitle="Share your feedback"
             onPress={() => handleLinkPress('https://apps.apple.com')}
+            gradient={['#fffbeb', '#fde68a']}
           />
-        </View>
-      </View>
+        </ModernCard>
+      </Animated.View>
 
       {/* Legal Section */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Legal</Text>
-        <View style={styles.menuList}>
+      <Animated.View 
+        style={[
+          styles.section,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Legal</Typography>
+        <ModernCard style={styles.menuList}>
           <MenuItem
-            icon={<FileText size={20} color="#6B7280" />}
+            icon={<FileText size={20} color="#718096" />}
             title="Terms of Service"
             subtitle="User agreement and terms"
             onPress={() => {}}
           />
           <MenuItem
-            icon={<Shield size={20} color="#6B7280" />}
+            icon={<Shield size={20} color="#718096" />}
             title="Privacy Policy"
             subtitle="How we protect your data"
             onPress={() => {}}
           />
           <MenuItem
-            icon={<FileText size={20} color="#6B7280" />}
+            icon={<FileText size={20} color="#718096" />}
             title="Community Guidelines"
             subtitle="Rules and best practices"
             onPress={() => {}}
           />
-        </View>
-      </View>
+        </ModernCard>
+      </Animated.View>
 
       {/* About Section */}
-      <View style={styles.aboutSection}>
-        <View style={styles.aboutHeader}>
-          <HustlLogo size={32} />
-          <Text style={styles.aboutTitle}>About Hustl</Text>
-        </View>
-        <Text style={styles.aboutDescription}>
-          Hustl connects University of Florida students for quick campus errands and tasks. 
-          From coffee runs to printing services, we make campus life easier for everyone.
-        </Text>
-        
-        <View style={styles.aboutStats}>
-          <View style={styles.aboutStat}>
-            <Text style={styles.aboutStatValue}>4.9</Text>
-            <Text style={styles.aboutStatLabel}>App Rating</Text>
+      <Animated.View 
+        style={[
+          styles.aboutSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <GlassCard style={styles.aboutCard} gradient gradientColors={['rgba(102, 126, 234, 0.1)', 'rgba(118, 75, 162, 0.05)']}>
+          <View style={styles.aboutHeader}>
+            <HustlLogo size={40} />
+            <Typography variant="h3" style={styles.aboutTitle}>About Hustl</Typography>
           </View>
-          <View style={styles.aboutStat}>
-            <Text style={styles.aboutStatValue}>2023</Text>
-            <Text style={styles.aboutStatLabel}>Founded</Text>
+          <Typography variant="body1" style={styles.aboutDescription}>
+            Hustl connects University of Florida students for quick campus errands and tasks. 
+            From coffee runs to printing services, we make campus life easier for everyone.
+          </Typography>
+          
+          <View style={styles.aboutStats}>
+            <View style={styles.aboutStat}>
+              <Typography variant="h2" color="#667eea">4.9</Typography>
+              <Typography variant="body2" color="#718096">App Rating</Typography>
+            </View>
+            <View style={styles.aboutStat}>
+              <Typography variant="h2" color="#f093fb">2023</Typography>
+              <Typography variant="body2" color="#718096">Founded</Typography>
+            </View>
+            <View style={styles.aboutStat}>
+              <Typography variant="h2" color="#ffd89b">UF</Typography>
+              <Typography variant="body2" color="#718096">Campus</Typography>
+            </View>
           </View>
-          <View style={styles.aboutStat}>
-            <Text style={styles.aboutStatValue}>UF</Text>
-            <Text style={styles.aboutStatLabel}>Campus</Text>
-          </View>
-        </View>
-      </View>
+        </GlassCard>
+      </Animated.View>
 
       {/* Social Links */}
-      <View style={styles.socialSection}>
-        <Text style={styles.sectionTitle}>Connect With Us</Text>
+      <Animated.View 
+        style={[
+          styles.socialSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Connect With Us</Typography>
         <View style={styles.socialLinks}>
-          <TouchableOpacity 
-            style={styles.socialButton}
+          <SocialButton 
+            title="📱 Instagram"
             onPress={() => handleLinkPress('https://instagram.com/hustluf')}
-          >
-            <Text style={styles.socialButtonText}>📱 Instagram</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.socialButton}
+            gradient={['#f093fb', '#f5576c']}
+          />
+          <SocialButton 
+            title="🐦 Twitter"
             onPress={() => handleLinkPress('https://twitter.com/hustluf')}
-          >
-            <Text style={styles.socialButtonText}>🐦 Twitter</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.socialButton}
+            gradient={['#667eea', '#764ba2']}
+          />
+          <SocialButton 
+            title="💬 Discord"
             onPress={() => handleLinkPress('https://discord.gg/hustluf')}
-          >
-            <Text style={styles.socialButtonText}>💬 Discord</Text>
-          </TouchableOpacity>
+            gradient={['#8b5cf6', '#a855f7']}
+          />
         </View>
-      </View>
+      </Animated.View>
+
+      {/* Premium CTA */}
+      <Animated.View 
+        style={[
+          styles.premiumSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <GlassCard style={styles.premiumCard} gradient gradientColors={['rgba(240, 147, 251, 0.1)', 'rgba(102, 126, 234, 0.05)']}>
+          <Sparkles size={32} color="#f093fb" style={styles.premiumIcon} />
+          <Typography variant="h3" style={styles.premiumTitle}>Unlock Premium</Typography>
+          <Typography variant="body2" style={styles.premiumDescription}>
+            Get priority matching, advanced analytics, and exclusive campus perks
+          </Typography>
+          <AnimatedButton
+            title="Upgrade Now"
+            onPress={() => {}}
+            variant="primary"
+            size="lg"
+            gradient
+            gradientColors={['#f093fb', '#f5576c']}
+            style={styles.premiumButton}
+          />
+        </GlassCard>
+      </Animated.View>
 
       {/* App Version */}
-      <View style={styles.versionSection}>
-        <Text style={styles.versionText}>Hustl v1.2.0</Text>
-        <Text style={styles.versionSubtext}>Made with ❤️ for UF Gators</Text>
-      </View>
+      <Animated.View 
+        style={[
+          styles.versionSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="body2" color="#a0aec0">Hustl v1.2.0</Typography>
+        <Typography variant="caption" color="#d1d5db">Made with ❤️ for UF Gators</Typography>
+      </Animated.View>
     </ScrollView>
   );
 }
 
-function MenuItem({ icon, title, subtitle, onPress }: {
+function MenuItem({ icon, title, subtitle, onPress, gradient }: {
   icon: React.ReactNode;
   title: string;
   subtitle: string;
   onPress: () => void;
+  gradient?: string[];
 }) {
   return (
     <TouchableOpacity style={styles.menuItem} onPress={onPress}>
-      <View style={styles.menuIcon}>{icon}</View>
-      <View style={styles.menuContent}>
-        <Text style={styles.menuTitle}>{title}</Text>
-        <Text style={styles.menuSubtitle}>{subtitle}</Text>
+      <View style={[styles.menuIcon, gradient && { backgroundColor: 'transparent' }]}>
+        {gradient ? (
+          <LinearGradient colors={gradient} style={styles.menuIconGradient}>
+            {icon}
+          </LinearGradient>
+        ) : (
+          icon
+        )}
       </View>
-      <ChevronRight size={16} color="#D1D5DB" />
+      <View style={styles.menuContent}>
+        <Typography variant="h4">{title}</Typography>
+        <Typography variant="body2" color="#718096">{subtitle}</Typography>
+      </View>
+      <ChevronRight size={16} color="#d1d5db" />
     </TouchableOpacity>
+  );
+}
+
+function SocialButton({ title, onPress, gradient }: {
+  title: string;
+  onPress: () => void;
+  gradient: string[];
+}) {
+  return (
+    <AnimatedButton
+      title={title}
+      onPress={onPress}
+      variant="primary"
+      size="md"
+      gradient
+      gradientColors={gradient}
+      style={styles.socialButton}
+    />
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#f8fafc',
   },
   header: {
     paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 24,
-    backgroundColor: '#FFFFFF',
+    paddingBottom: 32,
+  },
+  headerContent: {
+    flex: 1,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 8,
-  },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '800',
-    color: '#111827',
-    marginLeft: 12,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
+    gap: 12,
   },
   statsSection: {
     paddingHorizontal: 24,
     paddingVertical: 24,
+    marginTop: -16,
   },
   statsCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    marginBottom: 0,
+  },
+  statsGrid: {
+    gap: 20,
   },
   statItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginBottom: 16,
+    gap: 16,
   },
   statContent: {
-    marginLeft: 16,
-  },
-  statValue: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
-  },
-  statLabel: {
-    fontSize: 14,
-    color: '#6B7280',
+    flex: 1,
   },
   section: {
     paddingHorizontal: 24,
     paddingBottom: 24,
   },
   sectionTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   menuList: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    padding: 0,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
   },
   menuItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: '#f3f4f6',
   },
   menuIcon: {
     marginRight: 16,
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f3f4f6',
+  },
+  menuIconGradient: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   menuContent: {
     flex: 1,
   },
-  menuTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 2,
-  },
-  menuSubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-  },
   aboutSection: {
-    margin: 24,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+  },
+  aboutCard: {
+    alignItems: 'center',
+    padding: 32,
   },
   aboutHeader: {
     flexDirection: 'row',
     alignItems: 'center',
     marginBottom: 16,
+    gap: 12,
   },
   aboutTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
-    marginLeft: 12,
+    marginBottom: 0,
   },
   aboutDescription: {
-    fontSize: 16,
-    color: '#6B7280',
-    lineHeight: 24,
+    textAlign: 'center',
     marginBottom: 24,
+    lineHeight: 24,
   },
   aboutStats: {
     flexDirection: 'row',
     justifyContent: 'space-around',
+    width: '100%',
   },
   aboutStat: {
     alignItems: 'center',
-  },
-  aboutStatValue: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#F97316',
-    marginBottom: 4,
-  },
-  aboutStatLabel: {
-    fontSize: 12,
-    color: '#6B7280',
   },
   socialSection: {
     paddingHorizontal: 24,
     paddingBottom: 24,
   },
   socialLinks: {
-    flexDirection: 'row',
     gap: 12,
   },
   socialButton: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 4,
-    elevation: 1,
+    width: '100%',
   },
-  socialButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#374151',
+  premiumSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+  },
+  premiumCard: {
+    alignItems: 'center',
+    padding: 32,
+  },
+  premiumIcon: {
+    marginBottom: 16,
+  },
+  premiumTitle: {
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  premiumDescription: {
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#718096',
+  },
+  premiumButton: {
+    width: '100%',
   },
   versionSection: {
     alignItems: 'center',
     paddingVertical: 32,
-  },
-  versionText: {
-    fontSize: 14,
-    color: '#9CA3AF',
-    marginBottom: 4,
-  },
-  versionSubtext: {
-    fontSize: 12,
-    color: '#D1D5DB',
+    gap: 4,
   },
 });

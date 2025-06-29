@@ -1,13 +1,36 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
+import React, { useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { CreditCard as Edit, Star, Clock, DollarSign, Award, Settings, LogOut, Shield, Bell, CreditCard, ChevronRight } from 'lucide-react-native';
+import { Edit, Star, Clock, DollarSign, Award, Settings, LogOut, Shield, Bell, CreditCard, ChevronRight, TrendingUp, Users, Target } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { GlassCard } from '@/components/ui/GlassCard';
+import { Typography } from '@/components/ui/Typography';
+import { Badge } from '@/components/ui/Badge';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
 
 const { width } = Dimensions.get('window');
 
 export default function ProfileScreen() {
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
+
   const userStats = {
     tasksCompleted: 47,
     totalEarned: 1240,
@@ -43,10 +66,10 @@ export default function ProfileScreen() {
   ];
 
   const achievements = [
-    { id: 1, title: 'Coffee Master', description: '50+ coffee runs', icon: '☕', unlocked: true },
-    { id: 2, title: 'Speed Demon', description: 'Fast response time', icon: '⚡', unlocked: true },
-    { id: 3, title: 'Top Rated', description: '4.8+ star rating', icon: '⭐', unlocked: true },
-    { id: 4, title: 'Century Club', description: '100+ tasks', icon: '💯', unlocked: false },
+    { id: 1, title: 'Coffee Master', description: '50+ coffee runs', icon: '☕', unlocked: true, gradient: ['#fff7ed', '#fed7aa'] },
+    { id: 2, title: 'Speed Demon', description: 'Fast response time', icon: '⚡', unlocked: true, gradient: ['#eff6ff', '#dbeafe'] },
+    { id: 3, title: 'Top Rated', description: '4.8+ star rating', icon: '⭐', unlocked: true, gradient: ['#fffbeb', '#fde68a'] },
+    { id: 4, title: 'Century Club', description: '100+ tasks', icon: '💯', unlocked: false, gradient: ['#f3f4f6', '#e5e7eb'] },
   ];
 
   return (
@@ -55,66 +78,135 @@ export default function ProfileScreen() {
       
       {/* Header with Profile */}
       <LinearGradient
-        colors={['#1E40AF', '#3B82F6']}
+        colors={['#667eea', '#764ba2']}
         style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
       >
-        <View style={styles.headerLogo}>
-          <HustlLogo size={24} />
-        </View>
-        
-        <View style={styles.profileSection}>
-          <Image
-            source={{ uri: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300' }}
-            style={styles.profileImage}
-          />
-          <View style={styles.profileInfo}>
-            <Text style={styles.profileName}>Alex Johnson</Text>
-            <Text style={styles.profileEmail}>alex.johnson@ufl.edu</Text>
-            <View style={styles.profileBadge}>
-              <Star size={16} color="#F97316" fill="#F97316" />
-              <Text style={styles.profileRating}>{userStats.rating}</Text>
-              <Text style={styles.profileLevel}>• Verified Student</Text>
-            </View>
+        <Animated.View 
+          style={[
+            styles.headerContent,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <View style={styles.headerLogo}>
+            <HustlLogo size={24} />
           </View>
-          <TouchableOpacity style={styles.editButton}>
-            <Edit size={20} color="#FFFFFF" />
-          </TouchableOpacity>
-        </View>
+          
+          <View style={styles.profileSection}>
+            <Image
+              source={{ uri: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=300' }}
+              style={styles.profileImage}
+            />
+            <View style={styles.profileInfo}>
+              <Typography variant="h2" color="#ffffff">Alex Johnson</Typography>
+              <Typography variant="body2" color="rgba(255,255,255,0.8)">
+                alex.johnson@ufl.edu
+              </Typography>
+              <View style={styles.profileBadge}>
+                <Star size={16} color="#ffd89b" fill="#ffd89b" />
+                <Typography variant="body2" color="#ffffff">{userStats.rating}</Typography>
+                <Typography variant="body2" color="#ffd89b">• Verified Student</Typography>
+              </View>
+            </View>
+            <TouchableOpacity style={styles.editButton}>
+              <Edit size={20} color="#ffffff" />
+            </TouchableOpacity>
+          </View>
+        </Animated.View>
       </LinearGradient>
 
-      {/* Stats Cards */}
-      <View style={styles.statsSection}>
+      {/* Floating Stats Cards */}
+      <Animated.View 
+        style={[
+          styles.statsSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
         <View style={styles.statsGrid}>
           <StatCard
-            icon={<Award size={20} color="#F97316" />}
+            icon={<Award size={24} color="#f97316" />}
             value={userStats.tasksCompleted.toString()}
             label="Tasks"
-            color="#FFF7ED"
+            trend="+12 this week"
+            gradient={['#fff7ed', '#fed7aa']}
           />
           <StatCard
-            icon={<DollarSign size={20} color="#10B981" />}
+            icon={<DollarSign size={24} color="#10b981" />}
             value={`$${userStats.totalEarned}`}
             label="Earned"
-            color="#ECFDF5"
+            trend="+$240 this month"
+            gradient={['#ecfdf5', '#a7f3d0']}
           />
           <StatCard
-            icon={<Star size={20} color="#F59E0B" />}
+            icon={<Star size={24} color="#f59e0b" />}
             value={userStats.rating.toString()}
             label="Rating"
-            color="#FFFBEB"
+            trend="New high!"
+            gradient={['#fffbeb', '#fde68a']}
           />
           <StatCard
-            icon={<Clock size={20} color="#3B82F6" />}
+            icon={<Clock size={24} color="#3b82f6" />}
             value={userStats.responseTime}
             label="Response"
-            color="#EFF6FF"
+            trend="Faster than 90%"
+            gradient={['#eff6ff', '#dbeafe']}
           />
         </View>
-      </View>
+      </Animated.View>
+
+      {/* Performance Overview */}
+      <Animated.View 
+        style={[
+          styles.performanceSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Performance Overview</Typography>
+        <GlassCard style={styles.performanceCard} gradient gradientColors={['rgba(102, 126, 234, 0.1)', 'rgba(118, 75, 162, 0.05)']}>
+          <View style={styles.performanceGrid}>
+            <PerformanceItem 
+              icon={<TrendingUp size={20} color="#10b981" />}
+              label="This Week"
+              value="12 tasks"
+              change="+25%"
+            />
+            <PerformanceItem 
+              icon={<Users size={20} color="#3b82f6" />}
+              label="Repeat Clients"
+              value="8 clients"
+              change="+3 new"
+            />
+            <PerformanceItem 
+              icon={<Target size={20} color="#f97316" />}
+              label="Success Rate"
+              value="98.5%"
+              change="Perfect!"
+            />
+          </View>
+        </GlassCard>
+      </Animated.View>
 
       {/* Achievements */}
-      <View style={styles.achievementsSection}>
-        <Text style={styles.sectionTitle}>Achievements</Text>
+      <Animated.View 
+        style={[
+          styles.achievementsSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Achievements</Typography>
         <View style={styles.achievementsGrid}>
           {achievements.map((achievement) => (
             <AchievementCard
@@ -123,15 +215,23 @@ export default function ProfileScreen() {
             />
           ))}
         </View>
-      </View>
+      </Animated.View>
 
       {/* Recent Activity */}
-      <View style={styles.activitySection}>
+      <Animated.View 
+        style={[
+          styles.activitySection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Recent Activity</Text>
+          <Typography variant="h3">Recent Activity</Typography>
           <TouchableOpacity style={styles.seeAllButton}>
-            <Text style={styles.seeAllText}>See All</Text>
-            <ChevronRight size={16} color="#3B82F6" />
+            <Typography variant="body2" color="#667eea">See All</Typography>
+            <ChevronRight size={16} color="#667eea" />
           </TouchableOpacity>
         </View>
         
@@ -140,95 +240,164 @@ export default function ProfileScreen() {
             <ActivityCard key={task.id} task={task} />
           ))}
         </View>
-      </View>
+      </Animated.View>
 
       {/* Settings */}
-      <View style={styles.settingsSection}>
-        <Text style={styles.sectionTitle}>Settings</Text>
-        <View style={styles.settingsList}>
+      <Animated.View 
+        style={[
+          styles.settingsSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <Typography variant="h3" style={styles.sectionTitle}>Settings</Typography>
+        <ModernCard style={styles.settingsList}>
           <SettingsItem
-            icon={<Settings size={20} color="#3B82F6" />}
+            icon={<Settings size={20} color="#3b82f6" />}
             title="Account Settings"
             subtitle="Privacy, notifications, security"
           />
           <SettingsItem
-            icon={<Shield size={20} color="#10B981" />}
+            icon={<Shield size={20} color="#10b981" />}
             title="Verification"
             subtitle="Student ID, background check"
           />
           <SettingsItem
-            icon={<Bell size={20} color="#F97316" />}
+            icon={<Bell size={20} color="#f97316" />}
             title="Notifications"
             subtitle="Push notifications, email alerts"
           />
           <SettingsItem
-            icon={<CreditCard size={20} color="#8B5CF6" />}
+            icon={<CreditCard size={20} color="#8b5cf6" />}
             title="Payment Methods"
             subtitle="Bank account, payment history"
           />
           <SettingsItem
-            icon={<LogOut size={20} color="#EF4444" />}
+            icon={<LogOut size={20} color="#ef4444" />}
             title="Sign Out"
             subtitle="Log out of your account"
             isDestructive
           />
-        </View>
-      </View>
+        </ModernCard>
+      </Animated.View>
+
+      {/* Upgrade CTA */}
+      <Animated.View 
+        style={[
+          styles.upgradeSection,
+          {
+            opacity: fadeAnim,
+            transform: [{ translateY: slideAnim }]
+          }
+        ]}
+      >
+        <GlassCard style={styles.upgradeCard} gradient gradientColors={['rgba(240, 147, 251, 0.1)', 'rgba(102, 126, 234, 0.05)']}>
+          <Typography variant="h4" style={styles.upgradeTitle}>Unlock Premium Features</Typography>
+          <Typography variant="body2" style={styles.upgradeDescription}>
+            Get priority matching, advanced analytics, and exclusive perks
+          </Typography>
+          <AnimatedButton
+            title="Upgrade to Pro"
+            onPress={() => {}}
+            variant="primary"
+            size="md"
+            gradient
+            gradientColors={['#f093fb', '#f5576c']}
+            style={styles.upgradeButton}
+          />
+        </GlassCard>
+      </Animated.View>
     </ScrollView>
   );
 }
 
-function StatCard({ icon, value, label, color }: {
+function StatCard({ icon, value, label, trend, gradient }: {
   icon: React.ReactNode;
   value: string;
   label: string;
-  color: string;
+  trend: string;
+  gradient: string[];
 }) {
   return (
-    <View style={[styles.statCard, { backgroundColor: color }]}>
+    <ModernCard style={styles.statCard} gradient gradientColors={gradient}>
       <View style={styles.statIcon}>{icon}</View>
-      <Text style={styles.statValue}>{value}</Text>
-      <Text style={styles.statLabel}>{label}</Text>
+      <Typography variant="h3" style={styles.statValue}>{value}</Typography>
+      <Typography variant="body2" style={styles.statLabel}>{label}</Typography>
+      <Typography variant="caption" color="#10b981" style={styles.statTrend}>{trend}</Typography>
+    </ModernCard>
+  );
+}
+
+function PerformanceItem({ icon, label, value, change }: {
+  icon: React.ReactNode;
+  label: string;
+  value: string;
+  change: string;
+}) {
+  return (
+    <View style={styles.performanceItem}>
+      <View style={styles.performanceIcon}>{icon}</View>
+      <Typography variant="body2" color="#718096">{label}</Typography>
+      <Typography variant="h4" style={styles.performanceValue}>{value}</Typography>
+      <Typography variant="caption" color="#10b981">{change}</Typography>
     </View>
   );
 }
 
 function AchievementCard({ achievement }: { achievement: any }) {
   return (
-    <View style={[styles.achievementCard, !achievement.unlocked && styles.achievementCardLocked]}>
-      <Text style={styles.achievementIcon}>{achievement.icon}</Text>
-      <Text style={[styles.achievementTitle, !achievement.unlocked && styles.achievementTitleLocked]}>
+    <ModernCard 
+      style={[styles.achievementCard, !achievement.unlocked && styles.achievementCardLocked]}
+      gradient
+      gradientColors={achievement.gradient}
+    >
+      <Typography variant="h2" style={styles.achievementIcon}>{achievement.icon}</Typography>
+      <Typography 
+        variant="h4" 
+        style={[
+          styles.achievementTitle, 
+          !achievement.unlocked && styles.achievementTitleLocked
+        ]}
+      >
         {achievement.title}
-      </Text>
-      <Text style={[styles.achievementDescription, !achievement.unlocked && styles.achievementDescriptionLocked]}>
+      </Typography>
+      <Typography 
+        variant="body2" 
+        style={[
+          styles.achievementDescription, 
+          !achievement.unlocked && styles.achievementDescriptionLocked
+        ]}
+      >
         {achievement.description}
-      </Text>
+      </Typography>
       {!achievement.unlocked && (
         <View style={styles.lockedOverlay}>
-          <Text style={styles.lockedText}>🔒</Text>
+          <Typography variant="body1">🔒</Typography>
         </View>
       )}
-    </View>
+    </ModernCard>
   );
 }
 
 function ActivityCard({ task }: { task: any }) {
   return (
-    <View style={styles.activityCard}>
+    <ModernCard style={styles.activityCard}>
       <View style={styles.activityContent}>
-        <Text style={styles.activityTitle}>{task.title}</Text>
-        <Text style={styles.activityDate}>{task.date}</Text>
+        <Typography variant="h4">{task.title}</Typography>
+        <Typography variant="body2" color="#718096">{task.date}</Typography>
       </View>
       <View style={styles.activityMeta}>
         <View style={styles.earningsContainer}>
-          <Text style={styles.activityEarnings}>+${task.earnings}</Text>
+          <Typography variant="body2" color="#10b981">+${task.earnings}</Typography>
         </View>
         <View style={styles.activityRating}>
-          <Star size={14} color="#F59E0B" fill="#F59E0B" />
-          <Text style={styles.activityRatingText}>{task.rating}</Text>
+          <Star size={14} color="#f59e0b" fill="#f59e0b" />
+          <Typography variant="caption" color="#718096">{task.rating}</Typography>
         </View>
       </View>
-    </View>
+    </ModernCard>
   );
 }
 
@@ -244,12 +413,16 @@ function SettingsItem({ icon, title, subtitle, isDestructive = false }: {
         {icon}
       </View>
       <View style={styles.settingsContent}>
-        <Text style={[styles.settingsTitle, isDestructive && styles.settingsTitleDestructive]}>
+        <Typography 
+          variant="h4" 
+          color={isDestructive ? "#ef4444" : undefined}
+          style={styles.settingsTitle}
+        >
           {title}
-        </Text>
-        <Text style={styles.settingsSubtitle}>{subtitle}</Text>
+        </Typography>
+        <Typography variant="body2" color="#718096">{subtitle}</Typography>
       </View>
-      <ChevronRight size={16} color="#D1D5DB" />
+      <ChevronRight size={16} color="#d1d5db" />
     </TouchableOpacity>
   );
 }
@@ -257,18 +430,21 @@ function SettingsItem({ icon, title, subtitle, isDestructive = false }: {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#f8fafc',
   },
   header: {
     paddingTop: 60,
-    paddingBottom: 30,
+    paddingBottom: 40,
     paddingHorizontal: 24,
     position: 'relative',
   },
+  headerContent: {
+    flex: 1,
+  },
   headerLogo: {
     position: 'absolute',
-    top: 60,
-    right: 24,
+    top: 0,
+    right: 0,
   },
   profileSection: {
     flexDirection: 'row',
@@ -280,36 +456,16 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     marginRight: 16,
     borderWidth: 3,
-    borderColor: '#FFFFFF',
+    borderColor: 'rgba(255,255,255,0.3)',
   },
   profileInfo: {
     flex: 1,
   },
-  profileName: {
-    fontSize: 24,
-    fontWeight: '800',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  profileEmail: {
-    fontSize: 14,
-    color: '#E5E7EB',
-    marginBottom: 8,
-  },
   profileBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  profileRating: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    marginLeft: 4,
-  },
-  profileLevel: {
-    fontSize: 14,
-    color: '#F97316',
-    fontWeight: '600',
+    marginTop: 8,
+    gap: 4,
   },
   editButton: {
     backgroundColor: 'rgba(255, 255, 255, 0.2)',
@@ -327,39 +483,50 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   statCard: {
-    borderRadius: 16,
-    padding: 20,
-    alignItems: 'center',
     width: '48%',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    alignItems: 'center',
+    padding: 20,
   },
   statIcon: {
     marginBottom: 12,
   },
   statValue: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
     marginBottom: 4,
   },
   statLabel: {
-    fontSize: 12,
-    color: '#6B7280',
     textAlign: 'center',
-    fontWeight: '600',
+    marginBottom: 4,
+  },
+  statTrend: {
+    textAlign: 'center',
+    fontFamily: 'Inter-SemiBold',
+  },
+  performanceSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 24,
+  },
+  performanceCard: {
+    marginTop: 16,
+  },
+  performanceGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  performanceItem: {
+    alignItems: 'center',
+    flex: 1,
+  },
+  performanceIcon: {
+    marginBottom: 8,
+  },
+  performanceValue: {
+    marginVertical: 4,
   },
   achievementsSection: {
     paddingHorizontal: 24,
     paddingBottom: 24,
   },
   sectionTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
     marginBottom: 16,
   },
   achievementsGrid: {
@@ -368,50 +535,34 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   achievementCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    alignItems: 'center',
     width: '48%',
+    alignItems: 'center',
+    padding: 16,
     position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
   },
   achievementCardLocked: {
     opacity: 0.6,
   },
   achievementIcon: {
-    fontSize: 32,
     marginBottom: 12,
   },
   achievementTitle: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#111827',
     marginBottom: 4,
     textAlign: 'center',
   },
   achievementTitleLocked: {
-    color: '#9CA3AF',
+    color: '#9ca3af',
   },
   achievementDescription: {
-    fontSize: 12,
-    color: '#6B7280',
     textAlign: 'center',
   },
   achievementDescriptionLocked: {
-    color: '#D1D5DB',
+    color: '#d1d5db',
   },
   lockedOverlay: {
     position: 'absolute',
     top: 8,
     right: 8,
-  },
-  lockedText: {
-    fontSize: 16,
   },
   activitySection: {
     paddingHorizontal: 24,
@@ -426,87 +577,49 @@ const styles = StyleSheet.create({
   seeAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  seeAllText: {
-    fontSize: 14,
-    color: '#3B82F6',
-    fontWeight: '600',
-    marginRight: 4,
+    gap: 4,
   },
   activityList: {
     gap: 12,
   },
   activityCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
+    padding: 16,
   },
   activityContent: {
     flex: 1,
-  },
-  activityTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 4,
-  },
-  activityDate: {
-    fontSize: 12,
-    color: '#6B7280',
   },
   activityMeta: {
     alignItems: 'flex-end',
     gap: 8,
   },
   earningsContainer: {
-    backgroundColor: '#ECFDF5',
+    backgroundColor: '#ecfdf5',
     paddingHorizontal: 12,
     paddingVertical: 6,
     borderRadius: 12,
   },
-  activityEarnings: {
-    fontSize: 14,
-    fontWeight: '700',
-    color: '#10B981',
-  },
   activityRating: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  activityRatingText: {
-    fontSize: 12,
-    color: '#6B7280',
-    marginLeft: 4,
-    fontWeight: '600',
+    gap: 4,
   },
   settingsSection: {
     paddingHorizontal: 24,
-    paddingBottom: 40,
+    paddingBottom: 24,
   },
   settingsList: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
+    padding: 0,
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
-    elevation: 2,
   },
   settingsItem: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: '#f3f4f6',
   },
   settingsIconContainer: {
     marginRight: 16,
@@ -515,16 +628,26 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   settingsTitle: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#111827',
     marginBottom: 2,
   },
-  settingsTitleDestructive: {
-    color: '#EF4444',
+  upgradeSection: {
+    paddingHorizontal: 24,
+    paddingBottom: 40,
   },
-  settingsSubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
+  upgradeCard: {
+    alignItems: 'center',
+    padding: 32,
+  },
+  upgradeTitle: {
+    marginBottom: 8,
+    textAlign: 'center',
+  },
+  upgradeDescription: {
+    marginBottom: 24,
+    textAlign: 'center',
+    color: '#718096',
+  },
+  upgradeButton: {
+    width: '100%',
   },
 });

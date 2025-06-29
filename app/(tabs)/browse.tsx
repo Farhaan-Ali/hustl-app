@@ -1,24 +1,36 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Search, Filter, MapPin, Clock, Star, Coffee, Printer, Heart, ShoppingBag, Zap } from 'lucide-react-native';
+import { Search, Filter, MapPin, Clock, Star, Coffee, Printer, Heart, ShoppingBag, Zap, TrendingUp } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
-import { Card } from '@/components/ui/Card';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/Input';
 import { Badge } from '@/components/ui/Badge';
-import { Button } from '@/components/ui/Button';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
+import { Typography } from '@/components/ui/Typography';
 
 export default function BrowseScreen() {
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+
+  useEffect(() => {
+    Animated.timing(fadeAnim, {
+      toValue: 1,
+      duration: 800,
+      useNativeDriver: true,
+    }).start();
+  }, []);
 
   const categories = [
-    { id: 'All', name: 'All', icon: null, count: 24 },
-    { id: 'Coffee', name: 'Coffee', icon: <Coffee size={16} color="#F97316" />, count: 8 },
-    { id: 'Printing', name: 'Print', icon: <Printer size={16} color="#3B82F6" />, count: 5 },
-    { id: 'Pet Care', name: 'Pets', icon: <Heart size={16} color="#EF4444" />, count: 3 },
-    { id: 'Food', name: 'Food', icon: <ShoppingBag size={16} color="#10B981" />, count: 6 },
-    { id: 'Shopping', name: 'Shop', icon: <ShoppingBag size={16} color="#8B5CF6" />, count: 2 },
+    { id: 'All', name: 'All', icon: null, count: 24, color: '#667eea' },
+    { id: 'Coffee', name: 'Coffee', icon: <Coffee size={16} color="#f97316" />, count: 8, color: '#f97316' },
+    { id: 'Printing', name: 'Print', icon: <Printer size={16} color="#3b82f6" />, count: 5, color: '#3b82f6' },
+    { id: 'Pet Care', name: 'Pets', icon: <Heart size={16} color="#ef4444" />, count: 3, color: '#ef4444' },
+    { id: 'Food', name: 'Food', icon: <ShoppingBag size={16} color="#10b981" />, count: 6, color: '#10b981' },
+    { id: 'Shopping', name: 'Shop', icon: <ShoppingBag size={16} color="#8b5cf6" />, count: 2, color: '#8b5cf6' },
   ];
 
   const tasks = [
@@ -109,21 +121,48 @@ export default function BrowseScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       
       {/* Premium Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <HustlLogo size={32} />
-          <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Browse Tasks</Text>
-            <Text style={styles.headerSubtitle}>Find your next gig</Text>
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <Animated.View style={[styles.headerContent, { opacity: fadeAnim }]}>
+          <View style={styles.headerTop}>
+            <HustlLogo size={32} />
+            <View style={styles.headerText}>
+              <Typography variant="h2" color="#ffffff">Browse Tasks</Typography>
+              <Typography variant="body2" color="rgba(255,255,255,0.8)">
+                Find your next gig
+              </Typography>
+            </View>
+            <TouchableOpacity style={styles.filterButton}>
+              <Filter size={20} color="#ffffff" />
+            </TouchableOpacity>
           </View>
-          <TouchableOpacity style={styles.filterButton}>
-            <Filter size={20} color="#6B7280" />
-          </TouchableOpacity>
-        </View>
-      </View>
+
+          {/* Live Stats */}
+          <GlassCard style={styles.liveStats}>
+            <View style={styles.liveStatsContent}>
+              <View style={styles.liveStat}>
+                <TrendingUp size={16} color="#10b981" />
+                <Typography variant="caption" color="#ffffff">24 Active</Typography>
+              </View>
+              <View style={styles.liveStat}>
+                <Clock size={16} color="#f97316" />
+                <Typography variant="caption" color="#ffffff">Avg 8min</Typography>
+              </View>
+              <View style={styles.liveStat}>
+                <Star size={16} color="#ffd89b" />
+                <Typography variant="caption" color="#ffffff">4.9★ Rating</Typography>
+              </View>
+            </View>
+          </GlassCard>
+        </Animated.View>
+      </LinearGradient>
 
       {/* Search Section */}
       <View style={styles.searchSection}>
@@ -131,12 +170,12 @@ export default function BrowseScreen() {
           placeholder="Search tasks, locations, or keywords..."
           value={searchQuery}
           onChangeText={setSearchQuery}
-          icon={<Search size={20} color="#6B7280" />}
+          icon={<Search size={20} color="#718096" />}
           containerStyle={styles.searchContainer}
         />
       </View>
 
-      {/* Categories with Counts */}
+      {/* Categories */}
       <View style={styles.categoriesSection}>
         <ScrollView 
           horizontal 
@@ -148,23 +187,35 @@ export default function BrowseScreen() {
               key={category.id}
               style={[
                 styles.categoryChip,
-                selectedCategory === category.id && styles.categoryChipActive
+                selectedCategory === category.id && [
+                  styles.categoryChipActive,
+                  { backgroundColor: category.color }
+                ]
               ]}
               onPress={() => setSelectedCategory(category.id)}
             >
               {category.icon}
-              <Text style={[
-                styles.categoryText,
-                selectedCategory === category.id && styles.categoryTextActive
-              ]}>
-                {category.name}
-              </Text>
-              <Badge 
-                variant={selectedCategory === category.id ? "info" : "default"} 
-                size="sm"
-                style={styles.categoryBadge}
+              <Typography 
+                variant="body2" 
+                color={selectedCategory === category.id ? "#ffffff" : "#4a5568"}
+                style={styles.categoryText}
               >
-                <Text>{category.count}</Text>
+                {category.name}
+              </Typography>
+              <Badge 
+                variant={selectedCategory === category.id ? "default" : "default"} 
+                size="sm"
+                style={[
+                  styles.categoryBadge,
+                  selectedCategory === category.id && { backgroundColor: 'rgba(255,255,255,0.2)' }
+                ]}
+              >
+                <Typography 
+                  variant="caption" 
+                  color={selectedCategory === category.id ? "#ffffff" : "#718096"}
+                >
+                  {category.count}
+                </Typography>
               </Badge>
             </TouchableOpacity>
           ))}
@@ -173,10 +224,10 @@ export default function BrowseScreen() {
 
       {/* Tasks Header */}
       <View style={styles.tasksHeader}>
-        <Text style={styles.tasksCount}>{filteredTasks.length} tasks available</Text>
-        <View style={styles.sortContainer}>
-          <Text style={styles.sortText}>Nearest first</Text>
-        </View>
+        <Typography variant="h4">{filteredTasks.length} tasks available</Typography>
+        <TouchableOpacity style={styles.sortContainer}>
+          <Typography variant="body2" color="#667eea">Nearest first</Typography>
+        </TouchableOpacity>
       </View>
 
       {/* Tasks List */}
@@ -193,117 +244,123 @@ export default function BrowseScreen() {
 
 function TaskCard({ task }: { task: any }) {
   return (
-    <Card style={styles.taskCard}>
+    <ModernCard style={styles.taskCard} onPress={() => {}}>
       <View style={styles.taskHeader}>
         {task.urgent && (
           <Badge variant="error" size="sm" style={styles.urgentBadge}>
-            <Zap size={12} color="#DC2626" />
-            <Text style={styles.urgentText}>Urgent</Text>
+            <Zap size={12} color="#dc2626" />
+            <Typography variant="caption" color="#dc2626">Urgent</Typography>
           </Badge>
         )}
         
         <View style={styles.categoryBadge}>
-          {task.category === 'Coffee' && <Coffee size={14} color="#F97316" />}
-          {task.category === 'Printing' && <Printer size={14} color="#3B82F6" />}
-          {task.category === 'Pet Care' && <Heart size={14} color="#EF4444" />}
-          {task.category === 'Food' && <ShoppingBag size={14} color="#10B981" />}
-          <Text style={styles.categoryText}>{task.category}</Text>
+          {task.category === 'Coffee' && <Coffee size={14} color="#f97316" />}
+          {task.category === 'Printing' && <Printer size={14} color="#3b82f6" />}
+          {task.category === 'Pet Care' && <Heart size={14} color="#ef4444" />}
+          {task.category === 'Food' && <ShoppingBag size={14} color="#10b981" />}
+          <Typography variant="caption" style={styles.categoryText}>{task.category}</Typography>
         </View>
         
-        <Text style={styles.taskPrice}>${task.price}</Text>
+        <Typography variant="h3" color="#667eea">${task.price}</Typography>
       </View>
       
       <Image source={{ uri: task.image }} style={styles.taskImage} />
       
       <View style={styles.taskContent}>
-        <Text style={styles.taskTitle}>{task.title}</Text>
-        <Text style={styles.taskDescription} numberOfLines={2}>{task.description}</Text>
+        <Typography variant="h4" style={styles.taskTitle}>{task.title}</Typography>
+        <Typography variant="body2" numberOfLines={2} style={styles.taskDescription}>
+          {task.description}
+        </Typography>
         
         <View style={styles.taskMeta}>
           <View style={styles.metaItem}>
-            <MapPin size={14} color="#6B7280" />
-            <Text style={styles.metaText}>{task.location}</Text>
-            <Text style={styles.distanceText}>• {task.distance}</Text>
+            <MapPin size={14} color="#718096" />
+            <Typography variant="body2" color="#718096">{task.location}</Typography>
+            <Typography variant="body2" color="#667eea">• {task.distance}</Typography>
           </View>
           <View style={styles.metaItem}>
-            <Clock size={14} color="#6B7280" />
-            <Text style={styles.metaText}>{task.time}</Text>
+            <Clock size={14} color="#718096" />
+            <Typography variant="body2" color="#718096">{task.time}</Typography>
           </View>
         </View>
         
         <View style={styles.posterSection}>
           <Image source={{ uri: task.poster.image }} style={styles.posterImage} />
           <View style={styles.posterInfo}>
-            <Text style={styles.posterName}>{task.poster.name}</Text>
+            <Typography variant="body2">{task.poster.name}</Typography>
             <View style={styles.posterRating}>
-              <Star size={12} color="#F59E0B" fill="#F59E0B" />
-              <Text style={styles.ratingText}>{task.poster.rating}</Text>
+              <Star size={12} color="#f59e0b" fill="#f59e0b" />
+              <Typography variant="caption" color="#718096">{task.poster.rating}</Typography>
             </View>
           </View>
           
-          <Button
+          <AnimatedButton
             title="Accept"
             onPress={() => {}}
             variant="primary"
             size="sm"
+            gradient
+            gradientColors={['#667eea', '#764ba2']}
             style={styles.acceptButton}
           />
         </View>
       </View>
-    </Card>
+    </ModernCard>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#f8fafc',
   },
   header: {
-    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    paddingBottom: 32,
+    paddingHorizontal: 24,
+  },
+  headerContent: {
+    flex: 1,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
+    marginBottom: 24,
   },
   headerText: {
     flex: 1,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: '#111827',
-    letterSpacing: -0.5,
-  },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
   filterButton: {
     padding: 12,
-    backgroundColor: '#F3F4F6',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     borderRadius: 12,
+  },
+  liveStats: {
+    marginTop: 16,
+  },
+  liveStatsContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  liveStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   searchSection: {
     paddingHorizontal: 24,
     paddingVertical: 20,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffffff',
   },
   searchContainer: {
     marginBottom: 0,
   },
   categoriesSection: {
-    backgroundColor: '#FFFFFF',
+    backgroundColor: '#ffffff',
     paddingBottom: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    borderBottomColor: '#f3f4f6',
   },
   categoriesContent: {
     paddingHorizontal: 24,
@@ -314,20 +371,19 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 16,
-    backgroundColor: '#F3F4F6',
+    borderRadius: 20,
+    backgroundColor: '#f3f4f6',
     gap: 8,
   },
   categoryChipActive: {
-    backgroundColor: '#3B82F6',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 4,
   },
   categoryText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  categoryTextActive: {
-    color: '#FFFFFF',
+    fontFamily: 'Inter-SemiBold',
   },
   categoryBadge: {
     marginLeft: 4,
@@ -339,19 +395,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 24,
     paddingVertical: 20,
   },
-  tasksCount: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
-  },
   sortContainer: {
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  sortText: {
-    fontSize: 14,
-    color: '#3B82F6',
-    fontWeight: '600',
   },
   tasksList: {
     paddingHorizontal: 24,
@@ -373,25 +419,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 4,
   },
-  urgentText: {
-    fontSize: 12,
-    fontWeight: '700',
-    color: '#DC2626',
-  },
   categoryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#F3F4F6',
+    backgroundColor: '#f3f4f6',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 8,
     gap: 4,
     flex: 1,
-  },
-  taskPrice: {
-    fontSize: 24,
-    fontWeight: '900',
-    color: '#F97316',
   },
   taskImage: {
     width: '100%',
@@ -401,16 +437,11 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   taskTitle: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#111827',
     marginBottom: 8,
   },
   taskDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    lineHeight: 20,
     marginBottom: 16,
+    lineHeight: 20,
   },
   taskMeta: {
     gap: 12,
@@ -420,16 +451,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-  },
-  metaText: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-  distanceText: {
-    fontSize: 12,
-    color: '#3B82F6',
-    fontWeight: '600',
   },
   posterSection: {
     flexDirection: 'row',
@@ -444,21 +465,11 @@ const styles = StyleSheet.create({
   posterInfo: {
     flex: 1,
   },
-  posterName: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#111827',
-    marginBottom: 2,
-  },
   posterRating: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
-  },
-  ratingText: {
-    fontSize: 12,
-    color: '#6B7280',
-    fontWeight: '600',
+    marginTop: 2,
   },
   acceptButton: {
     paddingHorizontal: 20,

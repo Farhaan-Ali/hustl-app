@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
+import React, { useState, useRef, useEffect } from 'react';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera, Zap, Users } from 'lucide-react-native';
+import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera, Zap, Users, Sparkles } from 'lucide-react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
-import { Card } from '@/components/ui/Card';
+import { ModernCard } from '@/components/ui/ModernCard';
+import { GlassCard } from '@/components/ui/GlassCard';
 import { Input } from '@/components/ui/Input';
-import { Button } from '@/components/ui/Button';
+import { AnimatedButton } from '@/components/ui/AnimatedButton';
 import { Badge } from '@/components/ui/Badge';
+import { Typography } from '@/components/ui/Typography';
 
 export default function PostTaskScreen() {
   const [formData, setFormData] = useState({
@@ -20,41 +23,58 @@ export default function PostTaskScreen() {
   });
 
   const [errors, setErrors] = useState<{ [key: string]: string }>({});
+  const fadeAnim = useRef(new Animated.Value(0)).current;
+  const slideAnim = useRef(new Animated.Value(30)).current;
+
+  useEffect(() => {
+    Animated.parallel([
+      Animated.timing(fadeAnim, {
+        toValue: 1,
+        duration: 800,
+        useNativeDriver: true,
+      }),
+      Animated.timing(slideAnim, {
+        toValue: 0,
+        duration: 600,
+        useNativeDriver: true,
+      }),
+    ]).start();
+  }, []);
 
   const categories = [
     { 
       id: 'coffee', 
       name: 'Coffee Run', 
-      icon: <Coffee size={24} color="#F97316" />, 
-      color: '#FFF7ED',
+      icon: <Coffee size={24} color="#f97316" />, 
+      gradient: ['#fff7ed', '#fed7aa'],
       description: 'Quick caffeine fixes'
     },
     { 
       id: 'printing', 
       name: 'Printing', 
-      icon: <Printer size={24} color="#3B82F6" />, 
-      color: '#EFF6FF',
+      icon: <Printer size={24} color="#3b82f6" />, 
+      gradient: ['#eff6ff', '#dbeafe'],
       description: 'Documents & materials'
     },
     { 
       id: 'petcare', 
       name: 'Pet Care', 
-      icon: <Heart size={24} color="#EF4444" />, 
-      color: '#FEF2F2',
+      icon: <Heart size={24} color="#ef4444" />, 
+      gradient: ['#fef2f2', '#fecaca'],
       description: 'Walking & sitting'
     },
     { 
       id: 'food', 
       name: 'Food Delivery', 
-      icon: <ShoppingBag size={24} color="#10B981" />, 
-      color: '#ECFDF5',
+      icon: <ShoppingBag size={24} color="#10b981" />, 
+      gradient: ['#ecfdf5', '#a7f3d0'],
       description: 'Pickup & delivery'
     },
     { 
       id: 'shopping', 
       name: 'Shopping', 
-      icon: <ShoppingBag size={24} color="#8B5CF6" />, 
-      color: '#F3F4F6',
+      icon: <ShoppingBag size={24} color="#8b5cf6" />, 
+      gradient: ['#f3f4f6', '#e5e7eb'],
       description: 'Errands & purchases'
     },
   ];
@@ -64,22 +84,22 @@ export default function PostTaskScreen() {
       id: 'normal', 
       name: 'Normal', 
       description: 'Within a few hours',
-      icon: <Clock size={20} color="#6B7280" />,
-      color: '#F3F4F6'
+      icon: <Clock size={20} color="#718096" />,
+      gradient: ['#f8fafc', '#f1f5f9']
     },
     { 
       id: 'urgent', 
       name: 'Urgent', 
       description: 'Within 30 minutes',
-      icon: <Zap size={20} color="#F97316" />,
-      color: '#FFF7ED'
+      icon: <Zap size={20} color="#f97316" />,
+      gradient: ['#fff7ed', '#fed7aa']
     },
     { 
       id: 'asap', 
       name: 'ASAP', 
       description: 'Right now!',
-      icon: <Users size={20} color="#EF4444" />,
-      color: '#FEF2F2'
+      icon: <Users size={20} color="#ef4444" />,
+      gradient: ['#fef2f2', '#fecaca']
     },
   ];
 
@@ -145,84 +165,170 @@ export default function PostTaskScreen() {
 
   return (
     <View style={styles.container}>
-      <StatusBar style="dark" />
+      <StatusBar style="light" />
       
       {/* Premium Header */}
-      <View style={styles.header}>
-        <View style={styles.headerTop}>
-          <HustlLogo size={32} />
-          <View style={styles.headerText}>
-            <Text style={styles.headerTitle}>Post Task</Text>
-            <Text style={styles.headerSubtitle}>Get help from fellow students</Text>
+      <LinearGradient
+        colors={['#667eea', '#764ba2']}
+        style={styles.header}
+        start={{ x: 0, y: 0 }}
+        end={{ x: 1, y: 1 }}
+      >
+        <Animated.View 
+          style={[
+            styles.headerContent,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <View style={styles.headerTop}>
+            <HustlLogo size={32} />
+            <View style={styles.headerText}>
+              <Typography variant="h2" color="#ffffff">Post Task</Typography>
+              <Typography variant="body2" color="rgba(255,255,255,0.8)">
+                Get help from fellow students
+              </Typography>
+            </View>
+            <Badge variant="success" size="sm">
+              <Typography variant="caption" color="#16a34a">Live</Typography>
+            </Badge>
           </View>
-          <Badge variant="success" size="sm">
-            <Text>Live</Text>
-          </Badge>
-        </View>
-      </View>
+
+          <GlassCard style={styles.quickStats}>
+            <View style={styles.quickStatsContent}>
+              <View style={styles.quickStat}>
+                <Sparkles size={16} color="#ffd89b" />
+                <Typography variant="caption" color="#ffffff">Avg Response: 8min</Typography>
+              </View>
+              <View style={styles.quickStat}>
+                <Users size={16} color="#10b981" />
+                <Typography variant="caption" color="#ffffff">24 Students Online</Typography>
+              </View>
+            </View>
+          </GlassCard>
+        </Animated.View>
+      </LinearGradient>
 
       <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         {/* Task Title */}
-        <Input
-          label="What do you need help with?"
-          placeholder="e.g., Starbucks coffee run to Reitz Union"
-          value={formData.title}
-          onChangeText={(value) => updateFormData('title', value)}
-          error={errors.title}
-        />
+        <Animated.View 
+          style={[
+            styles.inputSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <Input
+            label="What do you need help with?"
+            placeholder="e.g., Starbucks coffee run to Reitz Union"
+            value={formData.title}
+            onChangeText={(value) => updateFormData('title', value)}
+            error={errors.title}
+          />
+        </Animated.View>
 
         {/* Category Selection */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Category</Text>
+        <Animated.View 
+          style={[
+            styles.inputGroup,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <Typography variant="h4" style={styles.inputLabel}>Category</Typography>
           <View style={styles.categoryGrid}>
             {categories.map((category) => (
               <TouchableOpacity
                 key={category.id}
                 style={[
                   styles.categoryCard,
-                  { backgroundColor: category.color },
                   formData.category === category.id && styles.categoryCardSelected
                 ]}
                 onPress={() => updateFormData('category', category.id)}
               >
-                <View style={styles.categoryIcon}>{category.icon}</View>
-                <Text style={[
-                  styles.categoryName,
-                  formData.category === category.id && styles.categoryNameSelected
-                ]}>
-                  {category.name}
-                </Text>
-                <Text style={styles.categoryDescription}>{category.description}</Text>
+                <ModernCard 
+                  style={styles.categoryCardInner} 
+                  gradient
+                  gradientColors={category.gradient}
+                >
+                  <View style={styles.categoryIcon}>{category.icon}</View>
+                  <Typography 
+                    variant="h4" 
+                    style={[
+                      styles.categoryName,
+                      formData.category === category.id && styles.categoryNameSelected
+                    ]}
+                  >
+                    {category.name}
+                  </Typography>
+                  <Typography variant="body2" style={styles.categoryDescription}>
+                    {category.description}
+                  </Typography>
+                </ModernCard>
               </TouchableOpacity>
             ))}
           </View>
-          {errors.category && <Text style={styles.errorText}>{errors.category}</Text>}
-        </View>
+          {errors.category && <Typography variant="caption" color="#ef4444">{errors.category}</Typography>}
+        </Animated.View>
 
         {/* Description */}
-        <Input
-          label="Task Details"
-          placeholder="Provide specific details, preferences, and any special instructions..."
-          value={formData.description}
-          onChangeText={(value) => updateFormData('description', value)}
-          error={errors.description}
-          multiline
-          numberOfLines={4}
-          style={styles.textArea}
-        />
+        <Animated.View 
+          style={[
+            styles.inputSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <Input
+            label="Task Details"
+            placeholder="Provide specific details, preferences, and any special instructions..."
+            value={formData.description}
+            onChangeText={(value) => updateFormData('description', value)}
+            error={errors.description}
+            multiline
+            numberOfLines={4}
+            style={styles.textArea}
+          />
+        </Animated.View>
 
         {/* Location */}
-        <Input
-          label="Pickup/Delivery Location"
-          placeholder="e.g., Turlington Plaza, Reitz Union, Library West"
-          value={formData.location}
-          onChangeText={(value) => updateFormData('location', value)}
-          error={errors.location}
-          icon={<MapPin size={20} color="#6B7280" />}
-        />
+        <Animated.View 
+          style={[
+            styles.inputSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <Input
+            label="Pickup/Delivery Location"
+            placeholder="e.g., Turlington Plaza, Reitz Union, Library West"
+            value={formData.location}
+            onChangeText={(value) => updateFormData('location', value)}
+            error={errors.location}
+            icon={<MapPin size={20} color="#718096" />}
+          />
+        </Animated.View>
 
         {/* Budget and Time Row */}
-        <View style={styles.row}>
+        <Animated.View 
+          style={[
+            styles.row,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
           <View style={styles.halfWidth}>
             <Input
               label="Budget ($)"
@@ -231,7 +337,7 @@ export default function PostTaskScreen() {
               onChangeText={(value) => updateFormData('budget', value)}
               error={errors.budget}
               keyboardType="numeric"
-              icon={<DollarSign size={20} color="#6B7280" />}
+              icon={<DollarSign size={20} color="#718096" />}
               containerStyle={styles.halfInput}
             />
           </View>
@@ -243,85 +349,144 @@ export default function PostTaskScreen() {
               value={formData.timeEstimate}
               onChangeText={(value) => updateFormData('timeEstimate', value)}
               error={errors.timeEstimate}
-              icon={<Clock size={20} color="#6B7280" />}
+              icon={<Clock size={20} color="#718096" />}
               containerStyle={styles.halfInput}
             />
           </View>
-        </View>
+        </Animated.View>
 
         {/* Urgency Level */}
-        <View style={styles.inputGroup}>
-          <Text style={styles.inputLabel}>Urgency Level</Text>
+        <Animated.View 
+          style={[
+            styles.inputGroup,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <Typography variant="h4" style={styles.inputLabel}>Urgency Level</Typography>
           <View style={styles.urgencyGrid}>
             {urgencyLevels.map((level) => (
               <TouchableOpacity
                 key={level.id}
                 style={[
                   styles.urgencyCard,
-                  { backgroundColor: level.color },
                   formData.urgency === level.id && styles.urgencyCardSelected
                 ]}
                 onPress={() => updateFormData('urgency', level.id)}
               >
-                <View style={styles.urgencyHeader}>
-                  <View style={styles.urgencyIcon}>{level.icon}</View>
-                  <Text style={[
-                    styles.urgencyName,
-                    formData.urgency === level.id && styles.urgencyNameSelected
-                  ]}>
-                    {level.name}
-                  </Text>
-                </View>
-                <Text style={[
-                  styles.urgencyDescription,
-                  formData.urgency === level.id && styles.urgencyDescriptionSelected
-                ]}>
-                  {level.description}
-                </Text>
+                <ModernCard 
+                  style={styles.urgencyCardInner} 
+                  gradient
+                  gradientColors={level.gradient}
+                >
+                  <View style={styles.urgencyHeader}>
+                    <View style={styles.urgencyIcon}>{level.icon}</View>
+                    <Typography 
+                      variant="h4" 
+                      style={[
+                        styles.urgencyName,
+                        formData.urgency === level.id && styles.urgencyNameSelected
+                      ]}
+                    >
+                      {level.name}
+                    </Typography>
+                  </View>
+                  <Typography 
+                    variant="body2" 
+                    style={[
+                      styles.urgencyDescription,
+                      formData.urgency === level.id && styles.urgencyDescriptionSelected
+                    ]}
+                  >
+                    {level.description}
+                  </Typography>
+                </ModernCard>
               </TouchableOpacity>
             ))}
           </View>
-        </View>
+        </Animated.View>
 
         {/* Add Photo */}
-        <Card style={styles.photoCard}>
-          <TouchableOpacity style={styles.photoButton}>
-            <Camera size={24} color="#6B7280" />
-            <Text style={styles.photoButtonText}>Add Photo (Optional)</Text>
-            <Text style={styles.photoButtonSubtext}>Help others understand your task better</Text>
-          </TouchableOpacity>
-        </Card>
+        <Animated.View 
+          style={[
+            styles.photoSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <ModernCard style={styles.photoCard}>
+            <TouchableOpacity style={styles.photoButton}>
+              <Camera size={24} color="#718096" />
+              <Typography variant="h4" color="#718096" style={styles.photoButtonText}>
+                Add Photo (Optional)
+              </Typography>
+              <Typography variant="body2" color="#a0aec0" style={styles.photoButtonSubtext}>
+                Help others understand your task better
+              </Typography>
+            </TouchableOpacity>
+          </ModernCard>
+        </Animated.View>
 
         {/* Task Preview */}
-        <Card style={styles.previewCard} gradient gradientColors={['#F8FAFC', '#FFFFFF']}>
-          <Text style={styles.previewTitle}>Task Preview</Text>
-          <View style={styles.previewContent}>
-            <Text style={styles.previewTaskTitle}>{formData.title || 'Your task title'}</Text>
-            <Text style={styles.previewDescription}>{formData.description || 'Task description will appear here'}</Text>
-            <View style={styles.previewMeta}>
-              <Badge variant="info" size="sm">
-                <Text>{formData.category || 'Category'}</Text>
-              </Badge>
-              <Text style={styles.previewPrice}>${formData.budget || '0'}</Text>
-            </View>
-          </View>
-        </Card>
+        <Animated.View 
+          style={[
+            styles.previewSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <GlassCard style={styles.previewCard} gradient gradientColors={['rgba(102, 126, 234, 0.1)', 'rgba(118, 75, 162, 0.05)']}>
+            <Typography variant="h4" style={styles.previewTitle}>Task Preview</Typography>
+            <ModernCard style={styles.previewContent}>
+              <Typography variant="h4" style={styles.previewTaskTitle}>
+                {formData.title || 'Your task title'}
+              </Typography>
+              <Typography variant="body2" style={styles.previewDescription}>
+                {formData.description || 'Task description will appear here'}
+              </Typography>
+              <View style={styles.previewMeta}>
+                <Badge variant="info" size="sm">
+                  <Typography variant="caption">{formData.category || 'Category'}</Typography>
+                </Badge>
+                <Typography variant="h3" color="#667eea">
+                  ${formData.budget || '0'}
+                </Typography>
+              </View>
+            </ModernCard>
+          </GlassCard>
+        </Animated.View>
 
         {/* Submit Button */}
-        <Button
-          title="Post Task"
-          onPress={handleSubmit}
-          variant="primary"
-          size="lg"
-          gradient
-          style={styles.submitButton}
-        />
+        <Animated.View 
+          style={[
+            styles.submitSection,
+            {
+              opacity: fadeAnim,
+              transform: [{ translateY: slideAnim }]
+            }
+          ]}
+        >
+          <AnimatedButton
+            title="Post Task"
+            onPress={handleSubmit}
+            variant="primary"
+            size="lg"
+            gradient
+            gradientColors={['#667eea', '#764ba2']}
+            style={styles.submitButton}
+          />
 
-        {/* Terms */}
-        <Text style={styles.termsText}>
-          By posting a task, you agree to our Terms of Service and Community Guidelines. 
-          Payment will be held securely until task completion.
-        </Text>
+          <Typography variant="body2" color="#718096" style={styles.termsText}>
+            By posting a task, you agree to our Terms of Service and Community Guidelines. 
+            Payment will be held securely until task completion.
+          </Typography>
+        </Animated.View>
       </ScrollView>
     </View>
   );
@@ -330,81 +495,76 @@ export default function PostTaskScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F8FAFC',
+    backgroundColor: '#f8fafc',
   },
   header: {
-    paddingHorizontal: 24,
     paddingTop: 60,
-    paddingBottom: 20,
-    backgroundColor: '#FFFFFF',
-    borderBottomWidth: 1,
-    borderBottomColor: '#F3F4F6',
+    paddingBottom: 32,
+    paddingHorizontal: 24,
+  },
+  headerContent: {
+    flex: 1,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 16,
+    marginBottom: 24,
   },
   headerText: {
     flex: 1,
   },
-  headerTitle: {
-    fontSize: 28,
-    fontWeight: '900',
-    color: '#111827',
-    letterSpacing: -0.5,
+  quickStats: {
+    marginTop: 16,
   },
-  headerSubtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '500',
+  quickStatsContent: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  quickStat: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
   },
   form: {
     flex: 1,
     paddingHorizontal: 24,
     paddingTop: 24,
   },
-  inputGroup: {
+  inputSection: {
     marginBottom: 24,
   },
+  inputGroup: {
+    marginBottom: 32,
+  },
   inputLabel: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#374151',
-    marginBottom: 12,
+    marginBottom: 16,
   },
   categoryGrid: {
-    gap: 12,
+    gap: 16,
   },
   categoryCard: {
-    padding: 20,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    marginBottom: 0,
   },
   categoryCardSelected: {
-    borderColor: '#3B82F6',
-    shadowColor: '#3B82F6',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
+    transform: [{ scale: 1.02 }],
+  },
+  categoryCardInner: {
+    padding: 20,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   categoryIcon: {
     marginBottom: 12,
   },
   categoryName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#374151',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   categoryNameSelected: {
-    color: '#3B82F6',
+    color: '#667eea',
   },
   categoryDescription: {
-    fontSize: 12,
-    color: '#6B7280',
+    color: '#718096',
   },
   textArea: {
     height: 100,
@@ -413,6 +573,7 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: 'row',
     gap: 16,
+    marginBottom: 24,
   },
   halfWidth: {
     flex: 1,
@@ -424,18 +585,15 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   urgencyCard: {
-    padding: 16,
-    borderRadius: 16,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    marginBottom: 0,
   },
   urgencyCardSelected: {
-    borderColor: '#F97316',
-    shadowColor: '#F97316',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 2,
+    transform: [{ scale: 1.02 }],
+  },
+  urgencyCardInner: {
+    padding: 16,
+    borderWidth: 2,
+    borderColor: 'transparent',
   },
   urgencyHeader: {
     flexDirection: 'row',
@@ -446,94 +604,72 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   urgencyName: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#374151',
+    marginBottom: 0,
   },
   urgencyNameSelected: {
-    color: '#F97316',
+    color: '#667eea',
   },
   urgencyDescription: {
-    fontSize: 14,
-    color: '#6B7280',
+    color: '#718096',
   },
   urgencyDescriptionSelected: {
-    color: '#EA580C',
+    color: '#667eea',
+  },
+  photoSection: {
+    marginBottom: 32,
   },
   photoCard: {
-    marginBottom: 24,
     padding: 0,
   },
   photoButton: {
-    padding: 24,
+    padding: 32,
     alignItems: 'center',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    borderColor: '#e5e7eb',
     borderStyle: 'dashed',
-    borderRadius: 16,
+    borderRadius: 24,
   },
   photoButtonText: {
-    fontSize: 16,
-    color: '#6B7280',
-    fontWeight: '600',
-    marginTop: 8,
+    marginTop: 12,
+    marginBottom: 4,
   },
   photoButtonSubtext: {
-    fontSize: 12,
-    color: '#9CA3AF',
-    marginTop: 4,
+    textAlign: 'center',
   },
-  previewCard: {
+  previewSection: {
     marginBottom: 32,
   },
+  previewCard: {
+    marginBottom: 0,
+  },
   previewTitle: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#374151',
     marginBottom: 16,
   },
   previewContent: {
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
+    padding: 20,
     borderWidth: 1,
-    borderColor: '#E5E7EB',
+    borderColor: 'rgba(102, 126, 234, 0.2)',
   },
   previewTaskTitle: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#111827',
     marginBottom: 8,
   },
   previewDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 12,
-    lineHeight: 20,
+    marginBottom: 16,
+    lineHeight: 22,
   },
   previewMeta: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  previewPrice: {
-    fontSize: 20,
-    fontWeight: '800',
-    color: '#F97316',
+  submitSection: {
+    marginBottom: 40,
   },
   submitButton: {
     marginBottom: 24,
   },
   termsText: {
-    fontSize: 12,
-    color: '#6B7280',
     textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 40,
-  },
-  errorText: {
-    fontSize: 12,
-    color: '#EF4444',
-    marginTop: 4,
+    lineHeight: 20,
   },
 });

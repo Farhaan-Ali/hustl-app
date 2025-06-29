@@ -38,7 +38,11 @@
     "react-native-svg": "15.11.2",
     "react-native-url-polyfill": "^2.0.0",
     "react-native-web": "^0.20.0",
-    "react-native-webview": "13.13.5"
+    "react-native-webview": "13.13.5",
+    "@expo-google-fonts/inter": "^0.2.3",
+    "@expo-google-fonts/poppins": "^0.2.3",
+    "react-native-super-grid": "^6.0.1",
+    "react-native-modal": "^13.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",
