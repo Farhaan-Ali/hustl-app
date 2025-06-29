@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Linking, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { HelpCircle, Shield, FileText, Star, MessageCircle, Bell, CreditCard, ChevronRight, Users, Award, TrendingUp } from 'lucide-react-native';
+import { CircleHelp as HelpCircle, Shield, FileText, Star, MessageCircle, Bell, CreditCard, ChevronRight, Users, Award, TrendingUp } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { ModernCard } from '@/components/ui/ModernCard';
