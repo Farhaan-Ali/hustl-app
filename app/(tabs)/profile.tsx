@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Edit, Star, Clock, DollarSign, Award, Settings, LogOut, Shield, Bell, CreditCard, ChevronRight } from 'lucide-react-native';
+import { CreditCard as Edit, Star, Clock, DollarSign, Award, Settings, LogOut, Shield, Bell, CreditCard, ChevronRight } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 
