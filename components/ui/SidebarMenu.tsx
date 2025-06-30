@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { X, Home, Search, Plus, MessageCircle, Wallet, User, Settings, HelpCircle, LogOut } from 'lucide-react-native';
+import { X, Chrome as Home, Search, Plus, MessageCircle, Wallet, User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { Typography } from './Typography';
