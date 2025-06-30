@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Animated, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Bell, Settings, Filter, CheckCircle2 } from 'lucide-react-native';
+import { Bell, Settings, Filter, CircleCheck as CheckCircle2 } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { Typography } from '@/components/ui/Typography';

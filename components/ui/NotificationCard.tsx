@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, TouchableOpacity, Image } from 'react-native';
-import { Bell, CheckCircle, AlertCircle, MessageCircle, DollarSign } from 'lucide-react-native';
+import { Bell, CircleCheck as CheckCircle, CircleAlert as AlertCircle, MessageCircle, DollarSign } from 'lucide-react-native';
 import { ModernCard } from './ModernCard';
 import { Typography } from './Typography';
 import { Badge } from './Badge';
