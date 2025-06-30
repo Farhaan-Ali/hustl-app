@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 import { useFonts } from 'expo-font';
 import {
   Inter_300Light,
@@ -25,8 +24,6 @@ import 'react-native-url-polyfill/auto';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-  useFrameworkReady();
-
   const [fontsLoaded] = useFonts({
     'Inter-Light': Inter_300Light,
     'Inter-Regular': Inter_400Regular,
