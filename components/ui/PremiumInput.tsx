@@ -14,18 +14,37 @@ export function PremiumInput({ label, error, icon, containerStyle, style, gradie
   const [isFocused, setIsFocused] = useState(false);
   const focusAnim = useRef(new Animated.Value(0)).current;
   const glowAnim = useRef(new Animated.Value(0)).current;
+  const shimmerAnim = useRef(new Animated.Value(0)).current;
+
+  React.useEffect(() => {
+    // Continuous shimmer effect
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(shimmerAnim, {
+          toValue: 1,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+        Animated.timing(shimmerAnim, {
+          toValue: 0,
+          duration: 2000,
+          useNativeDriver: true,
+        }),
+      ])
+    ).start();
+  }, []);
 
   const handleFocus = () => {
     setIsFocused(true);
     Animated.parallel([
       Animated.timing(focusAnim, {
         toValue: 1,
-        duration: 200,
+        duration: 300,
         useNativeDriver: false,
       }),
       Animated.timing(glowAnim, {
         toValue: 1,
-        duration: 200,
+        duration: 300,
         useNativeDriver: true,
       }),
     ]).start();
@@ -36,12 +55,12 @@ export function PremiumInput({ label, error, icon, containerStyle, style, gradie
     Animated.parallel([
       Animated.timing(focusAnim, {
         toValue: 0,
-        duration: 200,
+        duration: 300,
         useNativeDriver: false,
       }),
       Animated.timing(glowAnim, {
         toValue: 0,
-        duration: 200,
+        duration: 300,
         useNativeDriver: true,
       }),
     ]).start();
@@ -49,28 +68,45 @@ export function PremiumInput({ label, error, icon, containerStyle, style, gradie
 
   const borderColor = focusAnim.interpolate({
     inputRange: [0, 1],
-    outputRange: ['#E5E7EB', '#0038FF'],
+    outputRange: ['rgba(139, 92, 246, 0.2)', '#8b5cf6'],
   });
 
   const glowStyle = {
     shadowOpacity: glowAnim,
-    shadowColor: '#0038FF',
+    shadowColor: '#8b5cf6',
     shadowOffset: { width: 0, height: 0 },
-    shadowRadius: 10,
-    elevation: isFocused ? 5 : 0,
+    shadowRadius: 15,
+    elevation: isFocused ? 8 : 0,
   };
+
+  const shimmerTranslate = shimmerAnim.interpolate({
+    inputRange: [0, 1],
+    outputRange: [-100, 100],
+  });
 
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <Text style={styles.label}>{label}</Text>}
       
       <Animated.View style={[styles.inputContainer, glowStyle, { borderColor }]}>
-        {gradient ? (
-          <LinearGradient
-            colors={['rgba(0, 56, 255, 0.05)', 'rgba(245, 247, 255, 0.8)']}
-            style={styles.gradientBackground}
-          />
-        ) : null}
+        <LinearGradient
+          colors={gradient ? ['rgba(139, 92, 246, 0.05)', 'rgba(255, 255, 255, 0.95)'] : ['#ffffff', '#ffffff']}
+          style={styles.gradientBackground}
+        />
+        
+        {/* Shimmer Effect */}
+        <Animated.View 
+          style={[
+            styles.shimmerOverlay,
+            {
+              transform: [{ translateX: shimmerTranslate }],
+              opacity: shimmerAnim.interpolate({
+                inputRange: [0, 1],
+                outputRange: [0, 0.3],
+              }),
+            }
+          ]}
+        />
         
         {icon && <View style={styles.icon}>{icon}</View>}
         
@@ -78,7 +114,7 @@ export function PremiumInput({ label, error, icon, containerStyle, style, gradie
           style={[styles.input, icon && styles.inputWithIcon, style]}
           onFocus={handleFocus}
           onBlur={handleBlur}
-          placeholderTextColor="#9CA3AF"
+          placeholderTextColor="rgba(113, 128, 150, 0.7)"
           {...props}
         />
       </Animated.View>
@@ -95,7 +131,7 @@ const styles = StyleSheet.create({
   label: {
     fontSize: 16,
     fontWeight: '600',
-    color: '#374151',
+    color: '#2d3748',
     marginBottom: 8,
     fontFamily: 'Inter-SemiBold',
   },
@@ -106,7 +142,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderRadius: 20,
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingVertical: 18,
     position: 'relative',
     overflow: 'hidden',
   },
@@ -117,6 +153,15 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
   },
+  shimmerOverlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    backgroundColor: 'rgba(255, 255, 255, 0.5)',
+    width: 50,
+  },
   icon: {
     marginRight: 12,
     zIndex: 1,
@@ -124,7 +169,7 @@ const styles = StyleSheet.create({
   input: {
     flex: 1,
     fontSize: 16,
-    color: '#111827',
+    color: '#2d3748',
     fontFamily: 'Inter-Regular',
     zIndex: 1,
   },
@@ -133,7 +178,7 @@ const styles = StyleSheet.create({
   },
   errorText: {
     fontSize: 12,
-    color: '#EF4444',
+    color: '#ff6b6b',
     marginTop: 4,
     fontFamily: 'Inter-Medium',
   },
