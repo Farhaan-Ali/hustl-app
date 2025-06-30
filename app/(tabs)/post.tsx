@@ -37,41 +37,47 @@ export default function PostTaskScreen() {
       id: 'coffee', 
       name: 'Coffee Run', 
       icon: <Coffee size={24} color="#FFFFFF" />, 
-      variant: 'secondary' as const
+      variant: 'secondary' as const,
+      cardVariant: 'secondary' as const // Orange
     },
     { 
       id: 'food', 
       name: 'Food Pickup', 
       icon: <UtensilsCrossed size={24} color="#FFFFFF" />, 
-      variant: 'primary' as const
+      variant: 'primary' as const,
+      cardVariant: 'primary' as const // Blue
     },
     { 
       id: 'printing', 
       name: 'Printing', 
-      icon: <Printer size={24} color="#FFFFFF" />, 
-      variant: 'primary' as const
+      icon: <Printer size={24} color="#001E3C" />, 
+      variant: 'accent' as const,
+      cardVariant: 'accent' as const // Grey/White
     },
     { 
       id: 'petcare', 
       name: 'Pet Care', 
-      icon: <Heart size={24} color="#E6501E" />, 
-      variant: 'accent' as const
+      icon: <Heart size={24} color="#FFFFFF" />, 
+      variant: 'secondary' as const,
+      cardVariant: 'secondary' as const // Orange
     },
     { 
       id: 'rides', 
       name: 'Campus Rides', 
       icon: <Car size={24} color="#FFFFFF" />, 
-      variant: 'secondary' as const
+      variant: 'primary' as const,
+      cardVariant: 'primary' as const // Blue
     },
     { 
       id: 'workout', 
       name: 'Workout Buddy', 
-      icon: <Dumbbell size={24} color="#FFFFFF" />, 
-      variant: 'primary' as const
+      icon: <Dumbbell size={24} color="#001E3C" />, 
+      variant: 'accent' as const,
+      cardVariant: 'accent' as const // Grey/White
     },
   ];
 
-  const recentTasks = [
+  const categoryTasks = [
     {
       id: 1,
       title: 'Starbucks Coffee Run',
@@ -241,6 +247,25 @@ export default function PostTaskScreen() {
           {errors.category && <Typography variant="caption" color="#E6501E">{errors.category}</Typography>}
         </Animated.View>
 
+        {/* Category Task Cards */}
+        <Animated.View style={[styles.categoryTasksSection, { opacity: fadeAnim }]}>
+          <View style={styles.sectionHeader}>
+            <Typography variant="h3">Popular in Categories</Typography>
+            <Badge variant="secondary" size="sm">
+              <Typography variant="caption" color="#FFFFFF">Live</Typography>
+            </Badge>
+          </View>
+          
+          <FlatList
+            data={categoryTasks}
+            renderItem={({ item }) => <CategoryTaskCard task={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.categoryTasksList}
+          />
+        </Animated.View>
+
         {/* Description */}
         <Animated.View style={[styles.inputSection, { opacity: fadeAnim }]}>
           <Input
@@ -307,25 +332,6 @@ export default function PostTaskScreen() {
           </ModernCard>
         </Animated.View>
 
-        {/* Recent Tasks Section */}
-        <Animated.View style={[styles.recentTasksSection, { opacity: fadeAnim }]}>
-          <View style={styles.sectionHeader}>
-            <Typography variant="h3">Similar Tasks</Typography>
-            <Badge variant="secondary" size="sm">
-              <Typography variant="caption" color="#FFFFFF">3 active</Typography>
-            </Badge>
-          </View>
-          
-          <FlatList
-            data={recentTasks}
-            renderItem={({ item }) => <TaskCard task={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.tasksList}
-          />
-        </Animated.View>
-
         {/* Submit Button */}
         <Animated.View style={[styles.submitSection, { opacity: fadeAnim }]}>
           <AnimatedButton
@@ -347,7 +353,7 @@ export default function PostTaskScreen() {
   );
 }
 
-function TaskCard({ task }: { task: any }) {
+function CategoryTaskCard({ task }: { task: any }) {
   const getHeaderColors = () => {
     switch (task.cardVariant) {
       case 'secondary': // Orange
@@ -376,7 +382,7 @@ function TaskCard({ task }: { task: any }) {
   const headerColors = getHeaderColors();
 
   return (
-    <ModernCard style={styles.taskCard} onPress={() => {}}>
+    <ModernCard style={styles.categoryTaskCard} onPress={() => {}}>
       <View style={[styles.taskHeader, { backgroundColor: headerColors.backgroundColor }]}>
         {task.urgent && (
           <Badge variant="default" size="sm" style={styles.urgentBadge}>
@@ -494,39 +500,7 @@ const styles = StyleSheet.create({
   categoryIcon: {
     marginBottom: 12,
   },
-  textArea: {
-    height: 100,
-    textAlignVertical: 'top',
-  },
-  row: {
-    flexDirection: 'row',
-    gap: 16,
-    marginBottom: 24,
-  },
-  halfWidth: {
-    flex: 1,
-  },
-  halfInput: {
-    marginBottom: 0,
-  },
-  photoSection: {
-    marginBottom: 32,
-  },
-  photoCard: {
-    padding: 0,
-  },
-  photoButton: {
-    padding: 32,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#D8DDE6',
-    borderStyle: 'dashed',
-    borderRadius: 20,
-  },
-  photoButtonText: {
-    marginTop: 12,
-  },
-  recentTasksSection: {
+  categoryTasksSection: {
     marginBottom: 32,
   },
   sectionHeader: {
@@ -535,10 +509,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 16,
   },
-  tasksList: {
+  categoryTasksList: {
     paddingRight: 24,
   },
-  taskCard: {
+  categoryTaskCard: {
     marginRight: 16,
     width: 280,
     padding: 0,
@@ -609,6 +583,38 @@ const styles = StyleSheet.create({
   },
   acceptButton: {
     paddingHorizontal: 20,
+  },
+  textArea: {
+    height: 100,
+    textAlignVertical: 'top',
+  },
+  row: {
+    flexDirection: 'row',
+    gap: 16,
+    marginBottom: 24,
+  },
+  halfWidth: {
+    flex: 1,
+  },
+  halfInput: {
+    marginBottom: 0,
+  },
+  photoSection: {
+    marginBottom: 32,
+  },
+  photoCard: {
+    padding: 0,
+  },
+  photoButton: {
+    padding: 32,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#D8DDE6',
+    borderStyle: 'dashed',
+    borderRadius: 20,
+  },
+  photoButtonText: {
+    marginTop: 12,
   },
   submitSection: {
     marginBottom: 40,
