@@ -31,39 +31,20 @@ export function GlowButton({
 }: GlowButtonProps) {
   const scaleAnim = useRef(new Animated.Value(1)).current;
   const shineAnim = useRef(new Animated.Value(0)).current;
-  const glowAnim = useRef(new Animated.Value(0.8)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
+  const glowAnim = useRef(new Animated.Value(0.7)).current;
 
   React.useEffect(() => {
     // Continuous glow animation
-    if (glow) {
-      Animated.loop(
-        Animated.sequence([
-          Animated.timing(glowAnim, {
-            toValue: 1,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-          Animated.timing(glowAnim, {
-            toValue: 0.8,
-            duration: 2000,
-            useNativeDriver: true,
-          }),
-        ])
-      ).start();
-    }
-
-    // Pulse animation
     Animated.loop(
       Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.02,
-          duration: 1500,
+        Animated.timing(glowAnim, {
+          toValue: 1,
+          duration: 2000,
           useNativeDriver: true,
         }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 1500,
+        Animated.timing(glowAnim, {
+          toValue: 0.7,
+          duration: 2000,
           useNativeDriver: true,
         }),
       ])
@@ -74,8 +55,6 @@ export function GlowButton({
     Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 0.96,
-        tension: 300,
-        friction: 8,
         useNativeDriver: true,
       }),
       shine && Animated.timing(shineAnim, {
@@ -90,13 +69,11 @@ export function GlowButton({
     Animated.parallel([
       Animated.spring(scaleAnim, {
         toValue: 1,
-        tension: 300,
-        friction: 8,
         useNativeDriver: true,
       }),
       shine && Animated.timing(shineAnim, {
         toValue: 0,
-        duration: 400,
+        duration: 300,
         useNativeDriver: true,
       })
     ]).start();
@@ -105,11 +82,11 @@ export function GlowButton({
   const getGradientColors = () => {
     switch (variant) {
       case 'primary':
-        return ['#667eea', '#764ba2'];
+        return ['#0038FF', '#0021A5'];
       case 'secondary':
-        return ['#ff9a9e', '#fecfef'];
+        return ['#FF5A1F', '#E63A0B'];
       default:
-        return ['#667eea', '#764ba2'];
+        return ['#0038FF', '#0021A5'];
     }
   };
 
@@ -130,7 +107,7 @@ export function GlowButton({
   ];
 
   const animatedStyle = {
-    transform: [{ scale: scaleAnim }, { scale: pulseAnim }],
+    transform: [{ scale: scaleAnim }],
     opacity: glow ? glowAnim : 1,
   };
 
@@ -169,7 +146,7 @@ export function GlowButton({
                       {
                         translateX: shineAnim.interpolate({
                           inputRange: [0, 1],
-                          outputRange: [-150, 150],
+                          outputRange: [-100, 100],
                         }),
                       },
                     ],
@@ -201,22 +178,22 @@ export function GlowButton({
 
 const styles = StyleSheet.create({
   button: {
-    borderRadius: 25,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
     gap: 8,
-    shadowColor: '#667eea',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.4,
-    shadowRadius: 20,
-    elevation: 15,
+    shadowColor: '#0038FF',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.3,
+    shadowRadius: 12,
+    elevation: 8,
   },
   touchable: {
-    borderRadius: 25,
+    borderRadius: 20,
   },
   gradientButton: {
-    borderRadius: 25,
+    borderRadius: 20,
     alignItems: 'center',
     justifyContent: 'center',
     flexDirection: 'row',
@@ -225,37 +202,37 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   sm: {
-    paddingHorizontal: 24,
-    paddingVertical: 14,
+    paddingHorizontal: 20,
+    paddingVertical: 12,
   },
   md: {
-    paddingHorizontal: 32,
-    paddingVertical: 18,
+    paddingHorizontal: 28,
+    paddingVertical: 16,
   },
   lg: {
-    paddingHorizontal: 40,
-    paddingVertical: 22,
+    paddingHorizontal: 36,
+    paddingVertical: 20,
   },
   primary: {
-    backgroundColor: '#667eea',
+    backgroundColor: '#0038FF',
   },
   secondary: {
-    backgroundColor: '#ff9a9e',
+    backgroundColor: '#FF5A1F',
   },
   outline: {
     backgroundColor: 'transparent',
     borderWidth: 2,
-    borderColor: '#667eea',
+    borderColor: '#0038FF',
   },
   ghost: {
-    backgroundColor: 'rgba(102, 126, 234, 0.1)',
+    backgroundColor: 'rgba(0, 56, 255, 0.1)',
   },
   disabled: {
     opacity: 0.5,
   },
   text: {
     fontFamily: 'Inter-SemiBold',
-    fontWeight: '700',
+    fontWeight: '600',
   },
   smText: {
     fontSize: 14,
@@ -273,13 +250,13 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
   outlineText: {
-    color: '#667eea',
+    color: '#0038FF',
   },
   ghostText: {
-    color: '#667eea',
+    color: '#0038FF',
   },
   disabledText: {
-    color: '#a0aec0',
+    color: '#D8DDE6',
   },
   shineOverlay: {
     position: 'absolute',
@@ -287,8 +264,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(255,255,255,0.4)',
+    backgroundColor: 'rgba(255,255,255,0.3)',
     transform: [{ skewX: '-20deg' }],
-    width: 40,
+    width: 30,
   },
 });

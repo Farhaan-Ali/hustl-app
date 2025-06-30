@@ -1,7 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Animated, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, UtensilsCrossed, FileText, Heart, Car, Dumbbell, Search, MapPin, Star, Clock, TrendingUp, Sparkles, Zap } from 'lucide-react-native';
+import { Coffee, UtensilsCrossed, FileText, Heart, Car, Dumbbell, Search, MapPin, Star, Clock, TrendingUp, Sparkles } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { PremiumCard } from '@/components/ui/PremiumCard';
@@ -12,36 +12,19 @@ import { GlowButton } from '@/components/ui/GlowButton';
 import { ConfettiAnimation } from '@/components/ui/ConfettiAnimation';
 import { TaskCard } from '@/components/ui/TaskCard';
 
-const { width, height } = Dimensions.get('window');
+const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scrollY = useRef(new Animated.Value(0)).current;
-  const pulseAnim = useRef(new Animated.Value(1)).current;
   const [showConfetti, setShowConfetti] = useState(false);
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1200,
+      duration: 1000,
       useNativeDriver: true,
     }).start();
-
-    // Continuous pulse animation
-    Animated.loop(
-      Animated.sequence([
-        Animated.timing(pulseAnim, {
-          toValue: 1.05,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-        Animated.timing(pulseAnim, {
-          toValue: 1,
-          duration: 2000,
-          useNativeDriver: true,
-        }),
-      ])
-    ).start();
   }, []);
 
   const services = [
@@ -49,55 +32,49 @@ export default function HomeScreen() {
       id: 'coffee',
       title: 'Coffee Runs',
       emoji: '☕️',
-      icon: <Coffee size={28} color="#FFFFFF" />,
-      gradient: ['#FF6B6B', '#FF8E53'],
-      count: 12,
-      description: 'Quick campus coffee delivery'
+      icon: <Coffee size={24} color="#FFFFFF" />,
+      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
+      count: 12
     },
     {
       id: 'food',
       title: 'Food Pickup',
       emoji: '🍔',
-      icon: <UtensilsCrossed size={28} color="#FFFFFF" />,
-      gradient: ['#4ECDC4', '#44A08D'],
-      count: 8,
-      description: 'Fresh meals delivered fast'
+      icon: <UtensilsCrossed size={24} color="#FFFFFF" />,
+      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
+      count: 8
     },
     {
       id: 'print',
       title: 'Print & Study',
       emoji: '📄',
-      icon: <FileText size={28} color="#FFFFFF" />,
-      gradient: ['#667eea', '#764ba2'],
-      count: 15,
-      description: 'Documents & study materials'
+      icon: <FileText size={24} color="#FFFFFF" />,
+      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
+      count: 15
     },
     {
       id: 'pets',
       title: 'Pet Care',
       emoji: '🐶',
-      icon: <Heart size={28} color="#FFFFFF" />,
-      gradient: ['#f093fb', '#f5576c'],
-      count: 6,
-      description: 'Loving pet care services'
+      icon: <Heart size={24} color="#FFFFFF" />,
+      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
+      count: 6
     },
     {
       id: 'rides',
       title: 'Campus Rides',
       emoji: '🚗',
-      icon: <Car size={28} color="#FFFFFF" />,
-      gradient: ['#4facfe', '#00f2fe'],
-      count: 4,
-      description: 'Quick campus transportation'
+      icon: <Car size={24} color="#FFFFFF" />,
+      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
+      count: 4
     },
     {
       id: 'workout',
       title: 'Workout Buddy',
       emoji: '💪',
-      icon: <Dumbbell size={28} color="#FFFFFF" />,
-      gradient: ['#fa709a', '#fee140'],
-      count: 9,
-      description: 'Find your fitness partner'
+      icon: <Dumbbell size={24} color="#FFFFFF" />,
+      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
+      count: 9
     }
   ];
 
@@ -197,24 +174,40 @@ export default function HomeScreen() {
         rating: 4.9,
         image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100'
       }
+    },
+    {
+      id: 7,
+      title: 'Study Buddy',
+      description: 'Find someone to study with',
+      category: 'Study Buddy',
+      price: 0,
+      time: '1-3 hours',
+      location: 'Library',
+      image: 'https://images.pexels.com/photos/159711/books-bookstore-book-reading-159711.jpeg?auto=compress&cs=tinysrgb&w=400',
+      urgent: false,
+      poster: {
+        name: 'Taylor M.',
+        rating: 4.8,
+        image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100'
+      }
     }
   ];
 
   const headerOpacity = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [1, 0.85],
+    inputRange: [0, 100],
+    outputRange: [1, 0.9],
     extrapolate: 'clamp',
   });
 
-  const headerScale = scrollY.interpolate({
-    inputRange: [0, 150],
-    outputRange: [1, 0.95],
+  const headerTranslateY = scrollY.interpolate({
+    inputRange: [0, 100],
+    outputRange: [0, -20],
     extrapolate: 'clamp',
   });
 
   return (
     <View style={styles.container}>
-      <StatusBar style="light" />
+      <StatusBar style="dark" />
       
       {/* Confetti Animation */}
       <ConfettiAnimation 
@@ -222,59 +215,42 @@ export default function HomeScreen() {
         onComplete={() => setShowConfetti(false)} 
       />
       
-      {/* Dynamic Header */}
+      {/* Compact Header */}
       <Animated.View style={[
         styles.header, 
         { 
           opacity: headerOpacity,
-          transform: [{ scale: headerScale }]
+          transform: [{ translateY: headerTranslateY }]
         }
       ]}>
         <LinearGradient
-          colors={['#667eea', '#764ba2', '#f093fb']}
+          colors={['rgba(248, 250, 252, 0.95)', 'rgba(255, 255, 255, 0.9)']}
           style={styles.headerGradient}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
         />
         
         <View style={styles.headerContent}>
           <View style={styles.headerTop}>
-            <HustlLogo size={32} />
+            <HustlLogo size={28} />
             <View style={styles.headerText}>
-              <Typography variant="h2" color="#FFFFFF" style={styles.headerTitle}>
-                Discover Magic ✨
-              </Typography>
+              <Typography variant="h3" style={styles.headerTitle}>Discover</Typography>
               <View style={styles.locationRow}>
-                <MapPin size={14} color="rgba(255, 255, 255, 0.8)" />
-                <Typography variant="body2" color="rgba(255, 255, 255, 0.9)">
-                  University of Florida
-                </Typography>
-                <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-                  <Sparkles size={14} color="#FFD700" />
-                </Animated.View>
+                <MapPin size={12} color="rgba(0, 30, 60, 0.6)" />
+                <Typography variant="caption" color="rgba(0, 30, 60, 0.6)">University of Florida</Typography>
+                <Sparkles size={12} color="#FF5A1F" />
               </View>
             </View>
           </View>
 
-          {/* Live Stats with Glow */}
-          <Animated.View style={[styles.liveStats, { transform: [{ scale: pulseAnim }] }]}>
-            <LinearGradient
-              colors={['rgba(255, 255, 255, 0.25)', 'rgba(255, 255, 255, 0.1)']}
-              style={styles.statsContainer}
-            >
-              <View style={styles.statItem}>
-                <Zap size={16} color="#FFD700" />
-                <Typography variant="body2" color="rgba(255, 255, 255, 0.95)">
-                  54 active tasks
-                </Typography>
-              </View>
-              <Typography variant="body2" color="rgba(255, 255, 255, 0.7)">•</Typography>
-              <Typography variant="body2" color="rgba(255, 255, 255, 0.95)">
-                8min avg response
-              </Typography>
-              <View style={styles.pulseIndicator} />
-            </LinearGradient>
-          </Animated.View>
+          {/* Compact Live Stats */}
+          <View style={styles.compactStats}>
+            <View style={styles.statItem}>
+              <TrendingUp size={14} color="#FF5A1F" />
+              <Typography variant="caption" color="rgba(0, 30, 60, 0.8)">54 active</Typography>
+            </View>
+            <Typography variant="caption" color="rgba(216, 221, 230, 0.8)">•</Typography>
+            <Typography variant="caption" color="rgba(0, 30, 60, 0.8)">8min avg</Typography>
+            <View style={styles.pulseIndicator} />
+          </View>
         </View>
       </Animated.View>
 
@@ -288,23 +264,19 @@ export default function HomeScreen() {
         scrollEventThrottle={16}
         contentContainerStyle={styles.scrollContent}
       >
-        {/* Search Bar with Glow */}
+        {/* Search Bar */}
         <Animated.View style={[styles.searchSection, { opacity: fadeAnim }]}>
-          <View style={styles.searchGlow}>
-            <PremiumInput
-              placeholder="What magic do you need today? ✨"
-              icon={<Search size={20} color="#667eea" />}
-              containerStyle={styles.searchContainer}
-              gradient
-            />
-          </View>
+          <PremiumInput
+            placeholder="Search for services or tasks..."
+            icon={<Search size={18} color="rgba(0, 56, 255, 0.7)" />}
+            containerStyle={styles.searchContainer}
+            gradient
+          />
         </Animated.View>
 
-        {/* Services Grid with Staggered Animation */}
+        {/* Services Grid */}
         <Animated.View style={[styles.servicesSection, { opacity: fadeAnim }]}>
-          <Typography variant="h3" style={styles.sectionTitle}>
-            🌟 Popular Services
-          </Typography>
+          <Typography variant="h4" style={styles.sectionTitle}>Popular Services</Typography>
           <View style={styles.servicesGrid}>
             {services.map((service, index) => (
               <ServiceCard
@@ -320,71 +292,46 @@ export default function HomeScreen() {
         {/* Task Cards Grid */}
         <Animated.View style={[styles.tasksSection, { opacity: fadeAnim }]}>
           <View style={styles.sectionHeader}>
-            <Typography variant="h3" style={styles.sectionTitle}>
-              🎯 Choose Your Adventure
-            </Typography>
-            <TouchableOpacity style={styles.customTaskButton}>
-              <LinearGradient
-                colors={['#ff9a9e', '#fecfef']}
-                style={styles.customTaskGradient}
-              >
-                <Typography variant="body2" color="#FFFFFF" style={styles.customTaskText}>
-                  Create Custom ⚡
-                </Typography>
-              </LinearGradient>
+            <Typography variant="h4" style={styles.sectionTitle}>Choose a Task Type</Typography>
+            <TouchableOpacity>
+              <Typography variant="body2" color="rgba(0, 56, 255, 0.7)" style={styles.customTaskText}>
+                Create Custom Task ⚡
+              </Typography>
             </TouchableOpacity>
           </View>
           
           <View style={styles.tasksGrid}>
-            {featuredTasks.map((task, index) => (
+            {featuredTasks.map((task) => (
               <View key={task.id} style={styles.taskCardContainer}>
                 <TaskCard 
                   task={task} 
-                  onPress={() => setShowConfetti(true)}
-                  index={index}
+                  onPress={() => setShowConfetti(true)} 
                 />
               </View>
             ))}
           </View>
         </Animated.View>
 
-        {/* CTA Section */}
-        <Animated.View style={[styles.ctaSection, { opacity: fadeAnim }]}>
-          <LinearGradient
-            colors={['#667eea', '#764ba2']}
-            style={styles.ctaCard}
-          >
-            <View style={styles.ctaContent}>
-              <Typography variant="h3" color="#FFFFFF" style={styles.ctaTitle}>
-                🚀 Ready to Get Started?
-              </Typography>
-              <Typography variant="body1" color="rgba(255,255,255,0.9)" style={styles.ctaDescription}>
-                Join thousands of students making campus life easier
-              </Typography>
-              <GlowButton
-                title="Post Your First Task"
-                onPress={() => setShowConfetti(true)}
-                variant="secondary"
-                size="lg"
-                style={styles.ctaButton}
-                glow
-                shine
-              />
-            </View>
-            
-            {/* Floating Elements */}
-            <View style={styles.floatingElements}>
-              <Animated.View style={[styles.floatingElement, { transform: [{ scale: pulseAnim }] }]}>
-                <Typography variant="h2">✨</Typography>
-              </Animated.View>
-              <Animated.View style={[styles.floatingElement2, { transform: [{ scale: pulseAnim }] }]}>
-                <Typography variant="h2">🎯</Typography>
-              </Animated.View>
-            </View>
-          </LinearGradient>
+        {/* Quick Actions */}
+        <Animated.View style={[styles.quickActionsSection, { opacity: fadeAnim }]}>
+          <PremiumCard style={styles.quickActionCard} variant="primary" gradient glowEffect>
+            <Typography variant="h4" color="#FFFFFF" style={styles.quickActionTitle}>
+              Need something done quickly?
+            </Typography>
+            <Typography variant="body2" color="rgba(255,255,255,0.9)" style={styles.quickActionDescription}>
+              Post your task and get matched with nearby students in minutes
+            </Typography>
+            <GlowButton
+              title="Post Task Now"
+              onPress={() => setShowConfetti(true)}
+              variant="secondary"
+              size="md"
+              style={styles.quickActionButton}
+            />
+          </PremiumCard>
         </Animated.View>
 
-        {/* Bottom Spacing */}
+        {/* Bottom Spacing for Floating Tab Bar */}
         <View style={styles.bottomSpacing} />
       </Animated.ScrollView>
     </View>
@@ -398,31 +345,21 @@ function ServiceCard({ service, index, onPress }: {
 }) {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
-  const rotateAnim = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     Animated.timing(animatedValue, {
       toValue: 1,
-      duration: 800,
-      delay: index * 150,
+      duration: 600,
+      delay: index * 100,
       useNativeDriver: true,
     }).start();
-
-    // Continuous rotation for icon
-    Animated.loop(
-      Animated.timing(rotateAnim, {
-        toValue: 1,
-        duration: 10000,
-        useNativeDriver: true,
-      })
-    ).start();
   }, []);
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
-      toValue: 0.95,
+      toValue: 0.96,
       tension: 300,
-      friction: 8,
+      friction: 10,
       useNativeDriver: true,
     }).start();
   };
@@ -431,7 +368,7 @@ function ServiceCard({ service, index, onPress }: {
     Animated.spring(scaleAnim, {
       toValue: 1,
       tension: 300,
-      friction: 8,
+      friction: 10,
       useNativeDriver: true,
     }).start();
     onPress();
@@ -444,18 +381,7 @@ function ServiceCard({ service, index, onPress }: {
       {
         translateY: animatedValue.interpolate({
           inputRange: [0, 1],
-          outputRange: [50, 0],
-        }),
-      },
-    ],
-  };
-
-  const iconRotation = {
-    transform: [
-      {
-        rotate: rotateAnim.interpolate({
-          inputRange: [0, 1],
-          outputRange: ['0deg', '360deg'],
+          outputRange: [20, 0],
         }),
       },
     ],
@@ -474,28 +400,15 @@ function ServiceCard({ service, index, onPress }: {
           start={{ x: 0, y: 0 }}
           end={{ x: 1, y: 1 }}
         >
-          <Animated.View style={[styles.serviceIconContainer, iconRotation]}>
+          <View style={styles.serviceIconContainer}>
             {service.icon}
-          </Animated.View>
-          
-          <Typography variant="h4" color="#FFFFFF" style={styles.serviceTitle}>
+          </View>
+          <Typography variant="body2" color="#FFFFFF" style={styles.serviceTitle}>
             {service.title}
           </Typography>
-          
-          <Typography variant="caption" color="rgba(255,255,255,0.9)" style={styles.serviceDescription}>
-            {service.description}
-          </Typography>
-          
-          <View style={styles.serviceFooter}>
-            <Badge variant="default" size="sm" style={styles.serviceCount}>
-              <Typography variant="caption" style={styles.serviceCountText}>
-                {service.count} active
-              </Typography>
-            </Badge>
-          </View>
-          
-          {/* Shine effect */}
-          <View style={styles.serviceShine} />
+          <Badge variant="default" size="sm" style={styles.serviceCount}>
+            <Typography variant="caption">{service.count}</Typography>
+          </Badge>
         </LinearGradient>
       </TouchableOpacity>
     </Animated.View>
@@ -505,12 +418,12 @@ function ServiceCard({ service, index, onPress }: {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f9ff',
+    backgroundColor: '#FFFFFF',
   },
   header: {
     paddingTop: 50,
-    paddingHorizontal: 24,
-    paddingBottom: 24,
+    paddingHorizontal: 20,
+    paddingBottom: 16,
     position: 'relative',
     zIndex: 100,
   },
@@ -520,163 +433,114 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderBottomLeftRadius: 30,
-    borderBottomRightRadius: 30,
   },
   headerContent: {
-    gap: 20,
+    gap: 12,
   },
   headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 16,
+    gap: 12,
   },
   headerText: {
     flex: 1,
   },
   headerTitle: {
-    marginBottom: 4,
-    fontWeight: '700',
+    marginBottom: 2,
+    fontWeight: '600',
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
-  liveStats: {
-    alignSelf: 'center',
-  },
-  statsContainer: {
+  compactStats: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 25,
-    borderWidth: 1,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
+    gap: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    borderRadius: 16,
+    alignSelf: 'flex-start',
   },
   statItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 6,
+    gap: 4,
   },
   pulseIndicator: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#FFD700',
-    marginLeft: 8,
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+    backgroundColor: '#FF5A1F',
+    marginLeft: 4,
   },
   content: {
     flex: 1,
   },
   scrollContent: {
-    paddingTop: 30,
+    paddingTop: 20,
   },
   searchSection: {
-    paddingHorizontal: 24,
-    marginBottom: 40,
-  },
-  searchGlow: {
-    shadowColor: '#667eea',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 10,
+    paddingHorizontal: 20,
+    marginBottom: 32,
   },
   searchContainer: {
     marginBottom: 0,
   },
   servicesSection: {
-    paddingHorizontal: 24,
-    marginBottom: 50,
+    paddingHorizontal: 20,
+    marginBottom: 40,
   },
   sectionTitle: {
-    marginBottom: 24,
-    fontWeight: '700',
-    color: '#2d3748',
+    marginBottom: 20,
+    fontWeight: '600',
   },
   servicesGrid: {
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 20,
+    gap: 16,
   },
   serviceCardContainer: {
-    width: (width - 88) / 2,
+    width: (width - 72) / 2,
   },
   serviceCard: {
-    borderRadius: 25,
-    padding: 24,
+    borderRadius: 20,
+    padding: 20,
     alignItems: 'center',
-    minHeight: 180,
-    justifyContent: 'space-between',
+    minHeight: 140,
+    justifyContent: 'center',
     position: 'relative',
     overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 15,
   },
   serviceIconContainer: {
-    width: 60,
-    height: 60,
-    borderRadius: 30,
-    backgroundColor: 'rgba(255,255,255,0.25)',
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'rgba(255,255,255,0.2)',
     justifyContent: 'center',
     alignItems: 'center',
-    marginBottom: 16,
+    marginBottom: 12,
   },
   serviceTitle: {
     textAlign: 'center',
     marginBottom: 8,
-    lineHeight: 24,
-    fontWeight: '600',
-  },
-  serviceDescription: {
-    textAlign: 'center',
-    lineHeight: 18,
-    marginBottom: 16,
-  },
-  serviceFooter: {
-    alignItems: 'center',
+    lineHeight: 20,
+    fontWeight: '500',
   },
   serviceCount: {
     backgroundColor: 'rgba(255,255,255,0.9)',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-  },
-  serviceCountText: {
-    fontWeight: '600',
-    color: '#2d3748',
-  },
-  serviceShine: {
-    position: 'absolute',
-    top: -50,
-    right: -50,
-    width: 100,
-    height: 100,
-    backgroundColor: 'rgba(255,255,255,0.1)',
-    borderRadius: 50,
   },
   tasksSection: {
-    paddingHorizontal: 24,
-    marginBottom: 50,
+    paddingHorizontal: 20,
+    marginBottom: 40,
   },
   sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 24,
-  },
-  customTaskButton: {
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  customTaskGradient: {
-    paddingHorizontal: 16,
-    paddingVertical: 10,
+    marginBottom: 20,
   },
   customTaskText: {
     fontWeight: '600',
@@ -685,62 +549,33 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
     justifyContent: 'space-between',
-    gap: 20,
+    gap: 16,
   },
   taskCardContainer: {
-    width: (width - 88) / 2,
+    width: (width - 72) / 2,
   },
-  ctaSection: {
-    paddingHorizontal: 24,
-    marginBottom: 50,
+  quickActionsSection: {
+    paddingHorizontal: 20,
+    marginBottom: 40,
   },
-  ctaCard: {
-    borderRadius: 30,
-    padding: 32,
-    position: 'relative',
-    overflow: 'hidden',
-    shadowColor: '#667eea',
-    shadowOffset: { width: 0, height: 15 },
-    shadowOpacity: 0.4,
-    shadowRadius: 25,
-    elevation: 20,
-  },
-  ctaContent: {
+  quickActionCard: {
     alignItems: 'center',
-    zIndex: 2,
+    padding: 32,
   },
-  ctaTitle: {
-    marginBottom: 12,
+  quickActionTitle: {
+    marginBottom: 8,
     textAlign: 'center',
-    fontWeight: '700',
+    fontWeight: '600',
   },
-  ctaDescription: {
-    marginBottom: 28,
+  quickActionDescription: {
+    marginBottom: 24,
     textAlign: 'center',
-    lineHeight: 24,
+    lineHeight: 20,
   },
-  ctaButton: {
-    paddingHorizontal: 40,
-  },
-  floatingElements: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    zIndex: 1,
-  },
-  floatingElement: {
-    position: 'absolute',
-    top: 20,
-    right: 30,
-  },
-  floatingElement2: {
-    position: 'absolute',
-    bottom: 20,
-    left: 30,
+  quickActionButton: {
+    paddingHorizontal: 32,
   },
   bottomSpacing: {
-    height: 150,
+    height: 120,
   },
 });
