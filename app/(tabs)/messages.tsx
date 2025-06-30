@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { View, StyleSheet, ScrollView, TouchableOpacity, Image, FlatList, Animated, TextInput, KeyboardAvoidingView, Platform } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Send, Phone, Video, MoreHorizontal, ArrowLeft, Paperclip, Smile } from 'lucide-react-native';
+import { Send, Phone, Video, MoveHorizontal as MoreHorizontal, ArrowLeft, Paperclip, Smile } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { ModernCard } from '@/components/ui/ModernCard';
