@@ -1,26 +1,18 @@
 import { Tabs } from 'expo-router';
 import { Search, Plus, User, MessageCircle, Wallet } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
+import { FloatingTabBar } from '@/components/ui/FloatingTabBar';
 
 export default function TabLayout() {
   return (
     <Tabs
+      tabBar={(props) => <FloatingTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#F97316',
-        tabBarInactiveTintColor: '#6B7280',
+        tabBarActiveTintColor: '#FFFFFF',
+        tabBarInactiveTintColor: '#001E3C',
         tabBarStyle: {
-          backgroundColor: '#FFFFFF',
-          borderTopWidth: 1,
-          borderTopColor: '#E5E7EB',
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 70,
-        },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-          marginTop: 4,
+          display: 'none', // Hide default tab bar since we're using custom floating one
         },
       }}>
       <Tabs.Screen
@@ -81,6 +73,15 @@ export default function TabLayout() {
         name="more"
         options={{
           title: 'More',
+          tabBarIcon: ({ size, color }) => (
+            <User size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="notifications"
+        options={{
+          title: 'Notifications',
           tabBarIcon: ({ size, color }) => (
             <User size={size} color={color} />
           ),
