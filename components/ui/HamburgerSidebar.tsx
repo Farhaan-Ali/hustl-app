@@ -2,7 +2,7 @@ import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Dimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import { X, User, Wallet, MessageCircle, Bell, Settings, MoreHorizontal } from 'lucide-react-native';
+import { X, User, Wallet, MessageCircle, Bell, Settings, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { Typography } from './Typography';
 import { Badge } from './Badge';
