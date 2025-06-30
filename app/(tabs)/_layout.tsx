@@ -1,19 +1,13 @@
 import { Tabs } from 'expo-router';
 import { Search, Plus, User, MessageCircle, Wallet } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
-import { FloatingTabBar } from '@/components/ui/FloatingTabBar';
 
 export default function TabLayout() {
   return (
     <Tabs
-      tabBar={(props) => <FloatingTabBar {...props} />}
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#FFFFFF',
-        tabBarInactiveTintColor: '#001E3C',
-        tabBarStyle: {
-          display: 'none', // Hide default tab bar since we're using custom floating one
-        },
+        tabBarStyle: { display: 'none' }, // Hide tab bar since we're using sidebar
       }}>
       <Tabs.Screen
         name="index"

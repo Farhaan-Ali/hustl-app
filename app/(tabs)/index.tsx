@@ -1,27 +1,25 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Animated, FlatList } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Image, Dimensions, Animated } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, UtensilsCrossed, FileText, Heart, Car, Dumbbell, Search, MapPin, Star, Clock, TrendingUp, Sparkles } from 'lucide-react-native';
+import { Menu, Coffee, UtensilsCrossed, FileText, Heart, Car, Dumbbell, Search, MapPin, Star, Clock, TrendingUp, Sparkles } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
 import { HustlLogo } from '@/components/HustlLogo';
-import { PremiumCard } from '@/components/ui/PremiumCard';
-import { PremiumInput } from '@/components/ui/PremiumInput';
 import { Typography } from '@/components/ui/Typography';
 import { Badge } from '@/components/ui/Badge';
-import { GlowButton } from '@/components/ui/GlowButton';
-import { ConfettiAnimation } from '@/components/ui/ConfettiAnimation';
+import { SidebarMenu } from '@/components/ui/SidebarMenu';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
   const fadeAnim = useRef(new Animated.Value(0)).current;
-  const scrollY = useRef(new Animated.Value(0)).current;
-  const [showConfetti, setShowConfetti] = useState(false);
+  const router = useRouter();
 
   useEffect(() => {
     Animated.timing(fadeAnim, {
       toValue: 1,
-      duration: 1000,
+      duration: 800,
       useNativeDriver: true,
     }).start();
   }, []);
@@ -30,180 +28,121 @@ export default function HomeScreen() {
     {
       id: 'coffee',
       title: 'Coffee Runs',
-      emoji: '☕️',
-      icon: <Coffee size={24} color="#FFFFFF" />,
-      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
-      count: 12
+      description: 'Quick coffee pickup from campus cafes',
+      price: 'From $5',
+      icon: <Coffee size={24} color="#0038FF" strokeWidth={1.5} />,
+      count: 12,
+      image: 'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 'food',
-      title: 'Food Pickup',
-      emoji: '🍔',
-      icon: <UtensilsCrossed size={24} color="#FFFFFF" />,
-      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
-      count: 8
+      title: 'Food Delivery',
+      description: 'Meal pickup and delivery service',
+      price: 'From $8',
+      icon: <UtensilsCrossed size={24} color="#FF5A1F" strokeWidth={1.5} />,
+      count: 8,
+      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 'print',
       title: 'Print & Study',
-      emoji: '📄',
-      icon: <FileText size={24} color="#FFFFFF" />,
-      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
-      count: 15
+      description: 'Document printing and study materials',
+      price: 'From $3',
+      icon: <FileText size={24} color="#0038FF" strokeWidth={1.5} />,
+      count: 15,
+      image: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 'pets',
       title: 'Pet Care',
-      emoji: '🐶',
-      icon: <Heart size={24} color="#FFFFFF" />,
-      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
-      count: 6
+      description: 'Pet walking and care services',
+      price: 'From $12',
+      icon: <Heart size={24} color="#FF5A1F" strokeWidth={1.5} />,
+      count: 6,
+      image: 'https://images.pexels.com/photos/1108099/pexels-photo-1108099.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 'rides',
       title: 'Campus Rides',
-      emoji: '🚗',
-      icon: <Car size={24} color="#FFFFFF" />,
-      gradient: ['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)'],
-      count: 4
+      description: 'Quick transportation around campus',
+      price: 'From $4',
+      icon: <Car size={24} color="#0038FF" strokeWidth={1.5} />,
+      count: 4,
+      image: 'https://images.pexels.com/photos/116675/pexels-photo-116675.jpeg?auto=compress&cs=tinysrgb&w=400'
     },
     {
       id: 'workout',
       title: 'Workout Buddy',
-      emoji: '💪',
-      icon: <Dumbbell size={24} color="#FFFFFF" />,
-      gradient: ['rgba(255, 90, 31, 0.9)', 'rgba(230, 58, 11, 0.9)'],
-      count: 9
+      description: 'Find gym partners and fitness help',
+      price: 'From $10',
+      icon: <Dumbbell size={24} color="#FF5A1F" strokeWidth={1.5} />,
+      count: 9,
+      image: 'https://images.pexels.com/photos/1552242/pexels-photo-1552242.jpeg?auto=compress&cs=tinysrgb&w=400'
     }
   ];
-
-  const featuredTasks = [
-    {
-      id: 1,
-      title: 'Starbucks Venti Iced Coffee',
-      location: 'Reitz Union',
-      price: 12,
-      time: '15 min',
-      image: 'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400',
-      category: 'Coffee',
-      urgent: true,
-      poster: {
-        name: 'Sarah M.',
-        rating: 4.9,
-        image: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100'
-      }
-    },
-    {
-      id: 2,
-      title: 'Chipotle Bowl Pickup',
-      location: 'Student Union',
-      price: 8,
-      time: '20 min',
-      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
-      category: 'Food',
-      urgent: false,
-      poster: {
-        name: 'Mike R.',
-        rating: 5.0,
-        image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100'
-      }
-    },
-    {
-      id: 3,
-      title: 'Print 50 Pages Double-Sided',
-      location: 'Library West',
-      price: 10,
-      time: '25 min',
-      image: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400',
-      category: 'Print',
-      urgent: false,
-      poster: {
-        name: 'Emma K.',
-        rating: 4.8,
-        image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100'
-      }
-    }
-  ];
-
-  const headerOpacity = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [1, 0.9],
-    extrapolate: 'clamp',
-  });
-
-  const headerTranslateY = scrollY.interpolate({
-    inputRange: [0, 100],
-    outputRange: [0, -20],
-    extrapolate: 'clamp',
-  });
 
   return (
     <View style={styles.container}>
       <StatusBar style="dark" />
       
-      {/* Confetti Animation */}
-      <ConfettiAnimation 
-        active={showConfetti} 
-        onComplete={() => setShowConfetti(false)} 
+      {/* Sidebar Menu */}
+      <SidebarMenu 
+        isOpen={sidebarOpen}
+        onClose={() => setSidebarOpen(false)}
+        navigation={router}
+        currentRoute="index"
       />
       
-      {/* Compact Header */}
-      <Animated.View style={[
-        styles.header, 
-        { 
-          opacity: headerOpacity,
-          transform: [{ translateY: headerTranslateY }]
-        }
-      ]}>
-        <LinearGradient
-          colors={['rgba(248, 250, 252, 0.95)', 'rgba(255, 255, 255, 0.9)']}
-          style={styles.headerGradient}
-        />
-        
+      {/* Header */}
+      <View style={styles.header}>
         <View style={styles.headerContent}>
-          <View style={styles.headerTop}>
-            <HustlLogo size={28} />
-            <View style={styles.headerText}>
-              <Typography variant="h3" style={styles.headerTitle}>Discover</Typography>
-              <View style={styles.locationRow}>
-                <MapPin size={12} color="rgba(0, 30, 60, 0.6)" />
-                <Typography variant="caption" color="rgba(0, 30, 60, 0.6)">University of Florida</Typography>
-                <Sparkles size={12} color="#FF5A1F" />
-              </View>
+          <TouchableOpacity 
+            onPress={() => setSidebarOpen(true)}
+            style={styles.menuButton}
+          >
+            <Menu size={24} color="#001E3C" strokeWidth={1.5} />
+          </TouchableOpacity>
+          
+          <View style={styles.headerCenter}>
+            <Typography variant="h3" style={styles.headerTitle}>Discover</Typography>
+            <View style={styles.locationRow}>
+              <MapPin size={12} color="#666" strokeWidth={1.5} />
+              <Typography variant="caption" color="#666">University of Florida</Typography>
             </View>
           </View>
-
-          {/* Compact Live Stats */}
-          <View style={styles.compactStats}>
-            <View style={styles.statItem}>
-              <TrendingUp size={14} color="#FF5A1F" />
-              <Typography variant="caption" color="rgba(0, 30, 60, 0.8)">54 active</Typography>
-            </View>
-            <Typography variant="caption" color="rgba(216, 221, 230, 0.8)">•</Typography>
-            <Typography variant="caption" color="rgba(0, 30, 60, 0.8)">8min avg</Typography>
-            <View style={styles.pulseIndicator} />
-          </View>
+          
+          <TouchableOpacity style={styles.profileButton}>
+            <Image
+              source={{ uri: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100' }}
+              style={styles.profileImage}
+            />
+          </TouchableOpacity>
         </View>
-      </Animated.View>
 
-      <Animated.ScrollView 
+        {/* Live Stats */}
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <TrendingUp size={14} color="#FF5A1F" strokeWidth={1.5} />
+            <Typography variant="caption" color="#666">54 active tasks</Typography>
+          </View>
+          <Typography variant="caption" color="#ccc">•</Typography>
+          <Typography variant="caption" color="#666">8min avg response</Typography>
+        </View>
+      </View>
+
+      <ScrollView 
         style={styles.content} 
         showsVerticalScrollIndicator={false}
-        onScroll={Animated.event(
-          [{ nativeEvent: { contentOffset: { y: scrollY } } }],
-          { useNativeDriver: false }
-        )}
-        scrollEventThrottle={16}
         contentContainerStyle={styles.scrollContent}
       >
         {/* Search Bar */}
         <Animated.View style={[styles.searchSection, { opacity: fadeAnim }]}>
-          <PremiumInput
-            placeholder="Search for services or tasks..."
-            icon={<Search size={18} color="rgba(0, 56, 255, 0.7)" />}
-            containerStyle={styles.searchContainer}
-            gradient
-          />
+          <View style={styles.searchContainer}>
+            <Search size={20} color="#999" strokeWidth={1.5} />
+            <Typography variant="body2" color="#999" style={styles.searchPlaceholder}>
+              Search for services or tasks...
+            </Typography>
+          </View>
         </Animated.View>
 
         {/* Services Grid */}
@@ -215,62 +154,41 @@ export default function HomeScreen() {
                 key={service.id}
                 service={service}
                 index={index}
-                onPress={() => setShowConfetti(true)}
               />
             ))}
           </View>
         </Animated.View>
 
-        {/* Featured Tasks */}
-        <Animated.View style={[styles.featuredSection, { opacity: fadeAnim }]}>
-          <View style={styles.sectionHeader}>
-            <Typography variant="h4" style={styles.sectionTitle}>Trending Tasks</Typography>
-            <Badge variant="secondary" size="sm" style={styles.liveBadge}>
-              <View style={styles.liveDot} />
-              <Typography variant="caption" color="#FFFFFF">Live</Typography>
-            </Badge>
-          </View>
-          
-          <FlatList
-            data={featuredTasks}
-            renderItem={({ item }) => <FeaturedTaskCard task={item} />}
-            keyExtractor={(item) => item.id.toString()}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.tasksList}
-          />
-        </Animated.View>
-
-        {/* Quick Actions */}
-        <Animated.View style={[styles.quickActionsSection, { opacity: fadeAnim }]}>
-          <PremiumCard style={styles.quickActionCard} variant="primary" gradient glowEffect>
+        {/* Quick Action */}
+        <Animated.View style={[styles.quickActionSection, { opacity: fadeAnim }]}>
+          <View style={styles.quickActionCard}>
+            <LinearGradient
+              colors={['#0038FF', '#0021A5']}
+              style={styles.quickActionGradient}
+              start={{ x: 0, y: 0 }}
+              end={{ x: 1, y: 1 }}
+            />
             <Typography variant="h4" color="#FFFFFF" style={styles.quickActionTitle}>
               Need something done quickly?
             </Typography>
             <Typography variant="body2" color="rgba(255,255,255,0.9)" style={styles.quickActionDescription}>
-              Post your task and get matched with nearby students in minutes
+              Post your task and get matched with nearby students
             </Typography>
-            <GlowButton
-              title="Post Task Now"
-              onPress={() => setShowConfetti(true)}
-              variant="secondary"
-              size="md"
-              style={styles.quickActionButton}
-            />
-          </PremiumCard>
+            <TouchableOpacity style={styles.quickActionButton}>
+              <Typography variant="body2" color="#0038FF" style={styles.quickActionButtonText}>
+                Post Task Now
+              </Typography>
+            </TouchableOpacity>
+          </View>
         </Animated.View>
-
-        {/* Bottom Spacing for Floating Tab Bar */}
-        <View style={styles.bottomSpacing} />
-      </Animated.ScrollView>
+      </ScrollView>
     </View>
   );
 }
 
-function ServiceCard({ service, index, onPress }: {
+function ServiceCard({ service, index }: {
   service: any;
   index: number;
-  onPress: () => void;
 }) {
   const animatedValue = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(1)).current;
@@ -286,9 +204,7 @@ function ServiceCard({ service, index, onPress }: {
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
-      toValue: 0.96,
-      tension: 300,
-      friction: 10,
+      toValue: 0.98,
       useNativeDriver: true,
     }).start();
   };
@@ -296,11 +212,8 @@ function ServiceCard({ service, index, onPress }: {
   const handlePressOut = () => {
     Animated.spring(scaleAnim, {
       toValue: 1,
-      tension: 300,
-      friction: 10,
       useNativeDriver: true,
     }).start();
-    onPress();
   };
 
   const animatedStyle = {
@@ -317,83 +230,40 @@ function ServiceCard({ service, index, onPress }: {
   };
 
   return (
-    <Animated.View style={[styles.serviceCardContainer, animatedStyle]}>
+    <Animated.View style={[styles.serviceCard, animatedStyle]}>
       <TouchableOpacity 
         onPressIn={handlePressIn}
         onPressOut={handlePressOut}
         activeOpacity={1}
+        style={styles.serviceCardTouch}
       >
-        <LinearGradient
-          colors={service.gradient}
-          style={styles.serviceCard}
-          start={{ x: 0, y: 0 }}
-          end={{ x: 1, y: 1 }}
-        >
-          <View style={styles.serviceIconContainer}>
-            {service.icon}
+        <Image source={{ uri: service.image }} style={styles.serviceImage} />
+        
+        <View style={styles.serviceContent}>
+          <View style={styles.serviceHeader}>
+            <View style={styles.serviceIcon}>
+              {service.icon}
+            </View>
+            <Badge variant="default" size="sm" style={styles.serviceCount}>
+              <Typography variant="caption">{service.count}</Typography>
+            </Badge>
           </View>
-          <Typography variant="body2" color="#FFFFFF" style={styles.serviceTitle}>
+          
+          <Typography variant="h4" style={styles.serviceTitle}>
             {service.title}
           </Typography>
-          <Badge variant="default" size="sm" style={styles.serviceCount}>
-            <Typography variant="caption">{service.count}</Typography>
-          </Badge>
-        </LinearGradient>
+          <Typography variant="body2" color="#666" style={styles.serviceDescription}>
+            {service.description}
+          </Typography>
+          
+          <View style={styles.serviceFooter}>
+            <Typography variant="body2" color="#0038FF" style={styles.servicePrice}>
+              {service.price}
+            </Typography>
+          </View>
+        </View>
       </TouchableOpacity>
     </Animated.View>
-  );
-}
-
-function FeaturedTaskCard({ task }: { task: any }) {
-  return (
-    <PremiumCard style={styles.featuredTaskCard} onPress={() => {}} glowEffect>
-      <Image source={{ uri: task.image }} style={styles.featuredTaskImage} />
-      
-      <LinearGradient
-        colors={['transparent', 'rgba(0,0,0,0.6)']}
-        style={styles.imageOverlay}
-      />
-      
-      <View style={styles.featuredTaskContent}>
-        <View style={styles.featuredTaskHeader}>
-          {task.urgent && (
-            <Badge variant="secondary" size="sm" style={styles.urgentBadge}>
-              <View style={styles.urgentPulse} />
-              <Typography variant="caption" color="#FFFFFF">Urgent</Typography>
-            </Badge>
-          )}
-          <Typography variant="h4" color="#0038FF" style={styles.priceText}>${task.price}</Typography>
-        </View>
-        
-        <Typography variant="body2" numberOfLines={2} style={styles.featuredTaskTitle}>
-          {task.title}
-        </Typography>
-        
-        <View style={styles.featuredTaskMeta}>
-          <View style={styles.metaItem}>
-            <MapPin size={12} color="rgba(0, 30, 60, 0.7)" />
-            <Typography variant="caption" color="rgba(0, 30, 60, 0.7)">{task.location}</Typography>
-          </View>
-          <View style={styles.metaItem}>
-            <Clock size={12} color="rgba(0, 30, 60, 0.7)" />
-            <Typography variant="caption" color="rgba(0, 30, 60, 0.7)">{task.time}</Typography>
-          </View>
-        </View>
-        
-        <View style={styles.featuredTaskFooter}>
-          <View style={styles.posterInfo}>
-            <Image source={{ uri: task.poster.image }} style={styles.posterImage} />
-            <View>
-              <Typography variant="caption">{task.poster.name}</Typography>
-              <View style={styles.posterRating}>
-                <Star size={10} color="#FF5A1F" fill="#FF5A1F" />
-                <Typography variant="caption" color="rgba(0, 30, 60, 0.7)">{task.poster.rating}</Typography>
-              </View>
-            </View>
-          </View>
-        </View>
-      </View>
-    </PremiumCard>
   );
 }
 
@@ -403,77 +273,83 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
   },
   header: {
-    paddingTop: 50,
+    paddingTop: 60,
     paddingHorizontal: 20,
-    paddingBottom: 16,
-    position: 'relative',
-    zIndex: 100,
-  },
-  headerGradient: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
+    paddingBottom: 20,
+    backgroundColor: '#FFFFFF',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
   headerContent: {
-    gap: 12,
-  },
-  headerTop: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    marginBottom: 16,
   },
-  headerText: {
+  menuButton: {
+    padding: 8,
+    marginRight: 16,
+  },
+  headerCenter: {
     flex: 1,
+    alignItems: 'center',
   },
   headerTitle: {
-    marginBottom: 2,
     fontWeight: '600',
+    marginBottom: 4,
   },
   locationRow: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  compactStats: {
+  profileButton: {
+    marginLeft: 16,
+  },
+  profileImage: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+  },
+  statsRow: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     gap: 8,
     paddingHorizontal: 16,
     paddingVertical: 8,
-    backgroundColor: 'rgba(255, 255, 255, 0.8)',
+    backgroundColor: '#f8f9fa',
     borderRadius: 16,
-    alignSelf: 'flex-start',
+    alignSelf: 'center',
   },
   statItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 4,
   },
-  pulseIndicator: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#FF5A1F',
-    marginLeft: 4,
-  },
   content: {
     flex: 1,
   },
   scrollContent: {
-    paddingTop: 20,
+    paddingBottom: 40,
   },
   searchSection: {
     paddingHorizontal: 20,
-    marginBottom: 32,
+    paddingVertical: 24,
   },
   searchContainer: {
-    marginBottom: 0,
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#f8f9fa',
+    borderRadius: 16,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    gap: 12,
+  },
+  searchPlaceholder: {
+    flex: 1,
   },
   servicesSection: {
     paddingHorizontal: 20,
-    marginBottom: 40,
   },
   sectionTitle: {
     marginBottom: 20,
@@ -484,142 +360,77 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 16,
   },
-  serviceCardContainer: {
-    width: (width - 72) / 2,
-  },
   serviceCard: {
-    borderRadius: 20,
-    padding: 20,
-    alignItems: 'center',
-    minHeight: 140,
-    justifyContent: 'center',
-    position: 'relative',
+    width: (width - 56) / 2,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 3,
   },
-  serviceIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    backgroundColor: 'rgba(255,255,255,0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 12,
+  serviceCardTouch: {
+    flex: 1,
   },
-  serviceTitle: {
-    textAlign: 'center',
-    marginBottom: 8,
-    lineHeight: 20,
-    fontWeight: '500',
+  serviceImage: {
+    width: '100%',
+    height: 120,
   },
-  serviceCount: {
-    backgroundColor: 'rgba(255,255,255,0.9)',
+  serviceContent: {
+    padding: 16,
   },
-  featuredSection: {
-    marginBottom: 40,
-  },
-  sectionHeader: {
+  serviceHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    paddingHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 12,
   },
-  liveBadge: {
-    flexDirection: 'row',
+  serviceIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: '#f8f9fa',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 4,
   },
-  liveDot: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#FFFFFF',
+  serviceCount: {
+    backgroundColor: '#f0f0f0',
   },
-  tasksList: {
-    paddingLeft: 20,
+  serviceTitle: {
+    marginBottom: 6,
+    fontWeight: '600',
   },
-  featuredTaskCard: {
-    marginRight: 16,
-    width: 280,
-    padding: 0,
+  serviceDescription: {
+    marginBottom: 12,
+    lineHeight: 18,
+  },
+  serviceFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  servicePrice: {
+    fontWeight: '600',
+  },
+  quickActionSection: {
+    paddingHorizontal: 20,
+    paddingTop: 32,
+  },
+  quickActionCard: {
+    borderRadius: 20,
+    padding: 24,
+    alignItems: 'center',
+    position: 'relative',
     overflow: 'hidden',
   },
-  featuredTaskImage: {
-    width: '100%',
-    height: 140,
-  },
-  imageOverlay: {
+  quickActionGradient: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: 140,
-  },
-  featuredTaskContent: {
-    padding: 20,
-  },
-  featuredTaskHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 8,
-  },
-  urgentBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  urgentPulse: {
-    width: 6,
-    height: 6,
-    borderRadius: 3,
-    backgroundColor: '#FFFFFF',
-  },
-  priceText: {
-    fontWeight: '700',
-  },
-  featuredTaskTitle: {
-    marginBottom: 12,
-    lineHeight: 20,
-    fontWeight: '500',
-  },
-  featuredTaskMeta: {
-    gap: 8,
-    marginBottom: 12,
-  },
-  metaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 4,
-  },
-  featuredTaskFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  posterInfo: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  posterImage: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-  },
-  posterRating: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 2,
-    marginTop: 2,
-  },
-  quickActionsSection: {
-    paddingHorizontal: 20,
-    marginBottom: 40,
-  },
-  quickActionCard: {
-    alignItems: 'center',
-    padding: 32,
+    bottom: 0,
   },
   quickActionTitle: {
     marginBottom: 8,
@@ -627,14 +438,17 @@ const styles = StyleSheet.create({
     fontWeight: '600',
   },
   quickActionDescription: {
-    marginBottom: 24,
+    marginBottom: 20,
     textAlign: 'center',
     lineHeight: 20,
   },
   quickActionButton: {
-    paddingHorizontal: 32,
+    backgroundColor: '#FFFFFF',
+    paddingHorizontal: 24,
+    paddingVertical: 12,
+    borderRadius: 12,
   },
-  bottomSpacing: {
-    height: 120,
+  quickActionButtonText: {
+    fontWeight: '600',
   },
 });
