@@ -1,5 +1,5 @@
 import { Tabs } from 'expo-router';
-import { Search, Plus, User, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
+import { Search, Plus, User, MessageCircle, Wallet } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
 
 export default function TabLayout() {
@@ -51,6 +51,24 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="messages"
+        options={{
+          title: 'Messages',
+          tabBarIcon: ({ size, color }) => (
+            <MessageCircle size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
+        name="wallet"
+        options={{
+          title: 'Wallet',
+          tabBarIcon: ({ size, color }) => (
+            <Wallet size={size} color={color} />
+          ),
+        }}
+      />
+      <Tabs.Screen
         name="profile"
         options={{
           title: 'Profile',
@@ -64,7 +82,7 @@ export default function TabLayout() {
         options={{
           title: 'More',
           tabBarIcon: ({ size, color }) => (
-            <MoreHorizontal size={size} color={color} />
+            <User size={size} color={color} />
           ),
         }}
       />
