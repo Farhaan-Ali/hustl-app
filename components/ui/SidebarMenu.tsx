@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Dimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { X, Chrome as Home, Search, Plus, MessageCircle, Wallet, User, Settings, CircleHelp as HelpCircle, LogOut } from 'lucide-react-native';
+import { X, Home, Search, Plus, MessageCircle, Wallet, User, Settings, HelpCircle, LogOut } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { Typography } from './Typography';
@@ -51,12 +51,12 @@ export function SidebarMenu({ isOpen, onClose, navigation, currentRoute }: Sideb
   }, [isOpen]);
 
   const menuItems = [
-    { id: 'index', name: 'Home', icon: Home, route: '/(tabs)/' },
-    { id: 'browse', name: 'Browse Tasks', icon: Search, route: '/(tabs)/browse' },
-    { id: 'post', name: 'Post Task', icon: Plus, route: '/(tabs)/post' },
-    { id: 'messages', name: 'Messages', icon: MessageCircle, route: '/(tabs)/messages', badge: 3 },
-    { id: 'wallet', name: 'Wallet', icon: Wallet, route: '/(tabs)/wallet' },
-    { id: 'profile', name: 'Profile', icon: User, route: '/(tabs)/profile' },
+    { id: 'index', name: 'Home', icon: Home, route: 'index' },
+    { id: 'browse', name: 'Browse Tasks', icon: Search, route: 'browse' },
+    { id: 'post', name: 'Post Task', icon: Plus, route: 'post' },
+    { id: 'messages', name: 'Messages', icon: MessageCircle, route: 'messages', badge: 3 },
+    { id: 'wallet', name: 'Wallet', icon: Wallet, route: 'wallet' },
+    { id: 'profile', name: 'Profile', icon: User, route: 'profile' },
   ];
 
   const bottomItems = [
@@ -66,8 +66,13 @@ export function SidebarMenu({ isOpen, onClose, navigation, currentRoute }: Sideb
   ];
 
   const handleNavigation = (route: string) => {
-    navigation.navigate(route);
-    onClose();
+    try {
+      navigation.push(route);
+      onClose();
+    } catch (error) {
+      console.log('Navigation error:', error);
+      onClose();
+    }
   };
 
   if (!isOpen) return null;
@@ -106,7 +111,7 @@ export function SidebarMenu({ isOpen, onClose, navigation, currentRoute }: Sideb
           <View style={styles.headerTop}>
             <HustlLogo size={32} />
             <TouchableOpacity onPress={onClose} style={styles.closeButton}>
-              <X size={24} color="#ffffff" />
+              <X size={24} color="#ffffff" strokeWidth={1.5} />
             </TouchableOpacity>
           </View>
           
