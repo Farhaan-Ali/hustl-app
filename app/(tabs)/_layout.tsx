@@ -2,10 +2,8 @@ import React, { useState } from 'react';
 import { Tabs } from 'expo-router';
 import { Search, Plus, User, MessageCircle, Wallet } from 'lucide-react-native';
 import { HustlLogo } from '@/components/HustlLogo';
-import { FloatingActionDock } from '@/components/ui/FloatingActionDock';
 import { HamburgerSidebar } from '@/components/ui/HamburgerSidebar';
 import { HamburgerButton } from '@/components/ui/HamburgerButton';
-import { View, StyleSheet } from 'react-native';
 
 export default function TabLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -13,13 +11,10 @@ export default function TabLayout() {
   return (
     <>
       <Tabs
-        tabBar={(props) => <FloatingActionDock {...props} />}
         screenOptions={{
           headerShown: false,
-          tabBarActiveTintColor: '#FFFFFF',
-          tabBarInactiveTintColor: '#001E3C',
           tabBarStyle: {
-            display: 'none', // Hide default tab bar since we're using custom floating dock
+            display: 'none', // Hide all tab bars
           },
         }}>
         <Tabs.Screen
@@ -58,7 +53,6 @@ export default function TabLayout() {
             ),
           }}
         />
-        {/* Keep these tabs visible but accessible via sidebar */}
         <Tabs.Screen
           name="messages"
           options={{
@@ -97,13 +91,11 @@ export default function TabLayout() {
         />
       </Tabs>
 
-      {/* Hamburger Button */}
-      <View style={styles.hamburgerContainer}>
-        <HamburgerButton 
-          onPress={() => setSidebarOpen(true)}
-          isOpen={sidebarOpen}
-        />
-      </View>
+      {/* Hamburger Button - Integrated into page design */}
+      <HamburgerButton 
+        onPress={() => setSidebarOpen(true)}
+        isOpen={sidebarOpen}
+      />
 
       {/* Hamburger Sidebar */}
       <HamburgerSidebar
@@ -113,12 +105,4 @@ export default function TabLayout() {
     </>
   );
 }
-
-const styles = StyleSheet.create({
-  hamburgerContainer: {
-    position: 'absolute',
-    top: 60,
-    left: 20,
-    zIndex: 1500,
-  },
-});
+</Tabs.Screen>

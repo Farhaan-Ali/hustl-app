@@ -2,10 +2,11 @@ import React, { useRef, useEffect } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Dimensions, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
-import { X, User, Wallet, MessageCircle, Bell, Settings, MoveHorizontal as MoreHorizontal } from 'lucide-react-native';
+import { X, User, Wallet, MessageCircle, Bell, Settings, MoveHorizontal as MoreHorizontal, Search, Plus, Home } from 'lucide-react-native';
 import { router } from 'expo-router';
 import { Typography } from './Typography';
 import { Badge } from './Badge';
+import { HustlLogo } from '../HustlLogo';
 
 const { width } = Dimensions.get('window');
 
@@ -49,6 +50,27 @@ export function HamburgerSidebar({ isOpen, onClose }: HamburgerSidebarProps) {
   }, [isOpen]);
 
   const menuItems = [
+    {
+      id: 'home',
+      title: 'Home',
+      icon: <HustlLogo size={20} clickable={false} />,
+      route: '/(tabs)/',
+      badge: null,
+    },
+    {
+      id: 'browse',
+      title: 'Browse Tasks',
+      icon: <Search size={20} color="rgba(0, 30, 60, 0.8)" />,
+      route: '/(tabs)/browse',
+      badge: null,
+    },
+    {
+      id: 'post',
+      title: 'Post Task',
+      icon: <Plus size={20} color="rgba(0, 30, 60, 0.8)" />,
+      route: '/(tabs)/post',
+      badge: null,
+    },
     {
       id: 'profile',
       title: 'Profile',
@@ -118,31 +140,25 @@ export function HamburgerSidebar({ isOpen, onClose }: HamburgerSidebarProps) {
           { transform: [{ translateX: slideAnim }] }
         ]}
       >
-        {Platform.OS === 'web' ? (
-          <View style={styles.webBlur}>
-            <LinearGradient
-              colors={['rgba(255, 255, 255, 0.95)', 'rgba(248, 250, 252, 0.95)']}
-              style={styles.sidebarContent}
-            />
-          </View>
-        ) : (
-          <BlurView intensity={30} tint="light" style={styles.sidebarContent} />
-        )}
+        <LinearGradient
+          colors={['rgba(255, 255, 255, 0.95)', 'rgba(248, 250, 252, 0.98)']}
+          style={styles.sidebarContent}
+        />
 
         <View style={styles.content}>
           {/* Header */}
           <View style={styles.header}>
             <View style={styles.headerLeft}>
-              <Typography variant="h3" style={styles.headerTitle}>Menu</Typography>
+              <Typography variant="h3" style={styles.headerTitle}>Navigation</Typography>
               <Typography variant="caption" color="rgba(0, 30, 60, 0.6)">
-                Quick navigation
+                All app sections
               </Typography>
             </View>
             <TouchableOpacity 
               style={styles.closeButton}
               onPress={onClose}
             >
-              <X size={20} color="rgba(0, 30, 60, 0.7)" />
+              <X size={18} color="rgba(0, 30, 60, 0.7)" />
             </TouchableOpacity>
           </View>
 
@@ -161,7 +177,7 @@ export function HamburgerSidebar({ isOpen, onClose }: HamburgerSidebarProps) {
           {/* Footer */}
           <View style={styles.footer}>
             <TouchableOpacity style={styles.settingsButton}>
-              <Settings size={18} color="rgba(0, 30, 60, 0.6)" />
+              <Settings size={16} color="rgba(0, 30, 60, 0.6)" />
               <Typography variant="caption" color="rgba(0, 30, 60, 0.6)">
                 Settings
               </Typography>
@@ -253,7 +269,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    zIndex: 2000,
+    zIndex: 1500,
   },
   overlay: {
     position: 'absolute',
@@ -261,7 +277,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    backgroundColor: 'rgba(0, 0, 0, 0.3)',
   },
   overlayTouch: {
     flex: 1,
@@ -271,25 +287,21 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     bottom: 0,
-    width: width * 0.8,
-    maxWidth: 320,
+    width: width * 0.75,
+    maxWidth: 300,
   },
   sidebarContent: {
     flex: 1,
-    borderTopRightRadius: 24,
-    borderBottomRightRadius: 24,
+    borderTopRightRadius: 20,
+    borderBottomRightRadius: 20,
     borderWidth: 1,
     borderLeftWidth: 0,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-  },
-  webBlur: {
-    flex: 1,
-    borderTopRightRadius: 24,
-    borderBottomRightRadius: 24,
-    borderWidth: 1,
-    borderLeftWidth: 0,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    overflow: 'hidden',
+    borderColor: 'rgba(245, 247, 255, 0.8)',
+    shadowColor: 'rgba(0, 33, 165, 0.15)',
+    shadowOffset: { width: 4, height: 0 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
+    elevation: 15,
   },
   content: {
     flex: 1,
@@ -298,7 +310,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    padding: 24,
+    padding: 20,
     paddingTop: 60,
   },
   header: {
@@ -315,17 +327,19 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   closeButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 18,
     backgroundColor: 'rgba(248, 250, 252, 0.8)',
     alignItems: 'center',
     justifyContent: 'center',
     marginLeft: 16,
+    borderWidth: 1,
+    borderColor: 'rgba(216, 221, 230, 0.3)',
   },
   menuItems: {
     flex: 1,
-    gap: 8,
+    gap: 6,
   },
   menuItem: {
     marginBottom: 4,
@@ -334,10 +348,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingVertical: 16,
+    paddingVertical: 14,
     paddingHorizontal: 16,
-    borderRadius: 16,
-    backgroundColor: 'rgba(255, 255, 255, 0.6)',
+    borderRadius: 14,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 247, 255, 0.8)',
   },
   menuItemLeft: {
     flexDirection: 'row',
@@ -345,26 +361,28 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   menuItemIcon: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: 'rgba(248, 250, 252, 0.8)',
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(248, 250, 252, 0.9)',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 16,
+    marginRight: 14,
+    borderWidth: 1,
+    borderColor: 'rgba(216, 221, 230, 0.2)',
   },
   menuItemText: {
     fontWeight: '500',
   },
   footer: {
-    paddingTop: 24,
+    paddingTop: 20,
     borderTopWidth: 1,
     borderTopColor: 'rgba(216, 221, 230, 0.3)',
   },
   settingsButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 12,
+    gap: 10,
     paddingVertical: 12,
     paddingHorizontal: 16,
   },

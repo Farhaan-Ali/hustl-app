@@ -21,7 +21,7 @@ export function HamburgerButton({ onPress, isOpen = false }: HamburgerButtonProp
 
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
-      toValue: 0.9,
+      toValue: 0.95,
       tension: 400,
       friction: 8,
       useNativeDriver: true,
@@ -58,7 +58,7 @@ export function HamburgerButton({ onPress, isOpen = false }: HamburgerButtonProp
       activeOpacity={1}
     >
       <Animated.View style={animatedStyle}>
-        <Menu size={20} color="rgba(0, 30, 60, 0.8)" />
+        <Menu size={18} color="rgba(0, 30, 60, 0.7)" />
       </Animated.View>
     </TouchableOpacity>
   );
@@ -66,16 +66,22 @@ export function HamburgerButton({ onPress, isOpen = false }: HamburgerButtonProp
 
 const styles = StyleSheet.create({
   button: {
-    width: 40,
-    height: 40,
-    borderRadius: 12,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    position: 'absolute',
+    top: 55,
+    right: 20,
+    width: 36,
+    height: 36,
+    borderRadius: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.85)',
     alignItems: 'center',
     justifyContent: 'center',
-    shadowColor: 'rgba(0, 33, 165, 0.15)',
+    shadowColor: 'rgba(0, 33, 165, 0.1)',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
+    shadowOpacity: 0.15,
     shadowRadius: 8,
     elevation: 4,
+    borderWidth: 1,
+    borderColor: 'rgba(245, 247, 255, 0.8)',
+    zIndex: 1000,
   },
 });
