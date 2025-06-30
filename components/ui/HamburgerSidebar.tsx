@@ -3,6 +3,7 @@ import { View, StyleSheet, TouchableOpacity, Animated, Dimensions, Platform } fr
 import { LinearGradient } from 'expo-linear-gradient';
 import { BlurView } from 'expo-blur';
 import { X, User, Wallet, MessageCircle, Bell, Settings, MoreHorizontal } from 'lucide-react-native';
+import { router } from 'expo-router';
 import { Typography } from './Typography';
 import { Badge } from './Badge';
 
@@ -11,10 +12,9 @@ const { width } = Dimensions.get('window');
 interface HamburgerSidebarProps {
   isOpen: boolean;
   onClose: () => void;
-  navigation: any;
 }
 
-export function HamburgerSidebar({ isOpen, onClose, navigation }: HamburgerSidebarProps) {
+export function HamburgerSidebar({ isOpen, onClose }: HamburgerSidebarProps) {
   const slideAnim = useRef(new Animated.Value(-width)).current;
   const overlayAnim = useRef(new Animated.Value(0)).current;
 
@@ -53,42 +53,47 @@ export function HamburgerSidebar({ isOpen, onClose, navigation }: HamburgerSideb
       id: 'profile',
       title: 'Profile',
       icon: <User size={20} color="rgba(0, 30, 60, 0.8)" />,
-      route: 'profile',
+      route: '/(tabs)/profile',
       badge: null,
     },
     {
       id: 'wallet',
       title: 'Wallet',
       icon: <Wallet size={20} color="rgba(0, 30, 60, 0.8)" />,
-      route: 'wallet',
+      route: '/(tabs)/wallet',
       badge: null,
     },
     {
       id: 'messages',
       title: 'Messages',
       icon: <MessageCircle size={20} color="rgba(0, 30, 60, 0.8)" />,
-      route: 'messages',
+      route: '/(tabs)/messages',
       badge: 3,
     },
     {
       id: 'notifications',
       title: 'Notifications',
       icon: <Bell size={20} color="rgba(0, 30, 60, 0.8)" />,
-      route: 'notifications',
+      route: '/(tabs)/notifications',
       badge: 5,
     },
     {
       id: 'more',
       title: 'More',
       icon: <MoreHorizontal size={20} color="rgba(0, 30, 60, 0.8)" />,
-      route: 'more',
+      route: '/(tabs)/more',
       badge: null,
     },
   ];
 
   const handleItemPress = (route: string) => {
-    navigation.navigate(route);
-    onClose();
+    try {
+      router.push(route as any);
+      onClose();
+    } catch (error) {
+      console.log('Navigation error:', error);
+      onClose();
+    }
   };
 
   if (!isOpen) return null;

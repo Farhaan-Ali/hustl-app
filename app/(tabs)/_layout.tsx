@@ -58,33 +58,41 @@ export default function TabLayout() {
             ),
           }}
         />
-        {/* Hidden tabs - accessible via sidebar */}
+        {/* Keep these tabs visible but accessible via sidebar */}
         <Tabs.Screen
           name="messages"
           options={{
-            href: null, // Hide from tab bar
             title: 'Messages',
+            tabBarIcon: ({ size, color }) => (
+              <MessageCircle size={size} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
           name="wallet"
           options={{
-            href: null, // Hide from tab bar
             title: 'Wallet',
+            tabBarIcon: ({ size, color }) => (
+              <Wallet size={size} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
           name="more"
           options={{
-            href: null, // Hide from tab bar
             title: 'More',
+            tabBarIcon: ({ size, color }) => (
+              <User size={size} color={color} />
+            ),
           }}
         />
         <Tabs.Screen
           name="notifications"
           options={{
-            href: null, // Hide from tab bar
             title: 'Notifications',
+            tabBarIcon: ({ size, color }) => (
+              <User size={size} color={color} />
+            ),
           }}
         />
       </Tabs>
@@ -101,7 +109,6 @@ export default function TabLayout() {
       <HamburgerSidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        navigation={null} // Will be passed from parent if needed
       />
     </>
   );

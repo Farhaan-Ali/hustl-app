@@ -45,8 +45,10 @@ export function FloatingActionDock({ state, descriptors, navigation }: FloatingA
     ).start();
   }, [state.index]);
 
-  // Only show main 4 tabs in dock
-  const mainTabs = state.routes.filter((route: any, index: number) => index < 4);
+  // Only show main 4 tabs in dock (filter out sidebar-only tabs)
+  const mainTabs = state.routes.filter((route: any) => 
+    ['index', 'browse', 'post', 'profile'].includes(route.name)
+  );
 
   return (
     <View style={styles.container}>
@@ -63,9 +65,10 @@ export function FloatingActionDock({ state, descriptors, navigation }: FloatingA
         )}
         
         <View style={styles.tabContainer}>
-          {mainTabs.map((route: any, index: number) => {
+          {mainTabs.map((route: any) => {
             const { options } = descriptors[route.key];
-            const isFocused = state.index === index;
+            const routeIndex = state.routes.findIndex((r: any) => r.key === route.key);
+            const isFocused = state.index === routeIndex;
 
             const onPress = () => {
               const event = navigation.emit({
@@ -79,7 +82,7 @@ export function FloatingActionDock({ state, descriptors, navigation }: FloatingA
               }
             };
 
-            const scaleAnim = animatedValues[index];
+            const scaleAnim = animatedValues[routeIndex] || new Animated.Value(0);
             const liftAnim = useRef(new Animated.Value(0)).current;
 
             const handlePressIn = () => {
