@@ -84,6 +84,7 @@ export default function PostTaskScreen() {
       image: 'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: true,
       distance: '0.2 mi',
+      cardVariant: 'secondary', // Orange
       poster: {
         name: 'Sarah M.',
         rating: 4.9,
@@ -102,6 +103,7 @@ export default function PostTaskScreen() {
       image: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: false,
       distance: '0.5 mi',
+      cardVariant: 'primary', // Blue
       poster: {
         name: 'Mike R.',
         rating: 5.0,
@@ -120,6 +122,7 @@ export default function PostTaskScreen() {
       image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
       urgent: false,
       distance: '0.3 mi',
+      cardVariant: 'accent', // Grey/White
       poster: {
         name: 'Emma K.',
         rating: 4.8,
@@ -345,23 +348,52 @@ export default function PostTaskScreen() {
 }
 
 function TaskCard({ task }: { task: any }) {
+  const getHeaderColors = () => {
+    switch (task.cardVariant) {
+      case 'secondary': // Orange
+        return {
+          backgroundColor: '#E6501E',
+          textColor: '#FFFFFF'
+        };
+      case 'primary': // Blue
+        return {
+          backgroundColor: '#0021A5',
+          textColor: '#FFFFFF'
+        };
+      case 'accent': // Grey/White
+        return {
+          backgroundColor: '#D8DDE6',
+          textColor: '#001E3C'
+        };
+      default:
+        return {
+          backgroundColor: '#D8DDE6',
+          textColor: '#001E3C'
+        };
+    }
+  };
+
+  const headerColors = getHeaderColors();
+
   return (
     <ModernCard style={styles.taskCard} onPress={() => {}}>
-      <View style={styles.taskHeader}>
+      <View style={[styles.taskHeader, { backgroundColor: headerColors.backgroundColor }]}>
         {task.urgent && (
-          <Badge variant="secondary" size="sm">
-            <Typography variant="caption" color="#FFFFFF">Urgent</Typography>
+          <Badge variant="default" size="sm" style={styles.urgentBadge}>
+            <Typography variant="caption" color="#001E3C">Urgent</Typography>
           </Badge>
         )}
         
         <View style={styles.categoryBadge}>
-          {task.category === 'Coffee' && <Coffee size={14} color="#E6501E" />}
-          {task.category === 'Printing' && <Printer size={14} color="#0021A5" />}
-          {task.category === 'Food' && <UtensilsCrossed size={14} color="#0021A5" />}
-          <Typography variant="caption" style={styles.categoryText}>{task.category}</Typography>
+          {task.category === 'Coffee' && <Coffee size={14} color={headerColors.textColor} />}
+          {task.category === 'Printing' && <Printer size={14} color={headerColors.textColor} />}
+          {task.category === 'Food' && <UtensilsCrossed size={14} color={headerColors.textColor} />}
+          <Typography variant="caption" color={headerColors.textColor} style={styles.categoryText}>
+            {task.category}
+          </Typography>
         </View>
         
-        <Typography variant="h3" color="#0021A5">${task.price}</Typography>
+        <Typography variant="h3" color={headerColors.textColor}>${task.price}</Typography>
       </View>
       
       <Image source={{ uri: task.image }} style={styles.taskImage} />
@@ -397,7 +429,7 @@ function TaskCard({ task }: { task: any }) {
           <AnimatedButton
             title="Accept"
             onPress={() => {}}
-            variant="primary"
+            variant={task.cardVariant === 'accent' ? 'primary' : 'secondary'}
             size="sm"
             gradient
             style={styles.acceptButton}
@@ -518,10 +550,13 @@ const styles = StyleSheet.create({
     padding: 16,
     gap: 12,
   },
+  urgentBadge: {
+    backgroundColor: '#FFFFFF',
+  },
   categoryBadge: {
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#D8DDE6',
+    backgroundColor: 'rgba(255,255,255,0.2)',
     paddingHorizontal: 8,
     paddingVertical: 4,
     borderRadius: 12,
