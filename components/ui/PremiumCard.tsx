@@ -34,12 +34,12 @@ export function PremiumCard({
         Animated.sequence([
           Animated.timing(shimmerAnim, {
             toValue: 1,
-            duration: 1500,
+            duration: 2000,
             useNativeDriver: true,
           }),
           Animated.timing(shimmerAnim, {
             toValue: 0,
-            duration: 1500,
+            duration: 2000,
             useNativeDriver: true,
           }),
         ])
@@ -50,6 +50,8 @@ export function PremiumCard({
   const handlePressIn = () => {
     Animated.spring(scaleAnim, {
       toValue: 0.98,
+      tension: 300,
+      friction: 10,
       useNativeDriver: true,
     }).start();
   };
@@ -57,6 +59,8 @@ export function PremiumCard({
   const handlePressOut = () => {
     Animated.spring(scaleAnim, {
       toValue: 1,
+      tension: 300,
+      friction: 10,
       useNativeDriver: true,
     }).start();
   };
@@ -66,15 +70,15 @@ export function PremiumCard({
     
     switch (variant) {
       case 'primary':
-        return ['#0038FF', '#0021A5'];
+        return ['rgba(0, 56, 255, 0.95)', 'rgba(0, 33, 165, 0.95)'];
       case 'secondary':
-        return ['#FF5A1F', '#E63A0B'];
+        return ['rgba(255, 90, 31, 0.95)', 'rgba(230, 58, 11, 0.95)'];
       case 'accent':
-        return ['#F5F7FF', '#ffffff'];
+        return ['rgba(248, 250, 252, 0.95)', 'rgba(255, 255, 255, 0.95)'];
       case 'glass':
-        return ['rgba(255,255,255,0.25)', 'rgba(255,255,255,0.1)'];
+        return ['rgba(255, 255, 255, 0.15)', 'rgba(255, 255, 255, 0.05)'];
       default:
-        return ['#ffffff', '#F5F7FF'];
+        return ['rgba(255, 255, 255, 0.95)', 'rgba(248, 250, 252, 0.95)'];
     }
   };
 
@@ -106,7 +110,7 @@ export function PremiumCard({
                 {
                   opacity: shimmerAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, 0.3],
+                    outputRange: [0, 0.2],
                   }),
                 }
               ]}
@@ -123,7 +127,7 @@ export function PremiumCard({
                 {
                   opacity: shimmerAnim.interpolate({
                     inputRange: [0, 1],
-                    outputRange: [0, 0.3],
+                    outputRange: [0, 0.2],
                   }),
                 }
               ]}
@@ -153,48 +157,53 @@ export function PremiumCard({
 
 const styles = StyleSheet.create({
   card: {
-    borderRadius: 24,
-    padding: 24,
+    borderRadius: 20,
+    padding: 20,
     overflow: 'hidden',
     position: 'relative',
+    marginBottom: 16,
   },
   default: {
-    backgroundColor: '#ffffff',
+    backgroundColor: 'rgba(255, 255, 255, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(245, 247, 255, 0.8)',
   },
   primary: {
-    backgroundColor: '#0038FF',
+    backgroundColor: 'rgba(0, 56, 255, 0.95)',
   },
   secondary: {
-    backgroundColor: '#FF5A1F',
+    backgroundColor: 'rgba(255, 90, 31, 0.95)',
   },
   accent: {
-    backgroundColor: '#F5F7FF',
+    backgroundColor: 'rgba(248, 250, 252, 0.95)',
+    borderWidth: 1,
+    borderColor: 'rgba(216, 221, 230, 0.3)',
   },
   glass: {
-    backgroundColor: 'rgba(255,255,255,0.1)',
+    backgroundColor: 'rgba(255, 255, 255, 0.1)',
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.2)',
+    borderColor: 'rgba(255, 255, 255, 0.15)',
     backdropFilter: 'blur(20px)',
   },
   elevated: {
-    shadowColor: '#0021A5',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.15,
-    shadowRadius: 24,
-    elevation: 12,
+    shadowColor: 'rgba(0, 33, 165, 0.15)',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 8,
   },
   glow: {
-    shadowColor: '#0038FF',
+    shadowColor: 'rgba(0, 56, 255, 0.25)',
     shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.3,
-    shadowRadius: 20,
-    elevation: 15,
+    shadowOpacity: 0.2,
+    shadowRadius: 15,
+    elevation: 12,
   },
   gradientContent: {
     flex: 1,
-    margin: -24,
-    padding: 24,
-    borderRadius: 24,
+    margin: -20,
+    padding: 20,
+    borderRadius: 20,
   },
   shimmerOverlay: {
     position: 'absolute',
@@ -202,7 +211,7 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: 'rgba(255,255,255,0.5)',
-    borderRadius: 24,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+    borderRadius: 20,
   },
 });

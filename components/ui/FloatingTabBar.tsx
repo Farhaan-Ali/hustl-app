@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { View, StyleSheet, TouchableOpacity, Animated, Platform } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { BlurView } from 'expo-blur';
 import { Typography } from './Typography';
 
 interface FloatingTabBarProps {
@@ -21,6 +22,8 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
     animatedValues.forEach((anim, index) => {
       Animated.spring(anim, {
         toValue: state.index === index ? 1 : 0,
+        tension: 300,
+        friction: 10,
         useNativeDriver: true,
       }).start();
     });
@@ -30,12 +33,12 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
       Animated.sequence([
         Animated.timing(glowAnim, {
           toValue: 1,
-          duration: 1500,
+          duration: 2000,
           useNativeDriver: true,
         }),
         Animated.timing(glowAnim, {
-          toValue: 0.3,
-          duration: 1500,
+          toValue: 0.6,
+          duration: 2000,
           useNativeDriver: true,
         }),
       ])
@@ -44,10 +47,18 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
 
   return (
     <View style={styles.container}>
-      <LinearGradient
-        colors={['rgba(255,255,255,0.95)', 'rgba(245,247,255,0.95)']}
-        style={styles.tabBar}
-      >
+      <View style={styles.tabBarWrapper}>
+        {Platform.OS === 'web' ? (
+          <View style={styles.webBlur}>
+            <LinearGradient
+              colors={['rgba(255, 255, 255, 0.9)', 'rgba(248, 250, 252, 0.9)']}
+              style={styles.tabBar}
+            />
+          </View>
+        ) : (
+          <BlurView intensity={20} tint="light" style={styles.tabBar} />
+        )}
+        
         <View style={styles.tabContainer}>
           {state.routes.map((route: any, index: number) => {
             const { options } = descriptors[route.key];
@@ -76,17 +87,17 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                 {
                   scale: animatedValues[index].interpolate({
                     inputRange: [0, 1],
-                    outputRange: [1, 1.1],
+                    outputRange: [1, 1.05],
                   }),
                 },
               ],
             };
 
             const glowStyle = isFocused ? {
-              shadowColor: '#0038FF',
+              shadowColor: 'rgba(0, 56, 255, 0.4)',
               shadowOffset: { width: 0, height: 0 },
               shadowOpacity: glowAnim,
-              shadowRadius: 15,
+              shadowRadius: 12,
               elevation: 8,
             } : {};
 
@@ -104,7 +115,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                 <Animated.View style={[styles.tabContent, animatedStyle]}>
                   {isFocused && (
                     <LinearGradient
-                      colors={['#0038FF', '#0021A5']}
+                      colors={['rgba(0, 56, 255, 0.9)', 'rgba(0, 33, 165, 0.9)']}
                       style={styles.activeBackground}
                       start={{ x: 0, y: 0 }}
                       end={{ x: 1, y: 1 }}
@@ -113,14 +124,14 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
                   
                   <View style={styles.iconContainer}>
                     {options.tabBarIcon && options.tabBarIcon({
-                      size: 24,
-                      color: isFocused ? '#FFFFFF' : '#001E3C',
+                      size: 22,
+                      color: isFocused ? '#FFFFFF' : 'rgba(0, 30, 60, 0.7)',
                     })}
                   </View>
                   
                   <Typography 
                     variant="caption" 
-                    color={isFocused ? '#FFFFFF' : '#001E3C'}
+                    color={isFocused ? '#FFFFFF' : 'rgba(0, 30, 60, 0.7)'}
                     style={styles.label}
                   >
                     {label}
@@ -130,7 +141,7 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
             );
           })}
         </View>
-      </LinearGradient>
+      </View>
     </View>
   );
 }
@@ -138,32 +149,51 @@ export function FloatingTabBar({ state, descriptors, navigation }: FloatingTabBa
 const styles = StyleSheet.create({
   container: {
     position: 'absolute',
-    bottom: 20,
+    bottom: 30,
     left: 20,
     right: 20,
     zIndex: 1000,
   },
-  tabBar: {
-    borderRadius: 25,
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.15,
-    shadowRadius: 25,
+  tabBarWrapper: {
+    borderRadius: 28,
+    overflow: 'hidden',
+    shadowColor: 'rgba(0, 33, 165, 0.15)',
+    shadowOffset: { width: 0, height: 8 },
+    shadowOpacity: 0.2,
+    shadowRadius: 20,
     elevation: 15,
+  },
+  tabBar: {
+    paddingVertical: 12,
+    paddingHorizontal: 8,
     borderWidth: 1,
-    borderColor: 'rgba(255,255,255,0.3)',
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+  },
+  webBlur: {
+    position: 'relative',
+    paddingVertical: 12,
+    paddingHorizontal: 8,
+    borderWidth: 1,
+    borderColor: 'rgba(255, 255, 255, 0.2)',
+    borderRadius: 28,
+    overflow: 'hidden',
   },
   tabContainer: {
     flexDirection: 'row',
     justifyContent: 'space-around',
     alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    paddingVertical: 12,
+    paddingHorizontal: 8,
   },
   tab: {
     flex: 1,
     alignItems: 'center',
-    paddingVertical: 8,
+    paddingVertical: 6,
     paddingHorizontal: 4,
   },
   tabContent: {
@@ -171,7 +201,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingVertical: 8,
     paddingHorizontal: 12,
-    borderRadius: 18,
+    borderRadius: 20,
     minWidth: 60,
     position: 'relative',
   },
@@ -181,13 +211,13 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    borderRadius: 18,
+    borderRadius: 20,
   },
   iconContainer: {
-    marginBottom: 4,
+    marginBottom: 2,
   },
   label: {
-    fontSize: 11,
+    fontSize: 10,
     fontWeight: '600',
     textAlign: 'center',
   },
