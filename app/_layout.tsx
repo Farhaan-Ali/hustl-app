@@ -19,13 +19,14 @@ import {
 } from '@expo-google-fonts/poppins';
 import * as SplashScreen from 'expo-splash-screen';
 import { AuthProvider } from '@/contexts/AuthContext';
-import 'react-native-url-polyfill/auto'
+import 'react-native-url-polyfill/auto';
 import { useFrameworkReady } from '@/hooks/useFrameworkReady';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   useFrameworkReady();
+  
   const [fontsLoaded] = useFonts({
     'Inter-Light': Inter_300Light,
     'Inter-Regular': Inter_400Regular,

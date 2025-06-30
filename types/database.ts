@@ -18,13 +18,13 @@ export interface Database {
           phone: string | null
           university: string | null
           student_id: string | null
-          verification_status: 'pending' | 'verified' | 'rejected'
-          rating: number
-          total_tasks_completed: number
-          total_tasks_posted: number
-          total_earnings: number
-          created_at: string
-          updated_at: string
+          verification_status: string | null
+          rating: number | null
+          total_tasks_completed: number | null
+          total_tasks_posted: number | null
+          total_earnings: number | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
           id: string
@@ -34,13 +34,13 @@ export interface Database {
           phone?: string | null
           university?: string | null
           student_id?: string | null
-          verification_status?: 'pending' | 'verified' | 'rejected'
-          rating?: number
-          total_tasks_completed?: number
-          total_tasks_posted?: number
-          total_earnings?: number
-          created_at?: string
-          updated_at?: string
+          verification_status?: string | null
+          rating?: number | null
+          total_tasks_completed?: number | null
+          total_tasks_posted?: number | null
+          total_earnings?: number | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
           id?: string
@@ -50,13 +50,45 @@ export interface Database {
           phone?: string | null
           university?: string | null
           student_id?: string | null
-          verification_status?: 'pending' | 'verified' | 'rejected'
-          rating?: number
-          total_tasks_completed?: number
-          total_tasks_posted?: number
-          total_earnings?: number
-          created_at?: string
-          updated_at?: string
+          verification_status?: string | null
+          rating?: number | null
+          total_tasks_completed?: number | null
+          total_tasks_posted?: number | null
+          total_earnings?: number | null
+          created_at?: string | null
+          updated_at?: string | null
+        }
+      }
+      categories: {
+        Row: {
+          id: string
+          name: string
+          description: string | null
+          icon: string | null
+          color: string | null
+          is_active: boolean | null
+          sort_order: number | null
+          created_at: string | null
+        }
+        Insert: {
+          id?: string
+          name: string
+          description?: string | null
+          icon?: string | null
+          color?: string | null
+          is_active?: boolean | null
+          sort_order?: number | null
+          created_at?: string | null
+        }
+        Update: {
+          id?: string
+          name?: string
+          description?: string | null
+          icon?: string | null
+          color?: string | null
+          is_active?: boolean | null
+          sort_order?: number | null
+          created_at?: string | null
         }
       }
       tasks: {
@@ -69,15 +101,15 @@ export interface Database {
           time_estimate: string
           location: string
           location_details: string | null
-          urgency: 'low' | 'normal' | 'high' | 'urgent'
-          status: 'open' | 'assigned' | 'in_progress' | 'completed' | 'cancelled'
+          urgency: string | null
+          status: string | null
           poster_id: string
           assignee_id: string | null
           image_url: string | null
           requirements: string | null
           deadline: string | null
-          created_at: string
-          updated_at: string
+          created_at: string | null
+          updated_at: string | null
           completed_at: string | null
         }
         Insert: {
@@ -89,15 +121,15 @@ export interface Database {
           time_estimate: string
           location: string
           location_details?: string | null
-          urgency?: 'low' | 'normal' | 'high' | 'urgent'
-          status?: 'open' | 'assigned' | 'in_progress' | 'completed' | 'cancelled'
+          urgency?: string | null
+          status?: string | null
           poster_id: string
           assignee_id?: string | null
           image_url?: string | null
           requirements?: string | null
           deadline?: string | null
-          created_at?: string
-          updated_at?: string
+          created_at?: string | null
+          updated_at?: string | null
           completed_at?: string | null
         }
         Update: {
@@ -109,15 +141,15 @@ export interface Database {
           time_estimate?: string
           location?: string
           location_details?: string | null
-          urgency?: 'low' | 'normal' | 'high' | 'urgent'
-          status?: 'open' | 'assigned' | 'in_progress' | 'completed' | 'cancelled'
+          urgency?: string | null
+          status?: string | null
           poster_id?: string
           assignee_id?: string | null
           image_url?: string | null
           requirements?: string | null
           deadline?: string | null
-          created_at?: string
-          updated_at?: string
+          created_at?: string | null
+          updated_at?: string | null
           completed_at?: string | null
         }
       }
@@ -127,27 +159,27 @@ export interface Database {
           task_id: string
           applicant_id: string
           message: string | null
-          status: 'pending' | 'accepted' | 'rejected'
-          created_at: string
-          updated_at: string
+          status: string | null
+          created_at: string | null
+          updated_at: string | null
         }
         Insert: {
           id?: string
           task_id: string
           applicant_id: string
           message?: string | null
-          status?: 'pending' | 'accepted' | 'rejected'
-          created_at?: string
-          updated_at?: string
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
         Update: {
           id?: string
           task_id?: string
           applicant_id?: string
           message?: string | null
-          status?: 'pending' | 'accepted' | 'rejected'
-          created_at?: string
-          updated_at?: string
+          status?: string | null
+          created_at?: string | null
+          updated_at?: string | null
         }
       }
       messages: {
@@ -157,9 +189,9 @@ export interface Database {
           sender_id: string
           receiver_id: string
           content: string
-          message_type: 'text' | 'image' | 'location' | 'system'
+          message_type: string | null
           read_at: string | null
-          created_at: string
+          created_at: string | null
         }
         Insert: {
           id?: string
@@ -167,9 +199,9 @@ export interface Database {
           sender_id: string
           receiver_id: string
           content: string
-          message_type?: 'text' | 'image' | 'location' | 'system'
+          message_type?: string | null
           read_at?: string | null
-          created_at?: string
+          created_at?: string | null
         }
         Update: {
           id?: string
@@ -177,9 +209,9 @@ export interface Database {
           sender_id?: string
           receiver_id?: string
           content?: string
-          message_type?: 'text' | 'image' | 'location' | 'system'
+          message_type?: string | null
           read_at?: string | null
-          created_at?: string
+          created_at?: string | null
         }
       }
       reviews: {
@@ -190,8 +222,8 @@ export interface Database {
           reviewee_id: string
           rating: number
           comment: string | null
-          review_type: 'poster_to_assignee' | 'assignee_to_poster'
-          created_at: string
+          review_type: string
+          created_at: string | null
         }
         Insert: {
           id?: string
@@ -200,8 +232,8 @@ export interface Database {
           reviewee_id: string
           rating: number
           comment?: string | null
-          review_type: 'poster_to_assignee' | 'assignee_to_poster'
-          created_at?: string
+          review_type: string
+          created_at?: string | null
         }
         Update: {
           id?: string
@@ -210,8 +242,8 @@ export interface Database {
           reviewee_id?: string
           rating?: number
           comment?: string | null
-          review_type?: 'poster_to_assignee' | 'assignee_to_poster'
-          created_at?: string
+          review_type?: string
+          created_at?: string | null
         }
       }
       transactions: {
@@ -221,11 +253,11 @@ export interface Database {
           payer_id: string
           payee_id: string
           amount: number
-          transaction_type: 'payment' | 'refund' | 'withdrawal' | 'deposit'
-          status: 'pending' | 'completed' | 'failed' | 'cancelled'
+          transaction_type: string
+          status: string | null
           payment_method: string | null
           stripe_payment_intent_id: string | null
-          created_at: string
+          created_at: string | null
           completed_at: string | null
         }
         Insert: {
@@ -234,11 +266,11 @@ export interface Database {
           payer_id: string
           payee_id: string
           amount: number
-          transaction_type: 'payment' | 'refund' | 'withdrawal' | 'deposit'
-          status?: 'pending' | 'completed' | 'failed' | 'cancelled'
+          transaction_type: string
+          status?: string | null
           payment_method?: string | null
           stripe_payment_intent_id?: string | null
-          created_at?: string
+          created_at?: string | null
           completed_at?: string | null
         }
         Update: {
@@ -247,11 +279,11 @@ export interface Database {
           payer_id?: string
           payee_id?: string
           amount?: number
-          transaction_type?: 'payment' | 'refund' | 'withdrawal' | 'deposit'
-          status?: 'pending' | 'completed' | 'failed' | 'cancelled'
+          transaction_type?: string
+          status?: string | null
           payment_method?: string | null
           stripe_payment_intent_id?: string | null
-          created_at?: string
+          created_at?: string | null
           completed_at?: string | null
         }
       }
@@ -261,65 +293,33 @@ export interface Database {
           user_id: string
           title: string
           message: string
-          type: 'task_update' | 'message' | 'payment' | 'review' | 'system'
+          type: string
           read_at: string | null
           action_url: string | null
           metadata: Json | null
-          created_at: string
+          created_at: string | null
         }
         Insert: {
           id?: string
           user_id: string
           title: string
           message: string
-          type: 'task_update' | 'message' | 'payment' | 'review' | 'system'
+          type: string
           read_at?: string | null
           action_url?: string | null
           metadata?: Json | null
-          created_at?: string
+          created_at?: string | null
         }
         Update: {
           id?: string
           user_id?: string
           title?: string
           message?: string
-          type?: 'task_update' | 'message' | 'payment' | 'review' | 'system'
+          type?: string
           read_at?: string | null
           action_url?: string | null
           metadata?: Json | null
-          created_at?: string
-        }
-      }
-      categories: {
-        Row: {
-          id: string
-          name: string
-          description: string | null
-          icon: string | null
-          color: string | null
-          is_active: boolean
-          sort_order: number
-          created_at: string
-        }
-        Insert: {
-          id?: string
-          name: string
-          description?: string | null
-          icon?: string | null
-          color?: string | null
-          is_active?: boolean
-          sort_order?: number
-          created_at?: string
-        }
-        Update: {
-          id?: string
-          name?: string
-          description?: string | null
-          icon?: string | null
-          color?: string | null
-          is_active?: boolean
-          sort_order?: number
-          created_at?: string
+          created_at?: string | null
         }
       }
     }
