@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Animated } from 'react-native';
+import { View, StyleSheet, ScrollView, TouchableOpacity, Alert, Animated, Image, FlatList } from 'react-native';
 import { StatusBar } from 'expo-status-bar';
-import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera } from 'lucide-react-native';
+import { Coffee, Printer, Heart, ShoppingBag, MapPin, DollarSign, Clock, Camera, Star, UtensilsCrossed, Car, Dumbbell } from 'lucide-react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { HustlLogo } from '@/components/HustlLogo';
 import { ModernCard } from '@/components/ui/ModernCard';
@@ -40,6 +40,12 @@ export default function PostTaskScreen() {
       variant: 'secondary' as const
     },
     { 
+      id: 'food', 
+      name: 'Food Pickup', 
+      icon: <UtensilsCrossed size={24} color="#FFFFFF" />, 
+      variant: 'primary' as const
+    },
+    { 
       id: 'printing', 
       name: 'Printing', 
       icon: <Printer size={24} color="#FFFFFF" />, 
@@ -52,11 +58,74 @@ export default function PostTaskScreen() {
       variant: 'accent' as const
     },
     { 
-      id: 'shopping', 
-      name: 'Shopping', 
-      icon: <ShoppingBag size={24} color="#FFFFFF" />, 
+      id: 'rides', 
+      name: 'Campus Rides', 
+      icon: <Car size={24} color="#FFFFFF" />, 
+      variant: 'secondary' as const
+    },
+    { 
+      id: 'workout', 
+      name: 'Workout Buddy', 
+      icon: <Dumbbell size={24} color="#FFFFFF" />, 
       variant: 'primary' as const
     },
+  ];
+
+  const recentTasks = [
+    {
+      id: 1,
+      title: 'Starbucks Coffee Run',
+      description: 'Need a venti iced coffee with oat milk from Starbucks at Reitz Union.',
+      category: 'Coffee',
+      price: 12,
+      time: '15 min',
+      location: 'Reitz Union',
+      rating: 4.8,
+      image: 'https://images.pexels.com/photos/312418/pexels-photo-312418.jpeg?auto=compress&cs=tinysrgb&w=400',
+      urgent: true,
+      distance: '0.2 mi',
+      poster: {
+        name: 'Sarah M.',
+        rating: 4.9,
+        image: 'https://images.pexels.com/photos/1239291/pexels-photo-1239291.jpeg?auto=compress&cs=tinysrgb&w=100'
+      }
+    },
+    {
+      id: 2,
+      title: 'Print Assignment',
+      description: 'Print 20 pages double-sided and deliver to Turlington Plaza.',
+      category: 'Printing',
+      price: 8,
+      time: '20 min',
+      location: 'Library West',
+      rating: 4.9,
+      image: 'https://images.pexels.com/photos/4226140/pexels-photo-4226140.jpeg?auto=compress&cs=tinysrgb&w=400',
+      urgent: false,
+      distance: '0.5 mi',
+      poster: {
+        name: 'Mike R.',
+        rating: 5.0,
+        image: 'https://images.pexels.com/photos/1222271/pexels-photo-1222271.jpeg?auto=compress&cs=tinysrgb&w=100'
+      }
+    },
+    {
+      id: 3,
+      title: 'Chipotle Bowl Pickup',
+      description: 'Pick up my usual bowl from Chipotle at Student Union and deliver to Broward Hall.',
+      category: 'Food',
+      price: 10,
+      time: '25 min',
+      location: 'Student Union',
+      rating: 4.7,
+      image: 'https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=400',
+      urgent: false,
+      distance: '0.3 mi',
+      poster: {
+        name: 'Emma K.',
+        rating: 4.8,
+        image: 'https://images.pexels.com/photos/1181686/pexels-photo-1181686.jpeg?auto=compress&cs=tinysrgb&w=100'
+      }
+    }
   ];
 
   const validateForm = () => {
@@ -235,6 +304,25 @@ export default function PostTaskScreen() {
           </ModernCard>
         </Animated.View>
 
+        {/* Recent Tasks Section */}
+        <Animated.View style={[styles.recentTasksSection, { opacity: fadeAnim }]}>
+          <View style={styles.sectionHeader}>
+            <Typography variant="h3">Similar Tasks</Typography>
+            <Badge variant="secondary" size="sm">
+              <Typography variant="caption" color="#FFFFFF">3 active</Typography>
+            </Badge>
+          </View>
+          
+          <FlatList
+            data={recentTasks}
+            renderItem={({ item }) => <TaskCard task={item} />}
+            keyExtractor={(item) => item.id.toString()}
+            horizontal
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={styles.tasksList}
+          />
+        </Animated.View>
+
         {/* Submit Button */}
         <Animated.View style={[styles.submitSection, { opacity: fadeAnim }]}>
           <AnimatedButton
@@ -253,6 +341,70 @@ export default function PostTaskScreen() {
         </Animated.View>
       </ScrollView>
     </View>
+  );
+}
+
+function TaskCard({ task }: { task: any }) {
+  return (
+    <ModernCard style={styles.taskCard} onPress={() => {}}>
+      <View style={styles.taskHeader}>
+        {task.urgent && (
+          <Badge variant="secondary" size="sm">
+            <Typography variant="caption" color="#FFFFFF">Urgent</Typography>
+          </Badge>
+        )}
+        
+        <View style={styles.categoryBadge}>
+          {task.category === 'Coffee' && <Coffee size={14} color="#E6501E" />}
+          {task.category === 'Printing' && <Printer size={14} color="#0021A5" />}
+          {task.category === 'Food' && <UtensilsCrossed size={14} color="#0021A5" />}
+          <Typography variant="caption" style={styles.categoryText}>{task.category}</Typography>
+        </View>
+        
+        <Typography variant="h3" color="#0021A5">${task.price}</Typography>
+      </View>
+      
+      <Image source={{ uri: task.image }} style={styles.taskImage} />
+      
+      <View style={styles.taskContent}>
+        <Typography variant="h4" style={styles.taskTitle}>{task.title}</Typography>
+        <Typography variant="body2" numberOfLines={2} style={styles.taskDescription}>
+          {task.description}
+        </Typography>
+        
+        <View style={styles.taskMeta}>
+          <View style={styles.metaItem}>
+            <MapPin size={14} color="#001E3C" />
+            <Typography variant="body2" color="#001E3C">{task.location}</Typography>
+            <Typography variant="body2" color="#0021A5">• {task.distance}</Typography>
+          </View>
+          <View style={styles.metaItem}>
+            <Clock size={14} color="#001E3C" />
+            <Typography variant="body2" color="#001E3C">{task.time}</Typography>
+          </View>
+        </View>
+        
+        <View style={styles.posterSection}>
+          <Image source={{ uri: task.poster.image }} style={styles.posterImage} />
+          <View style={styles.posterInfo}>
+            <Typography variant="body2">{task.poster.name}</Typography>
+            <View style={styles.posterRating}>
+              <Star size={12} color="#E6501E" fill="#E6501E" />
+              <Typography variant="caption" color="#001E3C">{task.poster.rating}</Typography>
+            </View>
+          </View>
+          
+          <AnimatedButton
+            title="Accept"
+            onPress={() => {}}
+            variant="primary"
+            size="sm"
+            gradient
+            style={styles.acceptButton}
+          />
+        </View>
+      </View>
+    </ModernCard>
   );
 }
 
@@ -341,6 +493,87 @@ const styles = StyleSheet.create({
   },
   photoButtonText: {
     marginTop: 12,
+  },
+  recentTasksSection: {
+    marginBottom: 32,
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 16,
+  },
+  tasksList: {
+    paddingRight: 24,
+  },
+  taskCard: {
+    marginRight: 16,
+    width: 280,
+    padding: 0,
+    overflow: 'hidden',
+  },
+  taskHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    gap: 12,
+  },
+  categoryBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#D8DDE6',
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 12,
+    gap: 4,
+  },
+  categoryText: {
+    fontFamily: 'Inter-SemiBold',
+  },
+  taskImage: {
+    width: '100%',
+    height: 160,
+  },
+  taskContent: {
+    padding: 20,
+  },
+  taskTitle: {
+    marginBottom: 8,
+  },
+  taskDescription: {
+    marginBottom: 16,
+    lineHeight: 20,
+  },
+  taskMeta: {
+    gap: 12,
+    marginBottom: 16,
+  },
+  metaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+  },
+  posterSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+  posterImage: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+  },
+  posterInfo: {
+    flex: 1,
+  },
+  posterRating: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+    marginTop: 2,
+  },
+  acceptButton: {
+    paddingHorizontal: 20,
   },
   submitSection: {
     marginBottom: 40,

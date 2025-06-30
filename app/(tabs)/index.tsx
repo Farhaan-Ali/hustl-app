@@ -28,7 +28,7 @@ export default function HomeScreen() {
       title: 'Coffee Runs',
       emoji: '☕️',
       icon: <Coffee size={28} color="#FFFFFF" />,
-      gradient: ['#8B4513', '#D2691E'],
+      gradient: ['#0021A5', '#001E3C'], // UF Blue
       count: 12
     },
     {
@@ -36,7 +36,7 @@ export default function HomeScreen() {
       title: 'Food Pickup',
       emoji: '🍔',
       icon: <UtensilsCrossed size={28} color="#FFFFFF" />,
-      gradient: ['#FF6B35', '#F7931E'],
+      gradient: ['#E6501E', '#FF7849'], // UF Orange
       count: 8
     },
     {
@@ -44,7 +44,7 @@ export default function HomeScreen() {
       title: 'Print & Study',
       emoji: '📄',
       icon: <FileText size={28} color="#FFFFFF" />,
-      gradient: ['#0021A5', '#001E3C'],
+      gradient: ['#0021A5', '#001E3C'], // UF Blue
       count: 15
     },
     {
@@ -52,7 +52,7 @@ export default function HomeScreen() {
       title: 'Pet Care',
       emoji: '🐶',
       icon: <Heart size={28} color="#FFFFFF" />,
-      gradient: ['#E91E63', '#AD1457'],
+      gradient: ['#E6501E', '#FF7849'], // UF Orange
       count: 6
     },
     {
@@ -60,7 +60,7 @@ export default function HomeScreen() {
       title: 'Campus Rides',
       emoji: '🚗',
       icon: <Car size={28} color="#FFFFFF" />,
-      gradient: ['#2196F3', '#1976D2'],
+      gradient: ['#0021A5', '#001E3C'], // UF Blue
       count: 4
     },
     {
@@ -68,7 +68,7 @@ export default function HomeScreen() {
       title: 'Workout Buddy',
       emoji: '💪',
       icon: <Dumbbell size={28} color="#FFFFFF" />,
-      gradient: ['#4CAF50', '#388E3C'],
+      gradient: ['#E6501E', '#FF7849'], // UF Orange
       count: 9
     }
   ];
